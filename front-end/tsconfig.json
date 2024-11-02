@@ -10,7 +10,7 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "NodeNext", //needed to make imports work
+    "module": "NodeNext", //needed to make imports work instead of esnext
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '@/components/header';
 import Head from 'next/head';
+import ListsOverview from '@/components/lists/listsOverview';
 
 const Lists: React.FC = () => {
     return (
@@ -15,6 +16,9 @@ const Lists: React.FC = () => {
             </header>
             <h1>Lists Page</h1>
             <p>This is the lists page.</p>
+            <div>
+                <ListsOverview/>
+            </div>
         </>
     )
 };
