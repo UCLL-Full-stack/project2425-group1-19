@@ -1,8 +1,8 @@
 import User from "../model/user";
 import userDb from "../repository/user.db";
-import { userInput } from "../types";
+import { UserInput } from "../types";
 
-const addUser = (input: userInput): User => {
+const addUser = (input: UserInput): User => {
     try {
         const existingUser = userDb.getUserByUsername({ username: input.username });
         if (existingUser) {

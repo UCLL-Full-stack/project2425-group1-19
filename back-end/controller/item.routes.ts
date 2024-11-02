@@ -17,6 +17,7 @@
 
 import { Router, Request, Response } from "express";
 import itemService from "../service/item.service";
+import { ItemInput } from "../types";
 
 const itemRouter = Router();
 
@@ -119,7 +120,8 @@ itemRouter.get('/:name', async (req: Request, res: Response) => {
 
 itemRouter.post('/', async (req: Request, res: Response) => {
     try {
-        const newItem = await itemService.addItem(req.body);
+        const item = <ItemInput>req.body;
+        const newItem = itemService.addItem(item);
         res.status(201).json(newItem);
     } catch (error) {
         if (error instanceof Error) {

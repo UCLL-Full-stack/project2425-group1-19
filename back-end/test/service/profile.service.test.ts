@@ -1,12 +1,12 @@
 import ProfileService from "../../service/profile.service";
 import profileDb from "../../repository/profile.db";
 import Profile from "../../model/profile";
-import { profileInput } from "../../types";
+import { ProfileInput } from "../../types";
 
 // Sample profile inputs
-const profileInput1: profileInput = { email: "john.doe@example.com", name: "John", lastname: "Doe" };
-const profileInput2: profileInput = { email: "jane.doe@example.com", name: "Jane", lastname: "Doe" };
-const profileInput3: profileInput = { email: "mark.smith@example.com", name: "Mark", lastname: "Smith" };
+const profileInput1: ProfileInput = { email: "john.doe@example.com", name: "John", lastname: "Doe" };
+const profileInput2: ProfileInput = { email: "jane.doe@example.com", name: "Jane", lastname: "Doe" };
+const profileInput3: ProfileInput = { email: "mark.smith@example.com", name: "Mark", lastname: "Smith" };
 
 const profile1 = new Profile(profileInput1);
 const profile2 = new Profile(profileInput2);

@@ -1,8 +1,8 @@
 import Profile from "../model/profile";
 import profileDb from "../repository/profile.db";
-import { profileInput } from "../types";
+import { ProfileInput as ProfileInput } from "../types";
 
-const addProfile = (input: profileInput): Profile => {
+const addProfile = (input: ProfileInput): Profile => {
     try {
         const existingProfile = profileDb.getProfileByEmail({ email: input.email });
         if (existingProfile) {
