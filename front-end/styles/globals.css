@@ -56,6 +56,13 @@ header nav a:hover {
   text-decoration: underline;
 }
 
+.ProfileIcon {
+  justify-self: center;
+  align-self: center;
+  margin-left: auto;
+  font-size: 2rem; 
+}
+
 .container {
   text-align: center;
   padding: 20px;

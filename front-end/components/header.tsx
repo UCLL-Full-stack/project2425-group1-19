@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import {CgProfile} from "react-icons/cg";
 
 const Header: React.FC = () => {
     return (
@@ -16,6 +17,10 @@ const Header: React.FC = () => {
                 <Link
                     href="/monthlySpendings">
                     <h3>Monthly spendings</h3>
+                </Link>
+                <Link className='ProfileIcon'
+                    href="/profile">
+                    <CgProfile />
                 </Link>
             </header>
         </nav>
