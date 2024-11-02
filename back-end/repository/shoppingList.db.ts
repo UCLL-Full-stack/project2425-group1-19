@@ -50,11 +50,16 @@ const removeItemFromShoppingList = (listName: string, itemName: string): void =>
 }
 
 const createTestShoppingLists = (): void => {
-    const list1 = new ShoppingList({ ListName: "Groceries", items: [
+    const list1 = new ShoppingList({ ListName: "Carrefour", items: [
         new Item({ name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "High Priority" }),
-        new Item({ name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority" })
+        new Item({ name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority" }),
+        new Item({ name: "Eggs", description: "Dozen large eggs", price: 2.99, urgency: "High Priority" }),
+        new Item({ name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: 2 }),
+        new Item({ name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: 2 }),
+        new Item({ name: "Chicken Breast", description: "1 kg of boneless chicken breast", price: 7.99, urgency: "High Priority" }),
+        new Item({ name: "Tomatoes", description: "1 kg of fresh tomatoes", price: 2.99, urgency: "Low Priority" })
     ]});
-    const list2 = new ShoppingList({ ListName: "Office Supplies", items: [
+    const list2 = new ShoppingList({ ListName: "Acco", items: [
         new Item({ name: "Pens", description: "Pack of 10 blue pens", price: 5.99, urgency: "Low Priority" }),
         new Item({ name: "Notebooks", description: "Pack of 3 notebooks", price: 7.99, urgency: "High Priority" })
     ]});
