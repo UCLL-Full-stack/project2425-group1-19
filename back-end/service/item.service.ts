@@ -1,8 +1,8 @@
 import Item from "../model/item";
 import itemDb from "../repository/item.db";
-import { itemInput } from "../types";
+import { ItemInput } from "../types";
 
-const addItem = (input: itemInput): Item => {
+const addItem = (input: ItemInput): Item => {
     try {
         const existingItem = itemDb.getItemByName({ name: input.name });
         if (existingItem) {

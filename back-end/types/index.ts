@@ -1,31 +1,30 @@
-type itemInput = {
+type ItemInput = {
     name: string;
     description: string;
     price?: number;
     urgency?: string | number;
 }
 
-type shoppingListInput = {
+type ShoppingListInput = {
     ListName?: string;
-    items?: itemInput[];
+    items?: ItemInput[];
 }
 
-type userInput = {
+type UserInput = {
     username: string;
     password: string;
     role: string;
 }
 
-type profileInput = {
+type ProfileInput = {
     email: string;
     name: string;
     lastname: string;
 }
 
 export {
-    itemInput,
-    shoppingListInput,
-    userInput,
-    profileInput,
-    
+    ItemInput,
+    ShoppingListInput,
+    UserInput,
+    ProfileInput,
 }

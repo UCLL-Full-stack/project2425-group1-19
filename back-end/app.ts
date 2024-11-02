@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import itemRouter from './controller/item.routes';
+import shoppingListRouter from './controller/shoppingList.routes';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,9 @@ app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
     res.json({message: 'Back-end is running...'});
+});
+app.get('/', (req, res) => {
+    res.json({message:`Back-end is running... Use the path http://localhost:8000/api-docs/ To find the available endpoints.`});
 });
 
 app.listen(port || 8000, () => {
@@ -46,3 +50,4 @@ app.use(cors({
 //Endpoints
 
 app.use('/item', itemRouter);
+app.use('/shoppingList', shoppingListRouter);

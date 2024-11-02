@@ -1,12 +1,12 @@
 import UserService from "../../service/user.service";
 import userDb from "../../repository/user.db";
 import User from "../../model/user";
-import { userInput } from "../../types";
+import { UserInput } from "../../types";
 
 // Sample user inputs
-const userInput1: userInput = { username: "Janneke", password: "B@1", role: "admin" };
-const userInput2: userInput = { username: "Jannineke", password: "A&2", role: "member" };
-const userInput3: userInput = { username: "Jeanke", password: "C|3", role: "member" };
+const userInput1: UserInput = { username: "Janneke", password: "B@1", role: "admin" };
+const userInput2: UserInput = { username: "Jannineke", password: "A&2", role: "member" };
+const userInput3: UserInput = { username: "Jeanke", password: "C|3", role: "member" };
 
 const user1 = new User(userInput1);
 const user2 = new User(userInput2);

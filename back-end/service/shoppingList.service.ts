@@ -1,9 +1,9 @@
 import shoppingListDb from "../repository/shoppingList.db";
 import Item from "../model/item";
 import ShoppingList from "../model/shoppingList";
-import { shoppingListInput, itemInput } from "../types";
+import { ShoppingListInput, ItemInput } from "../types";
 
-const addShoppingList = (input: shoppingListInput): ShoppingList => {
+const addShoppingList = (input: ShoppingListInput): ShoppingList => {
     const existingList = shoppingListDb.getShoppingListByName(input.ListName || "General list");
     if (existingList) {
         throw new Error(`Shopping list with name ${input.ListName} already exists.`);
@@ -39,16 +39,16 @@ const removeShoppingList = (name: string): void => {
     }
 };
 
-const addItemToShoppingList = (listName: string, itemInput: itemInput): void => {
+const addItemToShoppingList = (listName: string, ItemInput: ItemInput): void => {
     const shoppingList = shoppingListDb.getShoppingListByName(listName);
 
     if (shoppingList != undefined) {
-        const existingItem = shoppingList.getListItems().find(item => item.getName() === itemInput.name);
+        const existingItem = shoppingList.getListItems().find(item => item.getName() === ItemInput.name);
         if (existingItem) {
-            throw new Error(`Item with name ${itemInput.name} already exists in the shopping list ${listName}.`);
+            throw new Error(`Item with name ${ItemInput.name} already exists in the shopping list ${listName}.`);
         }
 
-        const newItem = new Item(itemInput);
+        const newItem = new Item(ItemInput);
         shoppingListDb.addItemToShoppingList(listName, newItem);
     } else {
         throw new Error(`Shopping list with name ${listName} does not exist.`);
