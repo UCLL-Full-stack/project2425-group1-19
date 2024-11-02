@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import AddItemRow from './addItemRow';
 import { getShoppingLists } from '@/service/listsService';
-import { ShoppingList } from '@/types';
+import { ShoppingList, Item } from '@/types';
 import ListDetail from './ListDetail';
 
 const ListsOverview: React.FC = () => {
@@ -26,6 +27,11 @@ const ListsOverview: React.FC = () => {
         setSelectedListName(listName);
     };
 
+    const handleAddItem = (item: Item) => {
+        console.log('Item added:', item);
+        // Logic
+    };
+
     return (
         <div>
             <h1>Shopping Lists Overview</h1>
@@ -45,7 +51,25 @@ const ListsOverview: React.FC = () => {
                     ))}
                 </tbody>
             </table>
-            {selectedListName && <ListDetail shoppingListName={selectedListName}/>}
+            {selectedListName && (
+                <>
+                    <ListDetail shoppingListName={selectedListName} />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Urgency</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <AddItemRow onAddItem={handleAddItem} />
+                        </tbody>
+                    </table>
+                </>
+            )}
         </div>
     );
 };
