@@ -2,6 +2,7 @@ import shoppingListDb from "../repository/shoppingList.db";
 import Item from "../model/item";
 import ShoppingList from "../model/shoppingList";
 import { ShoppingListInput, ItemInput } from "../types";
+import itemDb from "../repository/item.db";
 
 const addShoppingList = (input: ShoppingListInput): ShoppingList => {
     const existingList = shoppingListDb.getShoppingListByName(input.ListName || "General list");
@@ -12,6 +13,7 @@ const addShoppingList = (input: ShoppingListInput): ShoppingList => {
     //Om zeker te zijn dat de list voldoet aan de regels
     const items = input.items?.map(item => new Item(item)) || [];
     const newShoppingList = new ShoppingList({ ListName: input.ListName, items });
+    items.forEach(item => itemDb.saveItem(item));
     return shoppingListDb.saveShoppingList(newShoppingList);
 };
 
@@ -33,6 +35,8 @@ const removeShoppingList = (name: string): void => {
     const shoppingList = shoppingListDb.getShoppingListByName(name);
 
     if (shoppingList != undefined) {
+        const items = shoppingList.getListItems();
+        items.forEach(item => itemDb.removeItem(item.getName()));
         shoppingListDb.removeShoppingList(name);
     } else {
         throw new Error(`Shopping list with name ${name} does not exist.`);
@@ -49,6 +53,7 @@ const addItemToShoppingList = (listName: string, ItemInput: ItemInput): void => 
         }
 
         const newItem = new Item(ItemInput);
+        itemDb.saveItem(newItem);
         shoppingListDb.addItemToShoppingList(listName, newItem);
     } else {
         throw new Error(`Shopping list with name ${listName} does not exist.`);
@@ -61,6 +66,7 @@ const removeItemFromShoppingList = (listName: string, itemName: string): void =>
     if (shoppingList != undefined) {
         const existingItem = shoppingList.getListItems().find(item => item.getName() === itemName);
         if (existingItem) {
+            itemDb.removeItem(itemName);
             shoppingListDb.removeItemFromShoppingList(listName, itemName);
         } else {
             throw new Error(`Item with name ${itemName} does not exist in the shopping list ${listName}.`);
