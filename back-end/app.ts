@@ -6,6 +6,8 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import itemRouter from './controller/item.routes';
 import shoppingListRouter from './controller/shoppingList.routes';
+import userRouter from './controller/user.routes';
+import profileRouter from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -51,3 +53,5 @@ app.use(cors({
 
 app.use('/item', itemRouter);
 app.use('/shoppingList', shoppingListRouter);
+app.use('/user', userRouter);
+app.use('/profile', profileRouter);
