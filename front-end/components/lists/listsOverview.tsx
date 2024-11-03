@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AddItemRow from './addItemRow';
-import { getShoppingLists, addItemToShoppingList} from '@/service/listsService';
-import { ShoppingList, Item } from '@/types';
+import {getShoppingLists, addItemToShoppingList} from '@/service/listsService';
+import {ShoppingList, Item} from '@/types';
 import ListDetail from './ListDetail';
 
 const ListsOverview: React.FC = () => {
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
     const [selectedListName, setSelectedListName] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const fetchShoppingLists = async () => {
         try {
@@ -25,14 +26,25 @@ const ListsOverview: React.FC = () => {
     const handleRowClick = (listName: string) => {
         console.log(`Row clicked: ${listName}`);
         setSelectedListName(listName);
+        setErrorMessage(null);
     };
 
-    const handleAddItem = (item: Item) => {
+    const handleAddItem = async (item: Item) => {
         console.log('Item added:', item);
         // Logic
         if (selectedListName) {
-        addItemToShoppingList(selectedListName, item);
-    }
+            try {
+                await addItemToShoppingList(selectedListName, item);
+                fetchShoppingLists();
+                setErrorMessage(null);
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message);
+                } else {
+                    setErrorMessage('An unexpected error occurred.');
+                }
+            }
+        }
     };
 
     return (
@@ -56,6 +68,7 @@ const ListsOverview: React.FC = () => {
             </table>
             {selectedListName && (
                 <>
+                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                     <ListDetail shoppingListName={selectedListName} />
                     <table>
                         <thead>
