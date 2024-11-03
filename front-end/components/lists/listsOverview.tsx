@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AddItemRow from './addItemRow';
-import { getShoppingLists } from '@/service/listsService';
+import { getShoppingLists, addItemToShoppingList} from '@/service/listsService';
 import { ShoppingList, Item } from '@/types';
 import ListDetail from './ListDetail';
 
@@ -8,17 +8,17 @@ const ListsOverview: React.FC = () => {
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
     const [selectedListName, setSelectedListName] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchShoppingLists = async () => {
-            try {
-                const lists = await getShoppingLists();
-                console.log('Fetched lists:', lists); // Debugging: Log fetched lists
-                setShoppingLists(lists);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const fetchShoppingLists = async () => {
+        try {
+            const lists = await getShoppingLists();
+            //console.log('Fetched lists:', lists); // Debugging: Log fetched lists
+            setShoppingLists(lists);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
+    useEffect(() => {
         fetchShoppingLists();
     }, []);
 
@@ -30,6 +30,9 @@ const ListsOverview: React.FC = () => {
     const handleAddItem = (item: Item) => {
         console.log('Item added:', item);
         // Logic
+        if (selectedListName) {
+        addItemToShoppingList(selectedListName, item);
+    }
     };
 
     return (

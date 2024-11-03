@@ -1,3 +1,5 @@
+import {Item} from "@/types";
+
 const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!backendUrl) {
@@ -44,13 +46,18 @@ const removeShoppingList = async (name: string) => {
     return response.json();
 };
 
-const addItemToShoppingList = async (listName: string, item: { name: string, description: string, price: number, urgency: string }) => {
+const addItemToShoppingList = async (listName: string, item: Item) => {
+    const itemWithDefaultPrice = {
+        ...item,
+        price: item.price !== undefined ? item.price : 0
+    };
+    
     const response = await fetch(`${backendUrl}/shoppingList/${listName}/item`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(item),
+        body: JSON.stringify(itemWithDefaultPrice),
     });
     if (!response.ok) {
         throw new Error(`Failed to add item to shopping list: ${listName}`);
