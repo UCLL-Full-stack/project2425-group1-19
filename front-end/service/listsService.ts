@@ -49,9 +49,9 @@ const removeShoppingList = async (name: string) => {
 const addItemToShoppingList = async (listName: string, item: Item) => {
     const itemWithDefaultPrice = {
         ...item,
-        price: item.price !== undefined ? item.price : 0
+        price: item.price !== undefined ? Number(item.price) : 0
     };
-    
+
     const response = await fetch(`${backendUrl}/shoppingList/${listName}/item`, {
         method: 'POST',
         headers: {

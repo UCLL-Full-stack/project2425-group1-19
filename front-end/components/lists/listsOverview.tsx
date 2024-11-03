@@ -24,9 +24,10 @@ const ListsOverview: React.FC = () => {
     }, []);
 
     const handleRowClick = (listName: string) => {
-        console.log(`Row clicked: ${listName}`);
+        //console.log(`Row clicked: ${listName}`);
         setSelectedListName(listName);
         setErrorMessage(null);
+        fetchShoppingLists();
     };
 
     const handleAddItem = async (item: Item) => {
@@ -70,6 +71,7 @@ const ListsOverview: React.FC = () => {
                 <>
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                     <ListDetail shoppingListName={selectedListName} />
+                    <h3>Add an Item to the shoppingList</h3>
                     <table>
                         <thead>
                             <tr>
