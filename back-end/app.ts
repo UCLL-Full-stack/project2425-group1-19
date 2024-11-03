@@ -11,7 +11,7 @@ import profileRouter from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
-const port = process.env.APP_PORT || 8000;
+const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,7 +20,7 @@ app.get('/status', (req, res) => {
     res.json({message: 'Back-end is running...'});
 });
 app.get('/', (req, res) => {
-    res.json({message:`Back-end is running... Use the path http://localhost:8000/api-docs/ To find the available endpoints.`});
+    res.json({message:`Back-end is running... Use the path http://localhost:3000/api-docs/ To find the available endpoints.`});
 });
 
 app.listen(port || 8000, () => {
