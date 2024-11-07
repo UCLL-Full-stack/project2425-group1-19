@@ -22,6 +22,7 @@ model Profile {
     email    String @unique
     name     String
     lastName String
+    userId   Int
 }
 
 model ShoppingList {
