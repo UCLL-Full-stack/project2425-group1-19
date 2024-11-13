@@ -1,46 +1,71 @@
 import User from "../model/user";
+import database from "./database";
 
-const users: Array<User> = [];    
+const users: Array<User> = [];
 
-const saveUser = (user: User): User => {
-    users.push(user);
-    return user;
+const saveUser = async (user: User): Promise<User> => {
+    try {
+        const userDatabase = await database.user.create({
+            data: {
+                username: user.getUsername(),
+                password: user.password,
+                role: user.getRole(),
+            },
+        });
+        return userDatabase;
+    } catch (error) {
+        throw new Error('Database Error while creating user:' + error)
+    }
 };
 
-const getUserByUsername = ({username}: {username: string}): User | undefined => {
+const getUserByUsername = async ({username}: {username: string}): Promise<User | undefined> => {
     try {
-        return users.find((user) => {user.getUsername() === username}) || undefined;
+        const user = await database.user.findUnique({
+            where: {username},
+        });
+        if (user) {
+            return user;
+        } else {
+            throw new Error('No User found with given user name')
+        };
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
 };
 
-const removeUser = (username: string): void => {
-    const index = users.findIndex(user => user.getUsername() === username);
-    if (index !== -1) {
-        users.splice(index, 1);
-    } else {
-        throw new Error(`User with username ${username} not found.`);
+const removeUser = async (username: string): Promise<void> => {
+    try {
+        await database.user.delete({
+            where: {username},
+        })
+    } catch (error) {
+        throw new Error('Error deleting user:' + error)
     }
 };
 
-const getAllUsers = ():Array<User> => {
-    return users;
+const getAllUsers = async (): Promise<Array<User>> => {
+    const users = await database.user.findMany();
+    return users.map((user:User) => new User({
+        username: user.getUsername(),
+        password: user.password,
+        role: user.getRole(),
+    }));
 };
 
 const createTestUsers = (): void => {
-    const user1 = new User({ username: "Janneke", password: "B@2", role: "admin" });
-    const user2 = new User({ username: "Jannineke", password: "A&2", role: "member" });
-    const user3 = new User({ username: "Jeanke", password: "C|3", role: "member" });
+    const user1 = new User({username: "Janneke", password: "B@2", role: "admin"});
+    const user2 = new User({username: "Jannineke", password: "A&2", role: "member"});
+    const user3 = new User({username: "Jeanke", password: "C|3", role: "member"});
     saveUser(user1);
     saveUser(user2);
     saveUser(user3);
 };
-createTestUsers();
+//createTestUsers();
 
-export default {saveUser,
-                getUserByUsername,
-                removeUser,
-                getAllUsers,
-                
-                };
+export default {
+    saveUser,
+    getUserByUsername,
+    removeUser,
+    getAllUsers,
+
+};

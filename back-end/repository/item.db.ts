@@ -1,30 +1,43 @@
 import Item from "../model/item";
+import database from "./database";
 
-const items: Array<Item> = [];
+//const items: Array<Item> = [];
 
-const saveItem = (item: Item): Item => {
-    items.push(item);
-    return item;
+const saveItem = async(item: Item): Promise<Item> => {
+    const savedItem = await database.item.create({
+        data: {
+            name: item.getName(),
+            description: item.description,
+            price: item.getPrice,
+            urgency: item.getUrgency,
+        },
+    });
+    return savedItem;
 };
 
-const getItemByName = ({name}: {name: string}): Item | undefined => {
+const getItemByName = async({name}: {name: string}): Promise<Item | null>  => {
     try {
-        return items.find((item) => {item.getName() === name}) || undefined;
+        const item = await database.item.findUnique({
+            where: {name},
+        });
+        return item;
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
 };
 
-const removeItem = (name: string): void => {
-    const index = items.findIndex(item => item.getName() === name);
-    if (index !== -1) {
-        items.splice(index, 1);
-    } else {
+const removeItem = async (name: string): Promise<void> => {
+    try {
+        await database.item.delete({
+            where: { name },
+        });
+    } catch (error) {
         throw new Error(`Item with name ${name} not found.`);
     }
 };
 
-const getAllItems = (): Array<Item> => {
+const getAllItems = async (): Promise<Array<Item>> => {
+    const items = await database.item.findMany();
     return items;
 };
 
@@ -43,7 +56,7 @@ const createTestItems = (): void => {
     itemslist.forEach((item) => saveItem(item))
     
 };
-createTestItems();
+//createTestItems();
 
 export default {
     saveItem,
