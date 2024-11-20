@@ -1,19 +1,19 @@
-import e from "express";
-
 class Profile {
     private email: string;
     public name: string;
-    public lastname: string;
+    public lastName: string;
+    public userId: number;
 
-    constructor (profile: {email: string, name: string, lastname: string}) {
+    constructor (profile: {email: string, name: string, lastName: string; userId: number}) {
         this.validateprofiles(profile);
 
         this.email = profile.email;
         this.name = profile.name;
-        this.lastname = profile.lastname;
+        this.lastName = profile.lastName;
+        this.userId = profile.userId;
     }
 
-    private validateprofiles = (profile: {email: string, name: string, lastname: string}) => {
+    private validateprofiles = (profile: {email: string, name: string, lastName: string}) => {
         if (typeof profile.email !== 'string' || profile.email.length > 60 || !this.validateEmail(profile.email)) {
             throw new Error('Invalid email value');
         }
@@ -22,7 +22,7 @@ class Profile {
             throw new Error('Invalid name value');
         }
 
-        if (typeof profile.lastname !== 'string' || profile.lastname.length > 60) {
+        if (typeof profile.lastName !== 'string' || profile.lastName.length > 60) {
             
             throw new Error('Invalid lastname value');
     
@@ -31,11 +31,11 @@ class Profile {
     };
 
     getFullName = ():string => {
-        return `${this.name} ${this.lastname}`;
+        return `${this.name} ${this.lastName}`;
     };
     
     getAbbreviatedName= ():string => {
-        return `${this.name[0]}${this.lastname[0]}`;
+        return `${this.name[0]}${this.lastName[0]}`;
     }
 
     setName= (name : string) =>
@@ -43,8 +43,8 @@ class Profile {
         this.name = name;
     }
 
-    setLastName= (lastname: string) => {
-        this.lastname = lastname;
+    setLastName= (lastName: string) => {
+        this.lastName = lastName;
     }
 
     validateEmail= (email:string): boolean =>

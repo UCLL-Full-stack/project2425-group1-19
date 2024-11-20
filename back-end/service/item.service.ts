@@ -2,9 +2,9 @@ import Item from "../model/item";
 import itemDb from "../repository/item.db";
 import { ItemInput } from "../types";
 
-const addItem = (input: ItemInput): Item => {
+const addItem = async(input: ItemInput): Promise<Item> => {
     try {
-        const existingItem = itemDb.getItemByName({ name: input.name });
+        const existingItem = await itemDb.getItemByName({ name: input.name });
         if (existingItem) {
             throw new Error(`Item with name ${input.name} already exists.`);
         }
@@ -17,8 +17,8 @@ const addItem = (input: ItemInput): Item => {
         
 };
 
-const getItem = (name: string): Item | undefined => {
-    const item = itemDb.getItemByName({ name });
+const getItem = async(name: string): Promise<Item | undefined> => {
+    const item = await itemDb.getItemByName({ name });
 
     if (item != undefined) {
         return item;
@@ -27,12 +27,12 @@ const getItem = (name: string): Item | undefined => {
     }
 };
 
-const getAllItems = (): Item[] => {
-    return itemDb.getAllItems();
+const getAllItems = async(): Promise<Item[]> => {
+    return await itemDb.getAllItems();
 };
 
-const removeItem = (name: string): void => {
-    const item = itemDb.getItemByName({ name });
+const removeItem = async(name: string): Promise<void> => {
+    const item = await itemDb.getItemByName({ name });
 
     if (item != undefined) {
         itemDb.removeItem(name);

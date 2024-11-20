@@ -5,7 +5,7 @@ const validName = "Test item";
 const validDescription = "This is a test item";
 const validPrice = 100;
 const validStringUrgency = "High Priority";
-const validNumberUrgency = 3;
+// const validNumberUrgency = 3;
 
 test('given valid values; when creating an item; then it should create the item correctly', () => {
     // given
@@ -105,23 +105,23 @@ test('given invalid urgency string; when creating an item; then it should throw 
     }).toThrow('Invalid urgency value');
 });
 
-test('given valid urgency number; when creating an item; then it should convert the number to corresponding string', () => {
-    // given
-    // (global constants are used)
+// test('given valid urgency number; when creating an item; then it should convert the number to corresponding string', () => {
+//     // given
+//     // (global constants are used)
 
-    // when
-    const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validNumberUrgency });
+//     // when
+//     const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validNumberUrgency });
 
-    // then
-    expect(newItem.getUrgency()).toBe(validStringUrgency);
-});
+//     // then
+//     expect(newItem.getUrgency()).toBe(validStringUrgency);
+// });
 
-test('given invalid urgency number; when creating an item; then it should throw an error', () => {
-    // given
-    const invalidUrgencyNumber = 5;
+// test('given invalid urgency number; when creating an item; then it should throw an error', () => {
+//     // given
+//     const invalidUrgencyNumber = 5;
 
-    // when & then
-    expect(() => {
-        new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgencyNumber });
-    }).toThrow('Invalid urgency value');
-});
+//     // when & then
+//     expect(() => {
+//         new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgencyNumber });
+//     }).toThrow('Invalid urgency value');
+// });

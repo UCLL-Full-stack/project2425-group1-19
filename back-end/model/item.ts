@@ -2,9 +2,10 @@ class Item {
     private name: string;
     public description: string;
     private price?: number;
-    private urgency?: string | number;
+    private urgency?: string;
 
-    constructor (item: {name: string, description: string, price?: number, urgency?: string | number}) {
+
+    constructor (item: {name: string, description: string, price?: number, urgency?: string}) {
         this.validateitems(item);
 
         this.name = item.name;
@@ -13,7 +14,7 @@ class Item {
         this.urgency = this.convertUrgency(item.urgency);
     }
 
-    private validateitems = (item: {name: string, description: string, price?: number, urgency?: string | number}) => {
+    private validateitems = (item: {name: string, description: string, price?: number, urgency?: string}) => {
         if (typeof item.name !== 'string' || item.name.length > 40) {
             throw new Error('Invalid name value');
         }
@@ -23,7 +24,7 @@ class Item {
         }
 
         if (item.price !== undefined) {
-            if (typeof item.price !== 'number' || !isFinite(item.price) || item.price <0) {
+            if (typeof item.price !== 'number' || !isFinite(item.price) || item.price < 0) {
                 throw new Error('Invalid price value');
             }
         }
@@ -48,10 +49,10 @@ class Item {
         return urgency || 'Not a Priority';
     };
 
-    getName = ():string => {
+    getName = (): string => {
         return this.name;
     };
-    getPrice = ():number => {
+    getPrice = (): number => {
         if (this.price == undefined) {
             return 0;
         }
@@ -62,5 +63,16 @@ class Item {
     getUrgency = () => {
         return this.urgency;
     }
+
+
+    static from = (data: any): Item => {
+        return new Item({
+            name: data.name,
+            description: data.description,
+            price: data.price,
+            urgency: data.urgency
+        });
+    };
 }
+
 export default Item;

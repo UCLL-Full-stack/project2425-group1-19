@@ -24,35 +24,33 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-test('given valid user input; when adding a user; then it should add the user correctly', () => {
+test('given valid user input; when adding a user; then it should add the user correctly', async () => {
     // given
-    mockGetUserByUsername.mockReturnValue(undefined);
-    mockSaveUser.mockReturnValue(user1);
+    mockGetUserByUsername.mockResolvedValue(null);
+    mockSaveUser.mockResolvedValue(user1);
 
     // when
-    const addedUser = UserService.addUser(userInput1);
+    const addedUser = await UserService.addUser(userInput1);
 
     // then
     expect(addedUser.getUsername()).toBe(userInput1.username);
     expect(mockSaveUser).toHaveBeenCalledWith(expect.any(User));
 });
 
-test('given existing username; when adding a user; then it should throw an error', () => {
+test('given existing username; when adding a user; then it should throw an error', async () => {
     // given
-    mockGetUserByUsername.mockReturnValue(user1);
+    mockGetUserByUsername.mockResolvedValue(user1);
 
     // when & then
-    expect(() => {
-        UserService.addUser(userInput1);
-    }).toThrow(`User with username ${userInput1.username} already exists.`);
+    await expect(UserService.addUser(userInput1)).rejects.toThrow(`User with username ${userInput1.username} already exists.`);
 });
 
-test('given valid username; when retrieving a user; then it should return the user', () => {
+test('given valid username; when retrieving a user; then it should return the user', async () => {
     // given
-    mockGetUserByUsername.mockReturnValue(user1);
+    mockGetUserByUsername.mockResolvedValue(user1);
 
     // when
-    const retrievedUser = UserService.getUser(userInput1.username);
+    const retrievedUser = await UserService.getUser(userInput1.username);
 
     // then
     expect(retrievedUser).toBeDefined();
@@ -60,45 +58,41 @@ test('given valid username; when retrieving a user; then it should return the us
     expect(mockGetUserByUsername).toHaveBeenCalledWith({ username: userInput1.username });
 });
 
-test('given non-existing username; when retrieving a user; then it should throw an error', () => {
+test('given non-existing username; when retrieving a user; then it should throw an error', async () => {
     // given
     const nonExistingUsername = "non_existing_user";
-    mockGetUserByUsername.mockReturnValue(undefined);
+    mockGetUserByUsername.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        UserService.getUser(nonExistingUsername);
-    }).toThrow(`User with username ${nonExistingUsername} does not exist.`);
+    await expect(UserService.getUser(nonExistingUsername)).rejects.toThrow(`User with username ${nonExistingUsername} does not exist.`);
 });
 
-test('given valid username; when removing a user; then it should remove the user', () => {
+test('given valid username; when removing a user; then it should remove the user', async () => {
     // given
-    mockGetUserByUsername.mockReturnValue(user1);
+    mockGetUserByUsername.mockResolvedValue(user1);
 
     // when
-    UserService.removeUser(userInput1.username);
+    await UserService.removeUser(userInput1.username);
 
     // then
     expect(mockRemoveUser).toHaveBeenCalledWith(userInput1.username);
 });
 
-test('given non-existing username; when removing a user; then it should throw an error', () => {
+test('given non-existing username; when removing a user; then it should throw an error', async () => {
     // given
     const nonExistingUsername = "non_existing_user";
-    mockGetUserByUsername.mockReturnValue(undefined);
+    mockGetUserByUsername.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        UserService.removeUser(nonExistingUsername);
-    }).toThrow(`User with username ${nonExistingUsername} does not exist.`);
+    await expect(UserService.removeUser(nonExistingUsername)).rejects.toThrow(`User with username ${nonExistingUsername} does not exist.`);
 });
 
-test('when retrieving all users; then it should return all users', () => {
+test('when retrieving all users; then it should return all users', async () => {
     // given
-    mockGetAllUsers.mockReturnValue([user1, user2, user3]);
+    mockGetAllUsers.mockResolvedValue([user1, user2, user3]);
 
     // when
-    const allUsers = UserService.getAllUsers();
+    const allUsers = await UserService.getAllUsers();
 
     // then
     expect(allUsers.length).toBe(3);

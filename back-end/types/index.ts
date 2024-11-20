@@ -2,7 +2,7 @@ type ItemInput = {
     name: string;
     description: string;
     price?: number;
-    urgency?: string | number;
+    urgency?: string;
 }
 
 type ShoppingListInput = {
@@ -19,7 +19,8 @@ type UserInput = {
 type ProfileInput = {
     email: string;
     name: string;
-    lastname: string;
+    lastName: string;
+    userId: number;
 }
 
 export {

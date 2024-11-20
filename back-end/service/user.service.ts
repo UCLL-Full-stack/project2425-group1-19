@@ -2,9 +2,9 @@ import User from "../model/user";
 import userDb from "../repository/user.db";
 import { UserInput } from "../types";
 
-const addUser = (input: UserInput): User => {
+const addUser = async(input: UserInput): Promise<User> => {
     try {
-        const existingUser = userDb.getUserByUsername({ username: input.username });
+        const existingUser = await userDb.getUserByUsername({ username: input.username });
         if (existingUser) {
             throw new Error(`User with username ${input.username} already exists.`);
         }
@@ -17,8 +17,8 @@ const addUser = (input: UserInput): User => {
         
 };
 
-const getUser = (username: string): User | undefined => {
-    const user = userDb.getUserByUsername({ username });
+const getUser = async(username: string): Promise<User | undefined> => {
+    const user = await userDb.getUserByUsername({ username });
 
     if (user != undefined) {
         return user;
@@ -27,12 +27,12 @@ const getUser = (username: string): User | undefined => {
     }
 };
 
-const getAllUsers = (): User[] => {
-    return userDb.getAllUsers();
+const getAllUsers = async(): Promise<User[]> => {
+    return await userDb.getAllUsers();
 };
 
-const removeUser = (username: string): void => {
-    const user = userDb.getUserByUsername({ username });
+const removeUser = async(username: string): Promise<void> => {
+    const user = await userDb.getUserByUsername({ username });
 
     if (user != undefined) {
         userDb.removeUser(username);

@@ -24,40 +24,38 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-test('given valid shopping list input; when adding a shopping list; then it should add the shopping list correctly', () => {
+test('given valid shopping list input; when adding a shopping list; then it should add the shopping list correctly', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2] };
+    const shoppingListInput = { name: validListName, items: [itemInput1, itemInput2] };
     const newShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockSaveShoppingList.mockReturnValue(newShoppingList);
+    mockSaveShoppingList.mockResolvedValue(newShoppingList);
 
     // when
-    const addedList = ShoppingListService.addShoppingList(shoppingListInput);
+    const addedList = await ShoppingListService.addShoppingList(shoppingListInput);
 
     // then
     expect(addedList.getListName()).toBe(validListName);
     expect(addedList.getListItems().length).toBe(2);
+    expect(mockSaveShoppingList).toHaveBeenCalledWith(expect.any(ShoppingList));
 });
 
-test('given existing shopping list name; when adding a shopping list; then it should throw an error', () => {
+test('given existing shopping list name; when adding a shopping list; then it should throw an error', async () => {
     // given
     const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when & then
-    expect(() => {
-        ShoppingListService.addShoppingList(shoppingListInput);
-    }).toThrow(`Shopping list with name ${validListName} already exists.`);
+    await expect(ShoppingListService.addShoppingList(shoppingListInput)).rejects.toThrow(`Shopping list with name ${validListName} already exists.`);
 });
 
-test('given valid shopping list name; when retrieving a shopping list; then it should return the shopping list', () => {
+test('given valid shopping list name; when retrieving a shopping list; then it should return the shopping list', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    const retrievedList = ShoppingListService.getShoppingList(validListName);
+    const retrievedList = await ShoppingListService.getShoppingList(validListName);
 
     // then
     expect(retrievedList).toBeDefined();
@@ -65,87 +63,74 @@ test('given valid shopping list name; when retrieving a shopping list; then it s
     expect(mockGetShoppingListByName).toHaveBeenCalledWith(validListName);
 });
 
-test('given non-existing shopping list name; when retrieving a shopping list; then it should throw an error', () => {
+test('given non-existing shopping list name; when retrieving a shopping list; then it should throw an error', async () => {
     // given
     const nonExistingListName = "NonExistingList";
-    mockGetShoppingListByName.mockReturnValue(undefined);
+    mockGetShoppingListByName.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ShoppingListService.getShoppingList(nonExistingListName);
-    }).toThrow(`Shopping list with name ${nonExistingListName} does not exist.`);
+    await expect(ShoppingListService.getShoppingList(nonExistingListName)).rejects.toThrow(`Shopping list with name ${nonExistingListName} does not exist.`);
 });
 
-test('given valid shopping list name; when removing a shopping list; then it should remove the shopping list', () => {
+test('given valid shopping list name; when removing a shopping list; then it should remove the shopping list', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    ShoppingListService.removeShoppingList(validListName);
+    await ShoppingListService.removeShoppingList(validListName);
 
     // then
     expect(mockRemoveShoppingList).toHaveBeenCalledWith(validListName);
 });
 
-test('given non-existing shopping list name; when removing a shopping list; then it should throw an error', () => {
+test('given non-existing shopping list name; when removing a shopping list; then it should throw an error', async () => {
     // given
     const nonExistingListName = "NonExistingList";
-    mockGetShoppingListByName.mockReturnValue(undefined);
+    mockGetShoppingListByName.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ShoppingListService.removeShoppingList(nonExistingListName);
-    }).toThrow(`Shopping list with name ${nonExistingListName} does not exist.`);
+    await expect(ShoppingListService.removeShoppingList(nonExistingListName)).rejects.toThrow(`Shopping list with name ${nonExistingListName} does not exist.`);
 });
 
-test('given valid item input; when adding an item to a shopping list; then it should add the item correctly', () => {
+test('given valid item input; when adding an item to a shopping list; then it should add the item correctly', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    ShoppingListService.addItemToShoppingList(validListName, itemInput2);
+    await ShoppingListService.addItemToShoppingList(validListName, itemInput2);
 
     // then
     expect(mockAddItemToShoppingList).toHaveBeenCalledWith(validListName, expect.any(Item));
 });
 
-test('given existing item name; when adding an item to a shopping list; then it should throw an error', () => {
+test('given existing item name; when adding an item to a shopping list; then it should throw an error', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when & then
-    expect(() => {
-        ShoppingListService.addItemToShoppingList(validListName, itemInput1);
-    }).toThrow(`Item with name ${itemInput1.name} already exists in the shopping list ${validListName}.`);
+    await expect(ShoppingListService.addItemToShoppingList(validListName, itemInput1)).rejects.toThrow(`Item with name ${itemInput1.name} already exists in the shopping list ${validListName}.`);
 });
 
-test('given valid item name; when removing an item from a shopping list; then it should remove the item', () => {
+test('given valid item name; when removing an item from a shopping list; then it should remove the item', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    ShoppingListService.removeItemFromShoppingList(validListName, itemInput1.name);
+    await ShoppingListService.removeItemFromShoppingList(validListName, itemInput1.name);
 
     // then
     expect(mockRemoveItemFromShoppingList).toHaveBeenCalledWith(validListName, itemInput1.name);
 });
 
-test('given non-existing item name; when removing an item from a shopping list; then it should throw an error', () => {
+test('given non-existing item name; when removing an item from a shopping list; then it should throw an error', async () => {
     // given
-    const shoppingListInput = { ListName: validListName, items: [itemInput1] };
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1] });
-    mockGetShoppingListByName.mockReturnValue(existingShoppingList);
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when & then
-    expect(() => {
-        ShoppingListService.removeItemFromShoppingList(validListName, itemInput2.name);
-    }).toThrow(`Item with name ${itemInput2.name} does not exist in the shopping list ${validListName}.`);
+    await expect(ShoppingListService.removeItemFromShoppingList(validListName, itemInput2.name)).rejects.toThrow(`Item with name ${itemInput2.name} does not exist in the shopping list ${validListName}.`);
 });

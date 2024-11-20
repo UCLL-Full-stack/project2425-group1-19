@@ -8,19 +8,38 @@ const saveItem = async(item: Item): Promise<Item> => {
         data: {
             name: item.getName(),
             description: item.description,
-            price: item.getPrice,
-            urgency: item.getUrgency,
+            price: item.getPrice(),
+            urgency: item.getUrgency(),
         },
     });
-    return savedItem;
+    return new Item(savedItem);
+};
+
+const getItemIdByName = async (name: string): Promise<number | null> => {
+    try {
+        const item = await database.item.findMany({
+            where: { name },
+            select: { id: true },
+        });
+        return item ? item[0].id : null;
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
 const getItemByName = async({name}: {name: string}): Promise<Item | null>  => {
     try {
+        const id = await getItemIdByName(name)
+        if (!id) {
+            throw new Error("No Item found with name:"+name);
+        };
         const item = await database.item.findUnique({
-            where: {name},
+            where: {id: id},
         });
-        return item;
+        if (!item) {
+            throw new Error("No item found with name:" + name)
+        }
+        return new Item(item);
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
@@ -28,8 +47,12 @@ const getItemByName = async({name}: {name: string}): Promise<Item | null>  => {
 
 const removeItem = async (name: string): Promise<void> => {
     try {
+        const id = await getItemIdByName(name)
+        if (!id) {
+            throw new Error("No Item found with name:"+name);
+        };
         await database.item.delete({
-            where: { name },
+            where: { id },
         });
     } catch (error) {
         throw new Error(`Item with name ${name} not found.`);
@@ -38,7 +61,8 @@ const removeItem = async (name: string): Promise<void> => {
 
 const getAllItems = async (): Promise<Array<Item>> => {
     const items = await database.item.findMany();
-    return items;
+    const items_array = items.map((i) => new Item(i));
+    return items_array;
 };
 
 const createTestItems = (): void => {
@@ -46,8 +70,8 @@ const createTestItems = (): void => {
         new Item({name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "High Priority"}),
         new Item({name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority"}),
         new Item({name: "Eggs", description: "Dozen large eggs", price: 2.99, urgency: "High Priority"}),
-        new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: 2}),
-        new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: 2}),
+        new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: "Not a Priority"}),
+        new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: "Not a Priority"}),
         new Item({name: "Chicken Breast", description: "1 kg of boneless chicken breast", price: 7.99, urgency: "High Priority"}),
         new Item({name: "Tomatoes", description: "1 kg of fresh tomatoes", price: 2.99, urgency: "Low Priority"}), 
         new Item({name: "Pens", description: "Pack of 10 blue pens", price: 5.99, urgency: "Low Priority"}),
@@ -56,6 +80,15 @@ const createTestItems = (): void => {
     itemslist.forEach((item) => saveItem(item))
     
 };
+
+Item.from = function (data: any): Item {
+    return new Item({
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        urgency: data.urgency,
+    });
+};
 //createTestItems();
 
 export default {
@@ -63,5 +96,6 @@ export default {
     getItemByName,
     removeItem,
     getAllItems,
-
+    getItemIdByName,
+    
 };

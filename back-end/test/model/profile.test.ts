@@ -4,10 +4,11 @@ import Profile from "../../model/profile";
 const validEmail = "test@example.com";
 const validName = "John";
 const validLastName = "Doe";
+const validUserId = 1;
 
 test('given valid values; when creating a profile; then it should create the profile correctly', () => {
     // given
-    const profileData = { email: validEmail, name: validName, lastname: validLastName };
+    const profileData = { email: validEmail, name: validName, lastName: validLastName, userId: validUserId };
 
     // when
     const newProfile = new Profile(profileData);
@@ -15,7 +16,8 @@ test('given valid values; when creating a profile; then it should create the pro
     // then
     expect(newProfile.getEmail()).toBe(validEmail);
     expect(newProfile.name).toBe(validName);
-    expect(newProfile.lastname).toBe(validLastName);
+    expect(newProfile.lastName).toBe(validLastName);
+    expect(newProfile.userId).toBe(validUserId);
 });
 
 test('given invalid email; when creating a profile; then it should throw an error', () => {
@@ -24,7 +26,7 @@ test('given invalid email; when creating a profile; then it should throw an erro
 
     // when & then
     expect(() => {
-        new Profile({ email: invalidEmail, name: validName, lastname: validLastName });
+        new Profile({ email: invalidEmail, name: validName, lastName: validLastName, userId: validUserId });
     }).toThrow('Invalid email value');
 });
 
@@ -34,7 +36,7 @@ test('given email longer than 60 characters; when creating a profile; then it sh
 
     // when & then
     expect(() => {
-        new Profile({ email: longEmail, name: validName, lastname: validLastName });
+        new Profile({ email: longEmail, name: validName, lastName: validLastName, userId: validUserId });
     }).toThrow('Invalid email value');
 });
 
@@ -44,7 +46,7 @@ test('given invalid name; when creating a profile; then it should throw an error
 
     // when & then
     expect(() => {
-        new Profile({ email: validEmail, name: invalidName, lastname: validLastName });
+        new Profile({ email: validEmail, name: invalidName, lastName: validLastName, userId: validUserId });
     }).toThrow('Invalid name value');
 });
 
@@ -54,33 +56,33 @@ test('given name longer than 40 characters; when creating a profile; then it sho
 
     // when & then
     expect(() => {
-        new Profile({ email: validEmail, name: longName, lastname: validLastName });
+        new Profile({ email: validEmail, name: longName, lastName: validLastName, userId: validUserId });
     }).toThrow('Invalid name value');
 });
 
-test('given invalid lastname; when creating a profile; then it should throw an error', () => {
+test('given invalid lastName; when creating a profile; then it should throw an error', () => {
     // given
     const invalidLastname = 123 as any;
 
     // when & then
     expect(() => {
-        new Profile({ email: validEmail, name: validName, lastname: invalidLastname });
+        new Profile({ email: validEmail, name: validName, lastName: invalidLastname, userId: validUserId });
     }).toThrow('Invalid lastname value');
 });
 
-test('given lastname longer than 60 characters; when creating a profile; then it should throw an error', () => {
+test('given lastName longer than 60 characters; when creating a profile; then it should throw an error', () => {
     // given
     const longLastname = "a".repeat(61);
 
     // when & then
     expect(() => {
-        new Profile({ email: validEmail, name: validName, lastname: longLastname });
+        new Profile({ email: validEmail, name: validName, lastName: longLastname, userId: validUserId });
     }).toThrow('Invalid lastname value');
 });
 
 test('given valid profile; when getting full name; then it should return the correct full name', () => {
     // given
-    const newProfile = new Profile({ email: validEmail, name: validName, lastname: validLastName });
+    const newProfile = new Profile({ email: validEmail, name: validName, lastName: validLastName, userId: validUserId });
 
     // when
     const fullName = newProfile.getFullName();
@@ -91,7 +93,7 @@ test('given valid profile; when getting full name; then it should return the cor
 
 test('given valid profile; when getting abbreviated name; then it should return the correct abbreviated name', () => {
     // given
-    const newProfile = new Profile({ email: validEmail, name: validName, lastname: validLastName });
+    const newProfile = new Profile({ email: validEmail, name: validName, lastName: validLastName, userId: validUserId });
 
     // when
     const abbreviatedName = newProfile.getAbbreviatedName();
@@ -102,7 +104,7 @@ test('given valid profile; when getting abbreviated name; then it should return 
 
 test('given valid new name; when updating the name; then it should update the name correctly', () => {
     // given
-    const newProfile = new Profile({ email: validEmail, name: validName, lastname: validLastName });
+    const newProfile = new Profile({ email: validEmail, name: validName, lastName: validLastName, userId: validUserId });
     const newName = "Jane";
 
     // when
@@ -112,14 +114,14 @@ test('given valid new name; when updating the name; then it should update the na
     expect(newProfile.name).toBe(newName);
 });
 
-test('given valid new lastname; when updating the lastname; then it should update the lastname correctly', () => {
+test('given valid new lastName; when updating the lastName; then it should update the lastName correctly', () => {
     // given
-    const newProfile = new Profile({ email: validEmail, name: validName, lastname: validLastName });
+    const newProfile = new Profile({ email: validEmail, name: validName, lastName: validLastName, userId: validUserId });
     const newLastname = "Smith";
 
     // when
     newProfile.setLastName(newLastname);
 
     // then
-    expect(newProfile.lastname).toBe(newLastname);
+    expect(newProfile.lastName).toBe(newLastname);
 });

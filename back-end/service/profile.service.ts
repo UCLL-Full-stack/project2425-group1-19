@@ -2,9 +2,9 @@ import Profile from "../model/profile";
 import profileDb from "../repository/profile.db";
 import { ProfileInput as ProfileInput } from "../types";
 
-const addProfile = (input: ProfileInput): Profile => {
+const addProfile = async(input: ProfileInput): Promise<Profile> => {
     try {
-        const existingProfile = profileDb.getProfileByEmail({ email: input.email });
+        const existingProfile = await profileDb.getProfileByEmail({ email: input.email });
         if (existingProfile) {
             throw new Error(`Profile with email ${input.email} already exists.`);
         }
@@ -17,8 +17,8 @@ const addProfile = (input: ProfileInput): Profile => {
         
 };
 
-const getProfileByEmail = (email: string): Profile | undefined => {
-    const profile = profileDb.getProfileByEmail({ email });
+const getProfileByEmail = async(email: string): Promise<Profile | undefined> => {
+    const profile = await profileDb.getProfileByEmail({ email });
 
     if (profile != undefined) {
         return profile;
@@ -27,12 +27,12 @@ const getProfileByEmail = (email: string): Profile | undefined => {
     }
 };
 
-const getAllProfiles = (): Profile[] => {
-    return profileDb.getAllProfiles();
+const getAllProfiles = async(): Promise<Profile[]> => {
+    return await profileDb.getAllProfiles();
 };
 
-const removeProfile = (email: string): void => {
-    const profile = profileDb.getProfileByEmail({ email });
+const removeProfile = async(email: string): Promise<void> => {
+    const profile = await profileDb.getProfileByEmail({ email });
 
     if (profile != undefined) {
         profileDb.removeProfile(email);

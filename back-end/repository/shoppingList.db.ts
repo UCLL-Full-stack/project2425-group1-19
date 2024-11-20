@@ -17,8 +17,12 @@ const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingLis
                 })),
             },
         },
+        include: {items: true},
     });
-    return savedShoppingList;
+    return new ShoppingList({
+        ListName: savedShoppingList.name,
+        items: savedShoppingList.items.map((i) => new Item(i))
+    });
 };
 
 const getShoppingListByName = async (name: string): Promise<ShoppingList | null> => {
@@ -45,9 +49,18 @@ const removeShoppingList = async (name: string): Promise<void> => {
 };
 
 const getAllShoppingLists = async (): Promise<Array<ShoppingList>> => {
-    const shoppingLists:ShoppingList[] = await database.shoppingList.findMany({
+    const shoppingListsData = await database.shoppingList.findMany({
         include: {items: true},
     });
+    const shoppingLists: ShoppingList[] = shoppingListsData.map(list => new ShoppingList({
+        ListName: list.name,
+        items: list.items.map(item => new Item({
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            urgency: item.urgency,
+        })),
+    }));
     return shoppingLists.map((list) => new ShoppingList({
         ListName: list.getListName(),
         items: list.getListItems().map((item: Item) => new Item({
@@ -100,8 +113,8 @@ const createTestShoppingLists = (): void => {
             new Item({name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "High Priority"}),
             new Item({name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority"}),
             new Item({name: "Eggs", description: "Dozen large eggs", price: 2.99, urgency: "High Priority"}),
-            new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: 2}),
-            new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: 2}),
+            new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: "Not a Priority"}),
+            new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: "Not a Priority"}),
             new Item({name: "Chicken Breast", description: "1 kg of boneless chicken breast", price: 7.99, urgency: "High Priority"}),
             new Item({name: "Tomatoes", description: "1 kg of fresh tomatoes", price: 2.99, urgency: "Low Priority"})
         ]

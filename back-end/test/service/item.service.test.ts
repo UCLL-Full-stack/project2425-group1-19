@@ -21,35 +21,33 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-test('given valid item input; when adding an item; then it should add the item correctly', () => {
+test('given valid item input; when adding an item; then it should add the item correctly', async () => {
     // given
-    mockGetItemByName.mockReturnValue(undefined);
-    mockSaveItem.mockReturnValue(item1);
+    mockGetItemByName.mockResolvedValue(null);
+    mockSaveItem.mockResolvedValue(item1);
 
     // when
-    const addedItem = ItemService.addItem(itemInput1);
+    const addedItem = await ItemService.addItem(itemInput1);
 
     // then
     expect(addedItem.getName()).toBe(itemInput1.name);
     expect(mockSaveItem).toHaveBeenCalledWith(expect.any(Item));
 });
 
-test('given existing item name; when adding an item; then it should throw an error', () => {
+test('given existing item name; when adding an item; then it should throw an error', async () => {
     // given
-    mockGetItemByName.mockReturnValue(item1);
+    mockGetItemByName.mockResolvedValue(item1);
 
     // when & then
-    expect(() => {
-        ItemService.addItem(itemInput1);
-    }).toThrow(`Item with name ${itemInput1.name} already exists.`);
+    await expect(ItemService.addItem(itemInput1)).rejects.toThrow(`Item with name ${itemInput1.name} already exists.`);
 });
 
-test('given valid item name; when retrieving an item; then it should return the item', () => {
+test('given valid item name; when retrieving an item; then it should return the item', async () => {
     // given
-    mockGetItemByName.mockReturnValue(item1);
+    mockGetItemByName.mockResolvedValue(item1);
 
     // when
-    const retrievedItem = ItemService.getItem(itemInput1.name);
+    const retrievedItem = await ItemService.getItem(itemInput1.name);
 
     // then
     expect(retrievedItem).toBeDefined();
@@ -57,45 +55,41 @@ test('given valid item name; when retrieving an item; then it should return the 
     expect(mockGetItemByName).toHaveBeenCalledWith({ name: itemInput1.name });
 });
 
-test('given non-existing item name; when retrieving an item; then it should throw an error', () => {
+test('given non-existing item name; when retrieving an item; then it should throw an error', async () => {
     // given
     const nonExistingItemName = "NonExistingItem";
-    mockGetItemByName.mockReturnValue(undefined);
+    mockGetItemByName.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ItemService.getItem(nonExistingItemName);
-    }).toThrow(`Item with name ${nonExistingItemName} does not exist.`);
+    await expect(ItemService.getItem(nonExistingItemName)).rejects.toThrow(`Item with name ${nonExistingItemName} does not exist.`);
 });
 
-test('given valid item name; when removing an item; then it should remove the item', () => {
+test('given valid item name; when removing an item; then it should remove the item', async () => {
     // given
-    mockGetItemByName.mockReturnValue(item1);
+    mockGetItemByName.mockResolvedValue(item1);
 
     // when
-    ItemService.removeItem(itemInput1.name);
+    await ItemService.removeItem(itemInput1.name);
 
     // then
     expect(mockRemoveItem).toHaveBeenCalledWith(itemInput1.name);
 });
 
-test('given non-existing item name; when removing an item; then it should throw an error', () => {
+test('given non-existing item name; when removing an item; then it should throw an error', async () => {
     // given
     const nonExistingItemName = "NonExistingItem";
-    mockGetItemByName.mockReturnValue(undefined);
+    mockGetItemByName.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ItemService.removeItem(nonExistingItemName);
-    }).toThrow(`Item with name ${nonExistingItemName} does not exist.`);
+    await expect(ItemService.removeItem(nonExistingItemName)).rejects.toThrow(`Item with name ${nonExistingItemName} does not exist.`);
 });
 
-test('when retrieving all items; then it should return all items', () => {
+test('when retrieving all items; then it should return all items', async () => {
     // given
-    mockGetAllItems.mockReturnValue([item1, item2, item3]);
+    mockGetAllItems.mockResolvedValue([item1, item2, item3]);
 
     // when
-    const allItems = ItemService.getAllItems();
+    const allItems = await ItemService.getAllItems();
 
     // then
     expect(allItems.length).toBe(3);

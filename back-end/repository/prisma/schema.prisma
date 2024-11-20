@@ -12,7 +12,7 @@ model Item {
     name           String
     description    String
     price          Float
-    urgency        Int           @default(0)
+    urgency        String           @default("Not a Priority")
     ShoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
     shoppingListId Int?
 }
@@ -27,7 +27,8 @@ model Profile {
 
 model ShoppingList {
     id    Int    @id @default(autoincrement())
-    Items Item[]
+    name  String @unique
+    items Item[]
 }
 
 model User {

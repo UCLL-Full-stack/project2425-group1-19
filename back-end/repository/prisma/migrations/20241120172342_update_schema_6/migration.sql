@@ -4,7 +4,7 @@ CREATE TABLE "Item" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "urgency" INTEGER NOT NULL DEFAULT 0,
+    "urgency" TEXT NOT NULL DEFAULT 'Not a Priority',
     "shoppingListId" INTEGER,
 
     CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
@@ -16,6 +16,7 @@ CREATE TABLE "Profile" (
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -23,6 +24,7 @@ CREATE TABLE "Profile" (
 -- CreateTable
 CREATE TABLE "ShoppingList" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "ShoppingList_pkey" PRIMARY KEY ("id")
 );
@@ -39,6 +41,9 @@ CREATE TABLE "User" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_email_key" ON "Profile"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ShoppingList_name_key" ON "ShoppingList"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");

@@ -12,7 +12,11 @@ const saveUser = async (user: User): Promise<User> => {
                 role: user.getRole(),
             },
         });
-        return userDatabase;
+        return new User({
+            username: userDatabase.username,
+            password: userDatabase.password,
+            role: userDatabase.role,
+        });
     } catch (error) {
         throw new Error('Database Error while creating user:' + error)
     }
@@ -24,7 +28,11 @@ const getUserByUsername = async ({username}: {username: string}): Promise<User |
             where: {username},
         });
         if (user) {
-            return user;
+            return new User({
+                username: user.username,
+                password: user.password,
+                role: user.role,
+            });
         } else {
             throw new Error('No User found with given user name')
         };
@@ -45,10 +53,10 @@ const removeUser = async (username: string): Promise<void> => {
 
 const getAllUsers = async (): Promise<Array<User>> => {
     const users = await database.user.findMany();
-    return users.map((user:User) => new User({
-        username: user.getUsername(),
+    return users.map((user: { username: string; password: string; role: string; id: number }) => new User({
+        username: user.username,
         password: user.password,
-        role: user.getRole(),
+        role: user.role,
     }));
 };
 

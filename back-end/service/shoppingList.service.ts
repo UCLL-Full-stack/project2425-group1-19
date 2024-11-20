@@ -4,21 +4,20 @@ import ShoppingList from "../model/shoppingList";
 import { ShoppingListInput, ItemInput } from "../types";
 import itemDb from "../repository/item.db";
 
-const addShoppingList = (input: ShoppingListInput): ShoppingList => {
-    const existingList = shoppingListDb.getShoppingListByName(input.ListName || "General list");
+const addShoppingList = async(input: ShoppingListInput): Promise<ShoppingList> => {
+    const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
     if (existingList) {
         throw new Error(`Shopping list with name ${input.ListName} already exists.`);
     }
 
-    //Om zeker te zijn dat de list voldoet aan de regels
     const items = input.items?.map(item => new Item(item)) || [];
     const newShoppingList = new ShoppingList({ ListName: input.ListName, items });
     items.forEach(item => itemDb.saveItem(item));
     return shoppingListDb.saveShoppingList(newShoppingList);
 };
 
-const getShoppingList = (name: string): ShoppingList | undefined => {
-    const shoppingList = shoppingListDb.getShoppingListByName(name);
+const getShoppingList = async(name: string): Promise<ShoppingList | undefined> => {
+    const shoppingList = await shoppingListDb.getShoppingListByName(name);
 
     if (shoppingList != undefined) {
         return shoppingList;
@@ -27,12 +26,12 @@ const getShoppingList = (name: string): ShoppingList | undefined => {
     }
 };
 
-const getAllShoppingLists = (): ShoppingList[] => {
-    return shoppingListDb.getAllShoppingLists();
+const getAllShoppingLists = async(): Promise<ShoppingList[]> => {
+    return await shoppingListDb.getAllShoppingLists();
 };
 
-const removeShoppingList = (name: string): void => {
-    const shoppingList = shoppingListDb.getShoppingListByName(name);
+const removeShoppingList = async(name: string): Promise<void> => {
+    const shoppingList = await shoppingListDb.getShoppingListByName(name);
 
     if (shoppingList != undefined) {
         const items = shoppingList.getListItems();
@@ -43,8 +42,8 @@ const removeShoppingList = (name: string): void => {
     }
 };
 
-const addItemToShoppingList = (listName: string, ItemInput: ItemInput): void => {
-    const shoppingList = shoppingListDb.getShoppingListByName(listName);
+const addItemToShoppingList = async(listName: string, ItemInput: ItemInput): Promise<void> => {
+    const shoppingList = await shoppingListDb.getShoppingListByName(listName);
 
     if (shoppingList != undefined) {
         const existingItem = shoppingList.getListItems().find(item => item.getName() === ItemInput.name);
@@ -60,8 +59,8 @@ const addItemToShoppingList = (listName: string, ItemInput: ItemInput): void => 
     }
 };
 
-const removeItemFromShoppingList = (listName: string, itemName: string): void => {
-    const shoppingList = shoppingListDb.getShoppingListByName(listName);
+const removeItemFromShoppingList = async(listName: string, itemName: string): Promise<void> => {
+    const shoppingList = await shoppingListDb.getShoppingListByName(listName);
 
     if (shoppingList != undefined) {
         const existingItem = shoppingList.getListItems().find(item => item.getName() === itemName);

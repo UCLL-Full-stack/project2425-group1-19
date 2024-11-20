@@ -4,9 +4,9 @@ import Profile from "../../model/profile";
 import { ProfileInput } from "../../types";
 
 // Sample profile inputs
-const profileInput1: ProfileInput = { email: "john.doe@example.com", name: "John", lastname: "Doe" };
-const profileInput2: ProfileInput = { email: "jane.doe@example.com", name: "Jane", lastname: "Doe" };
-const profileInput3: ProfileInput = { email: "mark.smith@example.com", name: "Mark", lastname: "Smith" };
+const profileInput1: ProfileInput = { email: "john.doe@example.com", name: "John", lastName: "Doe", userId: 1 };
+const profileInput2: ProfileInput = { email: "jane.doe@example.com", name: "Jane", lastName: "Doe", userId: 2 };
+const profileInput3: ProfileInput = { email: "mark.smith@example.com", name: "Mark", lastName: "Smith", userId: 3 };
 
 const profile1 = new Profile(profileInput1);
 const profile2 = new Profile(profileInput2);
@@ -24,35 +24,33 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-test('given valid profile input; when adding a profile; then it should add the profile correctly', () => {
+test('given valid profile input; when adding a profile; then it should add the profile correctly', async () => {
     // given
-    mockGetProfileByEmail.mockReturnValue(undefined);
-    mockSaveProfile.mockReturnValue(profile1);
+    mockGetProfileByEmail.mockResolvedValue(null);
+    mockSaveProfile.mockResolvedValue(profile1);
 
     // when
-    const addedProfile = ProfileService.addProfile(profileInput1);
+    const addedProfile = await ProfileService.addProfile(profileInput1);
 
     // then
     expect(addedProfile.getEmail()).toBe(profileInput1.email);
     expect(mockSaveProfile).toHaveBeenCalledWith(expect.any(Profile));
 });
 
-test('given existing email; when adding a profile; then it should throw an error', () => {
+test('given existing email; when adding a profile; then it should throw an error', async () => {
     // given
-    mockGetProfileByEmail.mockReturnValue(profile1);
+    mockGetProfileByEmail.mockResolvedValue(profile1);
 
     // when & then
-    expect(() => {
-        ProfileService.addProfile(profileInput1);
-    }).toThrow(`Profile with email ${profileInput1.email} already exists.`);
+    await expect(ProfileService.addProfile(profileInput1)).rejects.toThrow(`Profile with email ${profileInput1.email} already exists.`);
 });
 
-test('given valid email; when retrieving a profile; then it should return the profile', () => {
+test('given valid email; when retrieving a profile; then it should return the profile', async () => {
     // given
-    mockGetProfileByEmail.mockReturnValue(profile1);
+    mockGetProfileByEmail.mockResolvedValue(profile1);
 
     // when
-    const retrievedProfile = ProfileService.getProfileByEmail(profileInput1.email);
+    const retrievedProfile = await ProfileService.getProfileByEmail(profileInput1.email);
 
     // then
     expect(retrievedProfile).toBeDefined();
@@ -60,45 +58,41 @@ test('given valid email; when retrieving a profile; then it should return the pr
     expect(mockGetProfileByEmail).toHaveBeenCalledWith({ email: profileInput1.email });
 });
 
-test('given non-existing email; when retrieving a profile; then it should throw an error', () => {
+test('given non-existing email; when retrieving a profile; then it should throw an error', async () => {
     // given
     const nonExistingEmail = "non_existing_email@example.com";
-    mockGetProfileByEmail.mockReturnValue(undefined);
+    mockGetProfileByEmail.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ProfileService.getProfileByEmail(nonExistingEmail);
-    }).toThrow(`Profile with email ${nonExistingEmail} does not exist.`);
+    await expect(ProfileService.getProfileByEmail(nonExistingEmail)).rejects.toThrow(`Profile with email ${nonExistingEmail} does not exist.`);
 });
 
-test('given valid email; when removing a profile; then it should remove the profile', () => {
+test('given valid email; when removing a profile; then it should remove the profile', async () => {
     // given
-    mockGetProfileByEmail.mockReturnValue(profile1);
+    mockGetProfileByEmail.mockResolvedValue(profile1);
 
     // when
-    ProfileService.removeProfile(profileInput1.email);
+    await ProfileService.removeProfile(profileInput1.email);
 
     // then
     expect(mockRemoveProfile).toHaveBeenCalledWith(profileInput1.email);
 });
 
-test('given non-existing email; when removing a profile; then it should throw an error', () => {
+test('given non-existing email; when removing a profile; then it should throw an error', async () => {
     // given
     const nonExistingEmail = "non_existing_email@example.com";
-    mockGetProfileByEmail.mockReturnValue(undefined);
+    mockGetProfileByEmail.mockResolvedValue(null);
 
     // when & then
-    expect(() => {
-        ProfileService.removeProfile(nonExistingEmail);
-    }).toThrow(`Profile with email ${nonExistingEmail} does not exist.`);
+    await expect(ProfileService.removeProfile(nonExistingEmail)).rejects.toThrow(`Profile with email ${nonExistingEmail} does not exist.`);
 });
 
-test('when retrieving all profiles; then it should return all profiles', () => {
+test('when retrieving all profiles; then it should return all profiles', async () => {
     // given
-    mockGetAllProfiles.mockReturnValue([profile1, profile2, profile3]);
+    mockGetAllProfiles.mockResolvedValue([profile1, profile2, profile3]);
 
     // when
-    const allProfiles = ProfileService.getAllProfiles();
+    const allProfiles = await ProfileService.getAllProfiles();
 
     // then
     expect(allProfiles.length).toBe(3);
