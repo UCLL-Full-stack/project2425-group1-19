@@ -12,6 +12,7 @@ const item3 = new Item(itemInput3);
 
 jest.mock("../../repository/item.db");
 
+// Change to use jest.fn so mocking is cleaner
 const mockSaveItem = itemDb.saveItem as jest.Mock;
 const mockGetItemByName = itemDb.getItemByName as jest.Mock;
 const mockRemoveItem = itemDb.removeItem as jest.Mock;
