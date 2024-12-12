@@ -23,7 +23,7 @@ body {
   margin: 0;
   text-align: center;
 }
-
+/* 
 header {
   width: 100%;
   padding: 1rem;
@@ -57,7 +57,7 @@ header nav a {
 
 header nav a:hover {
   text-decoration: underline;
-}
+} */
 
 .ProfileIcon {
   justify-self: center;

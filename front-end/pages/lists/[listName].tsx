@@ -8,6 +8,19 @@ import {ShoppingList} from '@/types';
 
 const ListPage: React.FC = () => {
     const router = useRouter();
+
+    useEffect(() => {
+        try {
+            const userToken = localStorage.getItem("userLoginToken");
+            if (!userToken) {
+                router.push("/login");
+            }
+        } catch (error) {
+            console.error("An error occurred while retrieving the user token:", error);
+            router.push("/login");
+        }
+    }, [router]);
+
     const {listName} = router.query;
     const [list, setList] = useState<ShoppingList | null>(null);
 
@@ -31,11 +44,7 @@ const ListPage: React.FC = () => {
             <Head>
                 <title>{listName}'s list</title>
             </Head>
-            <header>
-                <nav>
-                    <Header />
-                </nav>
-            </header>
+            <Header />
             <main>
                 <ListDetail shoppingListName={Array.isArray(listName) ? listName[0] : (listName || '')} />
             </main>
