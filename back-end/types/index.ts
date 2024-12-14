@@ -13,7 +13,7 @@ type ShoppingListInput = {
 type UserInput = {
     username: string;
     password: string;
-    role: string;
+    role: 'admin' | 'adult' | 'child';
 }
 
 type ProfileInput = {

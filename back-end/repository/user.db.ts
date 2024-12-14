@@ -15,7 +15,7 @@ const saveUser = async (user: User): Promise<User> => {
         return new User({
             username: userDatabase.username,
             password: userDatabase.password,
-            role: userDatabase.role,
+            role: userDatabase.role as 'admin' | 'adult' | 'child',
         });
     } catch (error) {
         throw new Error('Database Error while creating user:' + error)
@@ -31,7 +31,7 @@ const getUserByUsername = async ({username}: {username: string}): Promise<User |
             return new User({
                 username: user.username,
                 password: user.password,
-                role: user.role,
+                role: user.role as 'admin' | 'adult' | 'child',
             });
         } else {
             throw new Error('No User found with given user name')
@@ -56,14 +56,14 @@ const getAllUsers = async (): Promise<Array<User>> => {
     return users.map((user: { username: string; password: string; role: string; id: number }) => new User({
         username: user.username,
         password: user.password,
-        role: user.role,
+        role: user.role as 'admin' | 'adult' | 'child',
     }));
 };
 
 const createTestUsers = (): void => {
     const user1 = new User({username: "Janneke", password: "B@2", role: "admin"});
-    const user2 = new User({username: "Jannineke", password: "A&2", role: "member"});
-    const user3 = new User({username: "Jeanke", password: "C|3", role: "member"});
+    const user2 = new User({username: "Jannineke", password: "A&2", role: "adult"});
+    const user3 = new User({username: "Jeanke", password: "C|3", role: "child"});
     saveUser(user1);
     saveUser(user2);
     saveUser(user3);

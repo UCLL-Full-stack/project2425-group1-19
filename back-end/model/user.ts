@@ -1,9 +1,11 @@
+import { UserInput } from "../types";
+
 class User {
     private username: string;
     public password: string;
-    private role: string;
+    private role: 'admin' | 'adult' | 'child';
 
-    constructor (user: {username: string, password: string, role: string}) {
+    constructor (user: UserInput) {
         this.validateusers(user);
         this.validatePassword(user.password);
 
@@ -12,7 +14,7 @@ class User {
         this.role = user.role;
     }
 
-    private validateusers = (user: {username: string, password: string, role: string}) => {
+    private validateusers = (user: UserInput) => {
         if (typeof user.username !== 'string' || user.username.length > 40) {
             throw new Error('Invalid username value');
         }
@@ -21,8 +23,8 @@ class User {
             throw new Error('Invalid password value');
         }
 
-        if (typeof user.role !== 'string') {
-            throw new Error('Invalid role value')
+        if (typeof user.role !== 'string' || !['admin', 'adult', 'child'].includes(user.role)) {
+            throw new Error('Invalid role value');
         }
 
     };
@@ -35,7 +37,7 @@ class User {
         return this.role;
     }
 
-    setRole= (role : string) =>
+    setRole= (role : 'admin' | 'adult' | 'child') =>
     {
         this.role = role;
     }

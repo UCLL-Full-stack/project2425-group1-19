@@ -27,7 +27,7 @@ const main = async () => {
         data: {
             username: 'johndoe',
             password: await bcrypt.hash('password123', 12),
-            role: 'member',
+            role: 'adult',
         },
     });
 

@@ -2,7 +2,7 @@ import User from "../../model/user";
 
 const validUsername = "testuser";
 const validPassword = "Password@123";
-const validRole = "admin";
+const validRole: "admin" | "adult" | "child" = "admin";
 
 test('given valid values; when creating a user; then it should create the user correctly', () => {
     // given
@@ -70,7 +70,7 @@ test('given invalid role; when creating a user; then it should throw an error', 
 test('given valid new role; when updating the user role; then it should update the role correctly', () => {
     // given
     const newUser = new User({ username: validUsername, password: validPassword, role: validRole });
-    const newRole = "user";
+    const newRole:any = 'user';
 
     // when
     newUser.setRole(newRole);

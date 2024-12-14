@@ -5,8 +5,8 @@ import { UserInput } from "../../types";
 
 // Sample user inputs
 const userInput1: UserInput = { username: "Janneke", password: "B@1", role: "admin" };
-const userInput2: UserInput = { username: "Jannineke", password: "A&2", role: "member" };
-const userInput3: UserInput = { username: "Jeanke", password: "C|3", role: "member" };
+const userInput2: UserInput = { username: "Jannineke", password: "A&2", role: "adult" };
+const userInput3: UserInput = { username: "Jeanke", password: "C|3", role: "child" };
 
 const user1 = new User(userInput1);
 const user2 = new User(userInput2);
