@@ -46,6 +46,7 @@ const removeUser = async(username: string): Promise<void> => {
 const authenticate = async({username, password}:UserInput): Promise<AuthenticationResponse>=> {
     const user = await userDb.getUserByUsername({username});
 
+    console.log(user);
     if (!user || !user.password) {
         throw new Error('Invalid username or password');
     }

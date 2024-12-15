@@ -1,4 +1,5 @@
 import User from "../model/user";
+import { UserInput } from "../types";
 import database from "./database";
 import bcrypt from 'bcrypt';
 
@@ -39,7 +40,11 @@ const getUserByUsername = async ({username}: {username: string}): Promise<User |
             where: {username},
         });
         if (user) {
-            return 
+            return new User({
+                username: user.username,
+                password: user.password,
+                role: user.role as 'admin' | 'adult' | 'child',
+                });
         } else {
             throw new Error('No User found with given user name')
         };
