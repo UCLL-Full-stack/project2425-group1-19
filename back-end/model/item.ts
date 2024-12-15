@@ -1,20 +1,22 @@
+import {Urgency} from "../types";
+
 class Item {
     private name: string;
     public description: string;
     private price?: number;
-    private urgency?: string;
+    private urgency?: Urgency;
 
 
-    constructor (item: {name: string, description: string, price?: number, urgency?: string}) {
+    constructor (item: {name: string, description: string, price?: number, urgency?: Urgency}) {
         this.validateitems(item);
 
         this.name = item.name;
         this.description = item.description;
         this.price = item.price;
-        this.urgency = this.convertUrgency(item.urgency);
+        this.urgency = item.urgency || "Not a Priority";
     }
 
-    private validateitems = (item: {name: string, description: string, price?: number, urgency?: string}) => {
+    private validateitems = (item: {name: string, description: string, price?: number, urgency?: Urgency}) => {
         if (typeof item.name !== 'string' || item.name.length > 40) {
             throw new Error('Invalid name value');
         }
@@ -29,24 +31,10 @@ class Item {
             }
         }
 
-        const validUrgencies = ['Not a Priority', 'Low Priority', 'High Priority'];
-        if (typeof item.urgency === "string" && (!validUrgencies.includes(item.urgency))) {
-            throw new Error('Invalid urgency value');
-        } else if (typeof item.urgency === "number") {
-            if (item.urgency < 1 || item.urgency > 3) {
-                throw new Error('Invalid urgency value');
-            }
-        } else if (item.urgency !== undefined && typeof item.urgency !== "string") {
+        const validUrgencies: Urgency[] = ['Not a Priority', 'Low Priority', 'High Priority'];
+        if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
             throw new Error('Invalid urgency value');
         }
-    };
-
-    private convertUrgency = (urgency?: string | number): string => {
-        const validUrgencies = ['Not a Priority', 'Low Priority', 'High Priority'];
-        if (typeof urgency === "number") {
-            return validUrgencies[urgency - 1];
-        }
-        return urgency || 'Not a Priority';
     };
 
     getName = (): string => {
@@ -60,8 +48,8 @@ class Item {
             return this.price;
         }
     }
-    getUrgency = () => {
-        return this.urgency;
+    getUrgency = ():Urgency => {
+        return this.urgency!;
     }
 
 

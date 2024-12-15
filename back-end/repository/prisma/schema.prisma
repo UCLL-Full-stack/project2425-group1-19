@@ -9,7 +9,7 @@ datasource db {
 
 model Item {
     id             Int           @id @default(autoincrement())
-    name           String
+    name           String        @unique
     description    String
     price          Float
     urgency        String           @default("Not a Priority")
@@ -25,10 +25,18 @@ model Profile {
     userId   Int
 }
 
+enum Privacy {
+    public
+    adultOnly
+    private
+}
+
 model ShoppingList {
     id    Int    @id @default(autoincrement())
     name  String @unique
     items Item[]
+    privacy Privacy @default(public)
+    owner   String @default("GeneralUser")
 }
 
 model User {

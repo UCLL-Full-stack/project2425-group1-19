@@ -1,6 +1,9 @@
 import ShoppingList from "../../model/shoppingList";
 import Item from "../../model/item";
 
+
+//TODO: ADD tests for owner and privacy
+
 // Global constants for valid inputs
 const validListName = "Test List";
 const item1 = new Item({ name: "Item 1", description: "Description 1", price: 10, urgency: "High Priority" });

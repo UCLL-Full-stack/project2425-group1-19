@@ -15,7 +15,7 @@
 
 import { Router, Request, Response } from "express";
 import shoppingListService from "../service/shoppingList.service";
-import { ShoppingListInput, ItemInput } from "../types";
+import { ShoppingListInput, ItemInput, AuthenticationResponse } from "../types";
 
 const shoppingListRouter = Router();
 
@@ -28,7 +28,7 @@ const shoppingListRouter = Router();
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get all shopping lists
+ *     summary: Get all shopping lists, depending on the role a different shooping list will be displayed
  *     tags: [ShoppingList]
  *     responses:
  *       200:
@@ -43,9 +43,17 @@ const shoppingListRouter = Router();
  *         description: Some fetching error
  */
 
-shoppingListRouter.get('/', async (req: Request, res: Response) => {
+shoppingListRouter.get('/', async (req: Request , res: Response) => {
+    let username;
+    let role ;
+    
     try {
-        const shoppingLists = await shoppingListService.getAllShoppingLists();
+        try {
+            ({username, role} = (req as any).auth as { username: string; role: 'admin' | 'adult' | 'child' });
+        } catch (error) {
+            console.log('No role or username given with request')
+        }
+        const shoppingLists = await shoppingListService.getAllShoppingLists(role, username);
         res.status(200).json(shoppingLists);
     } catch (error) {
         if (error instanceof Error) {

@@ -1,13 +1,19 @@
+type Urgency = "Not a Priority"|"Low Priority"|"High Priority";
+
 type ItemInput = {
     name: string;
     description: string;
     price?: number;
-    urgency?: string;
+    urgency?: Urgency;
 }
+
+type Privacy = 'public'|'adultOnly'|'private'
 
 type ShoppingListInput = {
     ListName?: string;
     items?: ItemInput[];
+    privacy?:Privacy;
+    owner?: string;
 }
 
 type UserInput = {
@@ -35,4 +41,7 @@ export {
     UserInput,
     ProfileInput,
     AuthenticationResponse,
+    
+    Privacy,
+    Urgency
 }

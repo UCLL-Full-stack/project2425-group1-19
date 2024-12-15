@@ -1,10 +1,11 @@
 import Item from "../../model/item";
+import {Urgency} from "../../types";
 
 // Global constants for valid inputs
 const validName = "Test item";
 const validDescription = "This is a test item";
 const validPrice = 100;
-const validStringUrgency = "High Priority";
+const validStringUrgency:Urgency = "High Priority";
 // const validNumberUrgency = 3;
 
 test('given valid values; when creating an item; then it should create the item correctly', () => {
@@ -101,7 +102,7 @@ test('given invalid urgency string; when creating an item; then it should throw 
 
     // when & then
     expect(() => {
-        new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgency });
+        new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgency as any});
     }).toThrow('Invalid urgency value');
 });
 

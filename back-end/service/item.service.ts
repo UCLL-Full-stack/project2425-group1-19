@@ -9,7 +9,7 @@ const addItem = async(input: ItemInput): Promise<Item> => {
             throw new Error(`Item with name ${input.name} already exists.`);
         }
         //Om zeker te zijn dat de item voldoet aan de regels
-        const newItem = new Item(input);
+        const newItem = Item.from(input);
         return itemDb.saveItem(newItem);
     } catch (error) {
         throw new Error(`Item with name ${input.name} already exists.`)

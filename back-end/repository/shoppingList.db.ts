@@ -2,12 +2,12 @@ import ShoppingList from "../model/shoppingList";
 import Item from "../model/item";
 import database from "./database";
 
-// const shoppingLists: Map<string, Array<Item>> = new Map();
-
 const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingList> => {
     const savedShoppingList = await database.shoppingList.create({
         data: {
             name: shoppingList.getListName(),
+            privacy: shoppingList.getPrivacy(),
+            owner: shoppingList.getOwner(),
             items: {
                 create: shoppingList.getListItems().map(item => ({
                     name: item.getName(),
@@ -19,10 +19,7 @@ const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingLis
         },
         include: {items: true},
     });
-    return new ShoppingList({
-        ListName: savedShoppingList.name,
-        items: savedShoppingList.items.map((i) => new Item(i))
-    });
+    return ShoppingList.from(savedShoppingList);
 };
 
 const getShoppingListByName = async (name: string): Promise<ShoppingList | null> => {
@@ -31,13 +28,7 @@ const getShoppingListByName = async (name: string): Promise<ShoppingList | null>
         include: {items: true},
     });
     if (shoppingList) {
-        const items: Item[] = shoppingList.items.map((item: any) => new Item({
-            name: item.getName(),
-            description: item.description,
-            price: item.getPrice(),
-            urgency: item.getUrgency(),
-        }));
-        return new ShoppingList({ListName: name, items});
+        return ShoppingList.from(shoppingList);
     }
     return null;
 };
@@ -48,28 +39,38 @@ const removeShoppingList = async (name: string): Promise<void> => {
     });
 };
 
-const getAllShoppingLists = async (): Promise<Array<ShoppingList>> => {
+const getAllShoppingLists = async (role?: 'admin' | 'adult' | 'child', username?: string): Promise<Array<ShoppingList>> => {
+    let whereClause: any = {};
+
+    if (role === 'admin') {
+        // Admin can see all lists
+        whereClause = {};
+    } else if (role === 'adult') {
+        // Adult can see public, adult only, child, and their own private lists
+        whereClause = {
+            OR: [
+                { privacy: 'public' },
+                { privacy: 'adult' },
+                { privacy: 'child' },
+                { AND: [{ privacy: 'private' }, { owner: username }] },
+            ],
+        };
+    } else if (role === 'child') {
+        // Child can see child and their own private lists
+        whereClause = {
+            OR: [
+                { privacy: 'child' },
+                { AND: [{ privacy: 'private' }, { owner: username }] },
+            ],
+        };
+    }
+
     const shoppingListsData = await database.shoppingList.findMany({
-        include: {items: true},
+        where: whereClause,
+        include: { items: true },
     });
-    const shoppingLists: ShoppingList[] = shoppingListsData.map(list => new ShoppingList({
-        ListName: list.name,
-        items: list.items.map(item => new Item({
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            urgency: item.urgency,
-        })),
-    }));
-    return shoppingLists.map((list) => new ShoppingList({
-        ListName: list.getListName(),
-        items: list.getListItems().map((item: Item) => new Item({
-            name: item.getName(),
-            description: item.description,
-            price: item.getPrice(),
-            urgency: item.getUrgency(),
-        })),
-    }));
+
+    return shoppingListsData.map(list => ShoppingList.from(list));
 };
 
 const addItemToShoppingList = async (listName: string, item: Item): Promise<void> => {
@@ -107,29 +108,6 @@ const removeItemFromShoppingList = async (listName: string, itemName: string): P
     }
 };
 
-const createTestShoppingLists = (): void => {
-    const list1 = new ShoppingList({
-        ListName: "Carrefour", items: [
-            new Item({name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "High Priority"}),
-            new Item({name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority"}),
-            new Item({name: "Eggs", description: "Dozen large eggs", price: 2.99, urgency: "High Priority"}),
-            new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: "Not a Priority"}),
-            new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: "Not a Priority"}),
-            new Item({name: "Chicken Breast", description: "1 kg of boneless chicken breast", price: 7.99, urgency: "High Priority"}),
-            new Item({name: "Tomatoes", description: "1 kg of fresh tomatoes", price: 2.99, urgency: "Low Priority"})
-        ]
-    });
-    const list2 = new ShoppingList({
-        ListName: "Acco", items: [
-            new Item({name: "Pens", description: "Pack of 10 blue pens", price: 5.99, urgency: "Low Priority"}),
-            new Item({name: "Notebooks", description: "Pack of 3 notebooks", price: 7.99, urgency: "High Priority"})
-        ]
-    });
-    saveShoppingList(list1);
-    saveShoppingList(list2);
-}
-
-//createTestShoppingLists();
 
 export default {
     saveShoppingList,

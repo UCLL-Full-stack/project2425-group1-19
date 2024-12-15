@@ -55,6 +55,7 @@ const main = async () => {
     const shoppingList1 = await prisma.shoppingList.create({
         data: {
             name: 'Weekly Groceries',
+            privacy: 'public',
             items: {
                 create: [
                     {
@@ -77,6 +78,7 @@ const main = async () => {
     const shoppingList2 = await prisma.shoppingList.create({
         data: {
             name: 'Party Supplies',
+            privacy: 'adultOnly',
             items: {
                 create: [
                     {
@@ -90,6 +92,53 @@ const main = async () => {
                         description: 'Refreshing soda drinks',
                         price: 4.99,
                         urgency: 'High Priority',
+                    },
+                    {
+                        name: 'Plastic Cups',
+                        description: 'Pack of 50 plastic cups',
+                        price: 3.99,
+                        urgency: 'Not a Priority',
+                    },
+                    {
+                        name: 'Napkins',
+                        description: 'Pack of 100 napkins',
+                        price: 1.99,
+                        urgency: 'Low Priority',
+                    },
+                ],
+            },
+        },
+    });
+    const shoppingList3 = await prisma.shoppingList.create({
+        data: {
+            name: 'Office Supplies',
+            privacy: 'private',
+            owner: 'johndoe',
+            items: {
+                create: [
+                    {
+                        name: 'Printer Paper',
+                        description: '500 sheets of printer paper',
+                        price: 5.99,
+                        urgency: 'High Priority',
+                    },
+                    {
+                        name: 'Pens',
+                        description: 'Pack of 20 blue pens',
+                        price: 4.99,
+                        urgency: 'Not a Priority',
+                    },
+                    {
+                        name: 'Stapler',
+                        description: 'Heavy-duty stapler',
+                        price: 9.99,
+                        urgency: 'Low Priority',
+                    },
+                    {
+                        name: 'Notebooks',
+                        description: 'Pack of 5 notebooks',
+                        price: 7.99,
+                        urgency: 'Medium Priority',
                     },
                 ],
             },
