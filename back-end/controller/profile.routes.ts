@@ -26,6 +26,8 @@ const profileRouter = Router();
  *     description: Endpoints related to profiles
  * /profile:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all profiles
  *     tags: [Profile]
  *     responses:
@@ -56,6 +58,8 @@ profileRouter.get('/', async (req: Request, res: Response) => {
  * @swagger
  * /profile/{email}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a profile by email
  *     tags: [Profile]
  *     parameters:
@@ -91,6 +95,8 @@ profileRouter.get('/:email', async (req: Request, res: Response) => {
  * @swagger
  * /profile:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new profile
  *     tags: [Profile]
  *     requestBody:
@@ -126,6 +132,8 @@ profileRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /profile/{email}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove a profile by email
  *     tags: [Profile]
  *     parameters:

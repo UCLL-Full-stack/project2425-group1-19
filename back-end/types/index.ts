@@ -23,9 +23,16 @@ type ProfileInput = {
     userId: number;
 }
 
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    role: 'admin' | 'adult' | 'child';
+};
+
 export {
     ItemInput,
     ShoppingListInput,
     UserInput,
     ProfileInput,
+    AuthenticationResponse,
 }

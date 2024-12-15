@@ -26,6 +26,8 @@ const shoppingListRouter = Router();
  *     description: Endpoints related to shopping lists
  * /shoppingList:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all shopping lists
  *     tags: [ShoppingList]
  *     responses:
@@ -56,6 +58,8 @@ shoppingListRouter.get('/', async (req: Request, res: Response) => {
  * @swagger
  * /shoppingList/{name}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a shopping list by name
  *     tags: [ShoppingList]
  *     parameters:
@@ -91,6 +95,8 @@ shoppingListRouter.get('/:name', async (req: Request, res: Response) => {
  * @swagger
  * /shoppingList:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new shopping list
  *     tags: [ShoppingList]
  *     requestBody:
@@ -126,6 +132,8 @@ shoppingListRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /shoppingList/{name}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove a shopping list by name
  *     tags: [ShoppingList]
  *     parameters:
@@ -157,6 +165,8 @@ shoppingListRouter.delete('/:name', async (req: Request, res: Response) => {
  * @swagger
  * /shoppingList/{name}/item:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add an item to a shopping list
  *     tags: [ShoppingList]
  *     parameters:
@@ -195,6 +205,8 @@ shoppingListRouter.post('/:name/item', async (req: Request, res: Response) => {
  * @swagger
  * /shoppingList/{name}/item/{itemName}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove an item from a shopping list
  *     tags: [ShoppingList]
  *     parameters:

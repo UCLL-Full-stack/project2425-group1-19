@@ -30,6 +30,8 @@ const itemRouter = Router();
  *     description: Endpoints related to items
  * /item:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all items
  *     tags: [Item]
  *     responses:
@@ -62,6 +64,8 @@ itemRouter.get('/', async (req: Request, res: Response) => {
  * @swagger
  * /item/{name}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get an item by name
  *     tags: [Item]
  *     parameters:
@@ -99,6 +103,8 @@ itemRouter.get('/:name', async (req: Request, res: Response) => {
  * @swagger
  * /item:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new item
  *     tags: [Item]
  *     requestBody:
@@ -136,6 +142,8 @@ itemRouter.post('/', async (req: Request, res: Response) => {
  * @swagger
  * /item/{name}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove an item by name
  *     tags: [Item]
  *     parameters:

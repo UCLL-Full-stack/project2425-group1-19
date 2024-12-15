@@ -10,10 +10,13 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 const main = async () => {
+    console.log("Resetting database")
     await prisma.item.deleteMany();
     await prisma.profile.deleteMany();
     await prisma.shoppingList.deleteMany();
     await prisma.user.deleteMany();
+
+    console.log("Creating data")
 
     const user1 = await prisma.user.create({
         data: {

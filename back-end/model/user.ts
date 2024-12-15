@@ -19,7 +19,7 @@ class User {
             throw new Error('Invalid username value');
         }
 
-        if (typeof user.password !== 'string' || user.password.length > 200) {
+        if (typeof user.password !== 'string' || user.password.length > 200 || !user.password.trim()) {
             throw new Error('Invalid password value');
         }
 
@@ -33,7 +33,7 @@ class User {
         return this.username;
     };
     
-    getRole= ():string => {
+    getRole= (): 'admin' | 'adult' | 'child'=> {
         return this.role;
     }
 

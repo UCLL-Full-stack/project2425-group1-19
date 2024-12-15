@@ -1,6 +1,8 @@
 import User from "../model/user";
 import userDb from "../repository/user.db";
-import { UserInput } from "../types";
+import { UserInput, AuthenticationResponse } from "../types";
+import bcrypt from "bcrypt"
+import jwt from 'jsonwebtoken';
 
 const addUser = async(input: UserInput): Promise<User> => {
     try {
@@ -41,10 +43,33 @@ const removeUser = async(username: string): Promise<void> => {
     }
 };
 
+const authenticate = async({username, password}:UserInput): Promise<AuthenticationResponse>=> {
+    const user = await userDb.getUserByUsername({username});
+
+    if (!user || !user.password) {
+        throw new Error('Invalid username or password');
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+        throw new Error('Incorrect password/username.');
+    }
+
+    const tijd = process.env.JWT_EXPIRES_HOURS ? `${process.env.JWT_EXPIRES_HOURS}h` : '1h'; ;
+    const secretKey = process.env.JWT_SECRET || "default_secret";
+   
+    const token = jwt.sign({username: user.getUsername(), role: user.getRole() }, secretKey, { expiresIn: tijd });
+    return {
+        token:token,
+        username: user.getUsername(),
+        role: user.getRole(),
+    }
+};
 
 export default {
     addUser,
     getUser,
     getAllUsers,
     removeUser,
+    authenticate,
 };

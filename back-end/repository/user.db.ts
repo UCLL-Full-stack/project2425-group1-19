@@ -1,20 +1,31 @@
 import User from "../model/user";
 import database from "./database";
+import bcrypt from 'bcrypt';
 
 const users: Array<User> = [];
 
 const saveUser = async (user: User): Promise<User> => {
     try {
+        const existingUser = await database.user.findUnique({
+            where: { username: user.getUsername() },
+        });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+
+        const hashedPassword = await bcrypt.hash(user.password, 12)
+
         const userDatabase = await database.user.create({
             data: {
                 username: user.getUsername(),
-                password: user.password,
+                password: hashedPassword,
                 role: user.getRole(),
             },
         });
+
         return new User({
             username: userDatabase.username,
-            password: userDatabase.password,
+            password: hashedPassword,
             role: userDatabase.role as 'admin' | 'adult' | 'child',
         });
     } catch (error) {
@@ -28,11 +39,7 @@ const getUserByUsername = async ({username}: {username: string}): Promise<User |
             where: {username},
         });
         if (user) {
-            return new User({
-                username: user.username,
-                password: user.password,
-                role: user.role as 'admin' | 'adult' | 'child',
-            });
+            return 
         } else {
             throw new Error('No User found with given user name')
         };
