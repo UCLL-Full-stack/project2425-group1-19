@@ -1,14 +1,108 @@
 import ShoppingList from "../../model/shoppingList";
 import Item from "../../model/item";
-
-
-//TODO: ADD tests for owner and privacy
+import { Privacy } from "../../types";
 
 // Global constants for valid inputs
 const validListName = "Test List";
 const item1 = new Item({ name: "Item 1", description: "Description 1", price: 10, urgency: "high" });
 const item2 = new Item({ name: "Item 2", description: "Description 2", price: 20, urgency: "low" });
 const validItems = [item1, item2];
+const validOwner = "TestOwner";
+const validPrivacy = 'public';
+
+test('given valid ListName, items, owner, and privacy; when creating a ShoppingList; then it should create the ShoppingList correctly', () => {
+    // given
+    // (global constants are used)
+
+    // when
+    const newList = new ShoppingList({ ListName: validListName, items: validItems, owner:validOwner, privacy: validPrivacy });
+
+    // then
+    expect(newList.getListName()).toBe(validListName);
+    expect(newList.getListItems()).toEqual(validItems);
+    expect(newList.getOwner()).toBe(validOwner);
+    expect(newList.getPrivacy()).toBe(validPrivacy);
+});
+
+test('given no owner and privacy; when creating a ShoppingList; then it should create the ShoppingList with default owner and privacy', () => {
+    // given
+    // (global constants are used)
+
+    // when
+    const newList = new ShoppingList({ ListName: validListName, items: validItems });
+
+    // then
+    expect(newList.getOwner()).toBe("GeneralUser");
+    expect(newList.getPrivacy()).toBe('public');
+});
+
+test('given invalid owner; when creating a ShoppingList; then it should throw an error', () => {
+    // given
+    const invalidOwner = 123 as any;
+
+    // when & then
+    expect(() => {
+        new ShoppingList({ ListName: validListName, items: validItems, owner: invalidOwner });
+    }).toThrow('Invalid owner name');
+});
+
+test('given invalid privacy; when creating a ShoppingList; then it should throw an error', () => {
+    // given
+    const invalidPrivacy = "invalid" as any;
+
+    // when & then
+    expect(() => {
+        new ShoppingList({ ListName: validListName, items: validItems, privacy: invalidPrivacy });
+    }).toThrow('Privacy can only be set to the following values: public, adultOnly, private');
+});
+
+test('given valid owner; when setting owner; then it should set the owner correctly', () => {
+    // given
+    const newList = new ShoppingList({ ListName: validListName, items: validItems });
+    const newOwner = "NewOwner";
+
+    // when
+    newList.setOwner(newOwner);
+
+    // then
+    expect(newList.getOwner()).toBe(newOwner);
+});
+
+test('given invalid owner; when setting owner; then it should throw an error', () => {
+    // given
+    const newList = new ShoppingList({ ListName: validListName, items: validItems });
+    const invalidOwner = 123 as any;
+
+    // when & then
+    expect(() => {
+        newList.setOwner(invalidOwner);
+    }).toThrow('Invalid owner name');
+});
+
+test('given valid privacy; when setting privacy; then it should set the privacy correctly', () => {
+    // given
+    const newList = new ShoppingList({ ListName: validListName, items: validItems });
+    const newPrivacy:Privacy = 'adultOnly';
+
+    // when
+    newList.setPrivacy(newPrivacy);
+
+    // then
+    expect(newList.getPrivacy()).toBe(newPrivacy);
+});
+
+test('given invalid privacy; when setting privacy; then it should throw an error', () => {
+    // given
+    const newList = new ShoppingList({ ListName: validListName, items: validItems });
+    const invalidPrivacy = "invalid" as any;
+
+    // when & then
+    expect(() => {
+        newList.setPrivacy(invalidPrivacy);
+    }).toThrow('Privacy can only be set to the following values: public, adultOnly, private');
+});
+
+// Existing tests...
 
 test('given valid ListName and items; when creating a ShoppingList; then it should create the ShoppingList correctly', () => {
     // given

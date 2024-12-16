@@ -34,6 +34,14 @@ const main = async () => {
         },
     });
 
+    const user3 = await prisma.user.create({
+        data: {
+            username: 'janedoe',
+            password: await bcrypt.hash('Password123!', 12),
+            role: 'child',
+        },
+    });
+
     const profile1 = await prisma.profile.create({
         data: {
             email: 'john.doe@example.com',
@@ -109,11 +117,12 @@ const main = async () => {
             },
         },
     });
+
     const shoppingList3 = await prisma.shoppingList.create({
         data: {
             name: 'Office Supplies',
             privacy: 'private',
-            owner: 'johndoe',
+            owner: 'admin',
             items: {
                 create: [
                     {
@@ -138,6 +147,76 @@ const main = async () => {
                         name: 'Notebooks',
                         description: 'Pack of 5 notebooks',
                         price: 7.99,
+                        urgency: 'mid',
+                    },
+                ],
+            },
+        },
+    });
+
+    const shoppingList4 = await prisma.shoppingList.create({
+        data: {
+            name: 'Children\'s Party',
+            privacy: 'public',
+            items: {
+                create: [
+                    {
+                        name: 'Balloons',
+                        description: 'Colorful balloons for decoration',
+                        price: 2.99,
+                        urgency: 'high',
+                    },
+                    {
+                        name: 'Cake',
+                        description: 'Chocolate birthday cake',
+                        price: 15.99,
+                        urgency: 'high',
+                    },
+                    {
+                        name: 'Party Hats',
+                        description: 'Pack of 10 party hats',
+                        price: 3.99,
+                        urgency: 'low',
+                    },
+                    {
+                        name: 'Juice Boxes',
+                        description: 'Pack of 20 juice boxes',
+                        price: 6.99,
+                        urgency: 'mid',
+                    },
+                ],
+            },
+        },
+    });
+
+    const shoppingList5 = await prisma.shoppingList.create({
+        data: {
+            name: 'Adult Only Gathering',
+            privacy: 'adultOnly',
+            items: {
+                create: [
+                    {
+                        name: 'Wine',
+                        description: 'Bottle of red wine',
+                        price: 12.99,
+                        urgency: 'high',
+                    },
+                    {
+                        name: 'Cheese Platter',
+                        description: 'Assorted cheese platter',
+                        price: 19.99,
+                        urgency: 'mid',
+                    },
+                    {
+                        name: 'Crackers',
+                        description: 'Box of gourmet crackers',
+                        price: 4.99,
+                        urgency: 'low',
+                    },
+                    {
+                        name: 'Fruit Tray',
+                        description: 'Assorted fresh fruit tray',
+                        price: 14.99,
                         urgency: 'mid',
                     },
                 ],

@@ -11,8 +11,8 @@ class ShoppingList {
 
         this.ListName = shoppingList.ListName?.trim() || "General list";
         this.items = shoppingList.items || [];
-        this.privacy == shoppingList.privacy || 'public';
-        this.owner == shoppingList.owner || 'GeneralUser';
+        this.privacy = shoppingList.privacy || 'public';
+        this.owner = shoppingList.owner || 'GeneralUser';
     };
 
     private validate = (shoppingList: {ListName?: string, items?: Array<Item>, privacy?: Privacy, owner?:string}) => {
@@ -38,11 +38,11 @@ class ShoppingList {
             }
         };
 
-        if (this.privacy && !('public,adultOnly,private'.includes(this.privacy?.toString()))) {
+        if (shoppingList.privacy && !('public,adultOnly,private'.includes(shoppingList.privacy?.toString()))) {
             throw new Error('Privacy can only be set to the following values: public, adultOnly, private')
         }
 
-        if (this.owner && !(typeof(this.owner) =="string")) {
+        if (shoppingList.owner && !(typeof(shoppingList.owner) =="string")) {
             throw new Error('Invalid owner name')
         }
     }
@@ -82,7 +82,7 @@ class ShoppingList {
 
     setPrivacy = (privacy: Privacy): void => {
         if (!('public,adultOnly,private'.includes(privacy.toString()))) {
-            throw new Error('privacy can only be set to the following values: public, adultOnly, private');
+            throw new Error('Privacy can only be set to the following values: public, adultOnly, private');
         }
         this.privacy = privacy;
     };
@@ -97,16 +97,6 @@ class ShoppingList {
         }
         this.owner = owner;
     };
-
-    /* not needed implement in service 
-    buyItem = (name: string): void => {
-        const item = this.items!.find(item => item.getName() === name);
-        if (item) {
-            this.removeItem(name);
-        } else {
-            throw new Error('Item not found');
-        }
-    }*/
 };
 
 export default ShoppingList;
