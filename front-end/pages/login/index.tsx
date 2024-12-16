@@ -1,6 +1,8 @@
 import Header from "@/components/header";
+import userService from "@/service/userService";
 import Head from "next/head";
 import React, {useState} from 'react';
+import {useRouter} from 'next/router';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState<string | null>(null);
@@ -8,6 +10,8 @@ const Login: React.FC = () => {
     const [feedback, setFeedback] = useState<string | null>(null);
     const [feedbackName, setFeedbackName] = useState<string | null>(null);
     const [feedbackPass, setFeedbackPass] = useState<string | null>(null);
+
+    const router = useRouter();
 
     const restFeedback = () => {
         setFeedback("");
@@ -33,12 +37,21 @@ const Login: React.FC = () => {
             return;
         }
         else {
-            setFeedback("success");
-            // Call Login from userService
             try {
+                const response = await userService.loginUser(username,password);
+                if (response) {
+                    setFeedback("success: Redirecting to homepage");
+                    localStorage.setItem("userLoginToken", response.token);
+                    localStorage.setItem("role", response.role);
+                    localStorage.setItem("username", response.username);
 
+                    setTimeout(() => {
+                        router.push("/")
+                    }, 800);
+                }
             } catch (error) {
                 setFeedback("Login failed")
+                console.log("Login error:"+error)
             }
         }
     };
