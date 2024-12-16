@@ -29,6 +29,10 @@ class User {
 
     };
 
+    public static from(user: UserInput): User {
+        return new User(user);
+    }
+
     getUsername = ():string => {
         return this.username;
     };

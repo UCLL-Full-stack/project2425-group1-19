@@ -13,7 +13,7 @@ class Item {
         this.name = item.name;
         this.description = item.description;
         this.price = item.price;
-        this.urgency = item.urgency || "Not a Priority";
+        this.urgency = item.urgency || "low";
     }
 
     private validateitems = (item: {name: string, description: string, price?: number, urgency?: Urgency}) => {
@@ -30,8 +30,8 @@ class Item {
                 throw new Error('Invalid price value');
             }
         }
-
-        const validUrgencies: Urgency[] = ['Not a Priority', 'Low Priority', 'High Priority'];
+        
+        const validUrgencies: Urgency[] = ['low', 'mid', 'high'];
         if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
             throw new Error('Invalid urgency value');
         }

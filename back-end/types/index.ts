@@ -1,4 +1,4 @@
-type Urgency = "Not a Priority"|"Low Priority"|"High Priority";
+type Urgency = "low"|"mid"|"high";
 
 type ItemInput = {
     name: string;

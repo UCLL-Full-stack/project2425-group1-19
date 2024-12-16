@@ -21,7 +21,7 @@ const main = async () => {
     const user1 = await prisma.user.create({
         data: {
             username: 'admin',
-            password: await bcrypt.hash('admin123', 12),
+            password: await bcrypt.hash('Admin123!', 12),
             role: 'admin',
         },
     });
@@ -29,7 +29,7 @@ const main = async () => {
     const user2 = await prisma.user.create({
         data: {
             username: 'johndoe',
-            password: await bcrypt.hash('password123', 12),
+            password: await bcrypt.hash('Password123!', 12),
             role: 'adult',
         },
     });
@@ -62,13 +62,13 @@ const main = async () => {
                         name: 'Apples',
                         description: 'Delicious red apples',
                         price: 3.99,
-                        urgency: 'High Priority',
+                        urgency: 'high',
                     },
                     {
                         name: 'Bananas',
                         description: 'Fresh yellow bananas',
                         price: 1.99,
-                        urgency: 'Low Priority',
+                        urgency: 'low',
                     },
                 ],
             },
@@ -85,25 +85,25 @@ const main = async () => {
                         name: 'Chips',
                         description: 'Crunchy potato chips',
                         price: 2.99,
-                        urgency: 'Not a Priority',
+                        urgency: 'mid',
                     },
                     {
                         name: 'Soda',
                         description: 'Refreshing soda drinks',
                         price: 4.99,
-                        urgency: 'High Priority',
+                        urgency: 'high',
                     },
                     {
                         name: 'Plastic Cups',
                         description: 'Pack of 50 plastic cups',
                         price: 3.99,
-                        urgency: 'Not a Priority',
+                        urgency: 'mid',
                     },
                     {
                         name: 'Napkins',
                         description: 'Pack of 100 napkins',
                         price: 1.99,
-                        urgency: 'Low Priority',
+                        urgency: 'low',
                     },
                 ],
             },
@@ -120,25 +120,25 @@ const main = async () => {
                         name: 'Printer Paper',
                         description: '500 sheets of printer paper',
                         price: 5.99,
-                        urgency: 'High Priority',
+                        urgency: 'high',
                     },
                     {
                         name: 'Pens',
                         description: 'Pack of 20 blue pens',
                         price: 4.99,
-                        urgency: 'Not a Priority',
+                        urgency: 'mid',
                     },
                     {
                         name: 'Stapler',
                         description: 'Heavy-duty stapler',
                         price: 9.99,
-                        urgency: 'Low Priority',
+                        urgency: 'low',
                     },
                     {
                         name: 'Notebooks',
                         description: 'Pack of 5 notebooks',
                         price: 7.99,
-                        urgency: 'Medium Priority',
+                        urgency: 'mid',
                     },
                 ],
             },

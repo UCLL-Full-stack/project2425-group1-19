@@ -15,7 +15,7 @@
  *           type: string
  */
 
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import itemService from "../service/item.service";
 import { ItemInput } from "../types";
 
@@ -47,14 +47,12 @@ const itemRouter = Router();
  *         description: Some fetching error
  */
 
-itemRouter.get('/', async (req: Request, res: Response) => {
+itemRouter.get('/', async (req: Request, res: Response, next:NextFunction) => {
     try {
         const items = await itemService.getAllItems();
         res.status(200).json(items)
-    } catch (error) { //Waarom lukt error.message niet direct?
-        if (error instanceof Error) {
-            res.status(400).json({ status: "error", errorMessage: error.message });
-        }
+    } catch (error) {
+        next(error)
     }
 });
 
@@ -124,14 +122,14 @@ itemRouter.get('/:name', async (req: Request, res: Response) => {
  *         description: Some input error
  */
 
-itemRouter.post('/', async (req: Request, res: Response) => {
+itemRouter.post('/', async (req: Request, res: Response, next:NextFunction) => {
     try {
         const item = <ItemInput>req.body;
-        const newItem = itemService.addItem(item);
+        const newItem = await itemService.addItem(item);
         res.status(201).json(newItem);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(400).json({ status: "error", errorMessage: error.message });
+            next(error)
         }
     }
 });

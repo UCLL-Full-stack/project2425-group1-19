@@ -126,12 +126,10 @@ userRouter.get('/:username', async (req: Request, res: Response) => {
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput> req.body;
-        const newUser = userService.addUser(user);
+        const newUser = await userService.addUser(user);
         res.status(200).json(newUser);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({status: "error", errorMessage: error.message});
-        }
+        next(error);
     }
 });
 
@@ -188,7 +186,7 @@ userRouter.delete('/:username', async (req: Request, res: Response) => {
  *               password:
  *                 type: string
  *                 description: The user's password
- *                 example: admin123
+ *                 example: Admin123!
  *     responses:
  *       200:
  *         description: Successfully authenticated

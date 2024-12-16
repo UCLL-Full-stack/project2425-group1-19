@@ -3,7 +3,7 @@ import { UserInput } from "../types";
 import database from "./database";
 import bcrypt from 'bcrypt';
 
-const users: Array<User> = [];
+// const users: Array<User> = [];
 
 const saveUser = async (user: User): Promise<User> => {
     try {
@@ -34,21 +34,19 @@ const saveUser = async (user: User): Promise<User> => {
     }
 };
 
-const getUserByUsername = async ({username}: {username: string}): Promise<User | undefined> => {
+const getUserByUsername = async (username:string): Promise<User | undefined> => {
     try {
         const user = await database.user.findUnique({
             where: {username},
         });
         if (user) {
-            return new User({
-                username: user.username,
-                password: user.password,
-                role: user.role as 'admin' | 'adult' | 'child',
-                });
+            return User.from(user);
         } else {
-            throw new Error('No User found with given user name')
+            //throw new Error('No User found with given user name')
+            return undefined;
         };
     } catch (error) {
+        console.log(error)
         throw new Error('Database error. See server log for details.');
     }
 };

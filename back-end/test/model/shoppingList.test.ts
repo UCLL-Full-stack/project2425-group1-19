@@ -6,8 +6,8 @@ import Item from "../../model/item";
 
 // Global constants for valid inputs
 const validListName = "Test List";
-const item1 = new Item({ name: "Item 1", description: "Description 1", price: 10, urgency: "High Priority" });
-const item2 = new Item({ name: "Item 2", description: "Description 2", price: 20, urgency: "Not a Priority" });
+const item1 = new Item({ name: "Item 1", description: "Description 1", price: 10, urgency: "high" });
+const item2 = new Item({ name: "Item 2", description: "Description 2", price: 20, urgency: "low" });
 const validItems = [item1, item2];
 
 test('given valid ListName and items; when creating a ShoppingList; then it should create the ShoppingList correctly', () => {
@@ -111,7 +111,7 @@ test('given items array with invalid item; when creating a ShoppingList; then it
 test('given valid item; when adding an item; then it should add the item to the list', () => {
     // given
     const newList = new ShoppingList({ ListName: validListName, items: validItems });
-    const newItem = new Item({ name: "Item 3", description: "Description 3", price: 30, urgency: "Not a Priority" });
+    const newItem = new Item({ name: "Item 3", description: "Description 3", price: 30, urgency: "low" });
 
     // when
     newList.addItem(newItem);

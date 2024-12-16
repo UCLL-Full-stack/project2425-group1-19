@@ -10,7 +10,7 @@ const AddItemRow: React.FC<Props> = ({ onAddItem }) => {
         name: '',
         description: '',
         price: 0,
-        urgency: 'Not a Priority'
+        urgency: 'mid'
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -29,7 +29,7 @@ const AddItemRow: React.FC<Props> = ({ onAddItem }) => {
             name: '',
             description: '',
             price: 0,
-            urgency: 'Not a Priority'
+            urgency: 'mid'
         });
     };
     const isFormValid = newItem.name && newItem.description;
@@ -40,10 +40,10 @@ const AddItemRow: React.FC<Props> = ({ onAddItem }) => {
             <td><input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleChange} required/></td>
             <td><input type="number" name="price" placeholder="Price" value={newItem.price} onChange={handleChange}/></td>
             <td>
-                <select name="urgency" value={newItem.urgency} onChange={handleChange} required defaultValue={"Not a Priority"}>
-                    <option value="Not a Priority">1- Not a Priority</option>
-                    <option value="Low Priority">2- Low Priority</option>
-                    <option value="High Priority">3- High Priority</option>
+                <select name="urgency" value={newItem.urgency} onChange={handleChange} required defaultValue={"mid"}>
+                    <option value="mid">1- mid</option>
+                    <option value="low">2- low</option>
+                    <option value="high">3- high</option>
                 </select>
             </td>
             <td><button onClick={handleAddItem} disabled={!isFormValid}>Add Item</button></td>

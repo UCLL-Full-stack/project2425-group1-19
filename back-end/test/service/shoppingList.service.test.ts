@@ -5,9 +5,9 @@ import ShoppingList from "../../model/shoppingList";
 import {Urgency} from "../../types";
 
 const validListName = "Groceries";
-const itemInput1 = { name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "High Priority" as Urgency};
-const itemInput2 = { name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "Not a Priority" as Urgency};
-const itemInput3 = { name: "Eggs", description: "1 dozen large eggs", price: 2.99, urgency: "Low Priority" as Urgency};
+const itemInput1 = { name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "high" as Urgency};
+const itemInput2 = { name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "mid" as Urgency};
+const itemInput3 = { name: "Eggs", description: "1 dozen large eggs", price: 2.99, urgency: "low" as Urgency};
 
 const item1 = new Item(itemInput1);
 const item2 = new Item(itemInput2);

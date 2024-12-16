@@ -55,7 +55,7 @@ test('given valid username; when retrieving a user; then it should return the us
     // then
     expect(retrievedUser).toBeDefined();
     expect(retrievedUser?.getUsername()).toBe(userInput1.username);
-    expect(mockGetUserByUsername).toHaveBeenCalledWith({ username: userInput1.username });
+    expect(mockGetUserByUsername).toHaveBeenCalledWith(userInput1.username );
 });
 
 test('given non-existing username; when retrieving a user; then it should throw an error', async () => {

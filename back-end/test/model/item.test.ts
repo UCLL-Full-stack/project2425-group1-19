@@ -5,7 +5,7 @@ import {Urgency} from "../../types";
 const validName = "Test item";
 const validDescription = "This is a test item";
 const validPrice = 100;
-const validStringUrgency:Urgency = "High Priority";
+const validStringUrgency:Urgency = "high";
 // const validNumberUrgency = 3;
 
 test('given valid values; when creating an item; then it should create the item correctly', () => {
@@ -33,7 +33,7 @@ test('given valid name, description, and no urgency; when creating an item; then
     expect(newItem.getName()).toBe(validName);
     expect(newItem.description).toBe(validDescription);
     expect(newItem.getPrice()).toBe(validPrice);
-    expect(newItem.getUrgency()).toBe("Not a Priority");
+    expect(newItem.getUrgency()).toBe("low");
 });
 
 test('given invalid name; when creating an item; then it should throw an error', () => {

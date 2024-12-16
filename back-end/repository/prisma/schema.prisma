@@ -7,12 +7,18 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum Urgency {
+    low
+    mid
+    high
+}
+
 model Item {
     id             Int           @id @default(autoincrement())
     name           String        @unique
     description    String
     price          Float
-    urgency        String           @default("Not a Priority")
+    urgency        Urgency           @default(low)
     ShoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
     shoppingListId Int?
 }
@@ -39,9 +45,15 @@ model ShoppingList {
     owner   String @default("GeneralUser")
 }
 
+enum Role {
+    admin
+    adult
+    child
+}
+
 model User {
     id       Int    @id @default(autoincrement())
     username String @unique
     password String
-    role     String
+    role     Role
 }
