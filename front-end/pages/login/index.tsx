@@ -3,6 +3,8 @@ import userService from "@/service/userService";
 import Head from "next/head";
 import React, {useState} from 'react';
 import {useRouter} from 'next/router';
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState<string | null>(null);
@@ -10,6 +12,8 @@ const Login: React.FC = () => {
     const [feedback, setFeedback] = useState<string | null>(null);
     const [feedbackName, setFeedbackName] = useState<string | null>(null);
     const [feedbackPass, setFeedbackPass] = useState<string | null>(null);
+
+    const { t } = useTranslation();
 
     const router = useRouter();
 
@@ -40,7 +44,7 @@ const Login: React.FC = () => {
             try {
                 const response = await userService.loginUser(username,password);
                 if (response) {
-                    setFeedback("success: Redirecting to homepage");
+                    setFeedback("success");
                     localStorage.setItem("userLoginToken", response.token);
                     localStorage.setItem("role", response.role);
                     localStorage.setItem("username", response.username);
@@ -50,7 +54,7 @@ const Login: React.FC = () => {
                     }, 800);
                 }
             } catch (error) {
-                setFeedback("Login failed")
+                setFeedback("failed");
                 console.log("Login error:"+error)
             }
         }
@@ -59,54 +63,62 @@ const Login: React.FC = () => {
     return (
         <>
             <Head>
-                <title>Home page</title>
+                <title>{t("login.title")}</title>
             </Head>
             <Header />
 
-            <h1 className="text-3xl font-bold">Login</h1>
+            <h1 className="text-3xl font-bold">{t("login.title")}</h1>
             {feedback && (<div>
                 {feedback.toLowerCase().includes("success") ? (
                     <div>
-                        <h3 className=" rounded-md text-green-300">Login succeeded</h3>
+                        <h3 className=" rounded-md text-green-300">{t("login.success")}</h3>
                     </div>
                 ) : (
                     <div>
-                        <h3 className=" rounded-md text-red-300">Login failed</h3>
+                        <h3 className=" rounded-md text-red-300">{t("login.failed")}</h3>
                     </div>
                 )}
             </div>)}
             <div className="flex flex-col items-center mt-10 mb-4">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">{t("login.label.username")}</label>
                 <input
                     type="text"
                     name="username"
                     id="username"
-                    placeholder="Username"
+                    placeholder={t("login.username")}
                     className="max-w-40 rounded-md text-left px-2"
                     onChange={(e) => setUsername(e.target.value)}
                 />
-                {feedbackName && <span className="text-red-500">Name is required</span>}
+                {feedbackName && <span className="text-red-500">{t("login.validate.username")}</span>}
             </div>
             <div className="flex flex-col items-center mb-4">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">{t("login.label.password")}</label>
                 <input
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Password"
+                    placeholder={t("login.password")}
                     className="max-w-40 rounded-md text-left px-2"
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                {feedbackPass && <span className="text-red-500">Password is required</span>}
+                {feedbackPass && <span className="text-red-500">{t("login.validate.password")}</span>}
             </div>
             <div>
                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={(e) => handleLogin(e)}>
-                    Login
+                    {t("login.submit")}
                 </button>
             </div>
 
         </>
     )
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+  return {
+      props: {
+          ...(await serverSideTranslations(context.locale ?? "en", ["common"]) ),
+      },
+  };
+}
 
 export default Login;

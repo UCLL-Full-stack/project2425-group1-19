@@ -1,0 +1,52 @@
+{
+    "app.title": "Grocery management x app",
+    "general.error": "An error occurred",
+
+    "login": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "submit": "Login",
+        "success": "Login successful",
+        "failed": "Login failed",
+        "validate": {
+            "username": "Username is required",
+            "password": "Password is required"
+        },
+        "label": {
+            "username": "Username:",
+            "password": "Password:"
+        }
+    },
+    "header": {
+        "nav": {
+            "logout": "Logout",
+            "profile": "Profile",
+            "home": "Home",
+            "lists": "Lists",
+            "monthly": "Monthly spendings",
+            "language": "Language"
+        }
+
+    },
+    "home": {
+        "title": "Home",
+        "subtitle": "Welcome to the Grocery management x app",
+        "description": "This app is designed to help you manage your grocery shopping. You can create shopping lists, track your monthly spendings and more.",
+        "button": "Get started"
+    },
+    "lists": {
+        "title": "Grocery lists",
+        "description": "This is the lists page",
+        "overview": "Shopping lists overview",
+        "table": {
+            "name": "Name",
+            "number": "Number of items"
+        }
+    },
+    "monthly": {
+        "title": "Monthly spendings",
+        "description": "This is the monthly spendings page",
+        "overview": "Monthly spendings overview"
+    }
+}

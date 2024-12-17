@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react';
 import AddItemRow from './addItemRow';
 import {getShoppingLists, addItemToShoppingList} from '@/service/listsService';
 import {ShoppingList, Item} from '@/types';
+import { useTranslation } from 'next-i18next';
 import ListDetail from './ListDetail';
 
 const ListsOverview: React.FC = () => {
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
     const [selectedListName, setSelectedListName] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const { t } = useTranslation();
 
     const fetchShoppingLists = async () => {
         try {
@@ -50,19 +53,19 @@ const ListsOverview: React.FC = () => {
 
     return (
         <div>
-            <h1>Shopping Lists Overview</h1>
+            <h1>{t("lists.overview")}</h1>
             <table>
                 <thead>
                     <tr>
-                        <th>List Name</th>
-                        <th>Number of Items</th>
+                        <th>{t("lists.table.name")}</th>
+                        <th>{t("lists.table.number")}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {shoppingLists.map((list) => (
                         <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)}>
                             <td>{list.ListName}</td>
-                            <td>{list.items.length}</td>
+                            <td>{list.items ? list.items.length : 0}</td>
                         </tr>
                     ))}
                 </tbody>

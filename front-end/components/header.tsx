@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {CgProfile} from "react-icons/cg";
-
+import Language from './language/Language';
 import {useRouter} from 'next/router';
+import {useTranslation} from 'next-i18next';
 
 const Header: React.FC = () => {
     const [logedIn, setLogedIn] = useState<boolean>(false)
+
+    const { t } = useTranslation("common");
 
     const router = useRouter();
     useEffect(() => {
@@ -36,17 +39,19 @@ const Header: React.FC = () => {
                     <header className="flex justify-between items-center">
                         <div className="flex space-x-8">
                             <Link href="/">
-                                <h3 className="text-white">Home</h3>
+                                <h3 className="text-white">{t("header.nav.home")}</h3>
                             </Link>
                             <Link href="/lists">
-                                <h3 className="text-white">Lists</h3>
+                                <h3 className="text-white">{t("header.nav.lists")}</h3>
                             </Link>
                             <Link href="/monthlySpendings">
-                                <h3 className="text-white">Monthly spendings</h3>
+                                <h3 className="text-white">{t("header.nav.monthly")}</h3>
                             </Link>
                         </div>
+                        
+                        <Language />
                         <div className="flex items-center space-x-4 text-white">
-                                <h3 onClick={() => handleLogout()} className='cursor-pointer '>Logout</h3>
+                                <h3 onClick={() => handleLogout()} className='cursor-pointer '>{t("header.nav.logout")}</h3>
                             <Link className="ProfileIcon text-white" href="/profile">
                                 <CgProfile size={24} />
                             </Link>

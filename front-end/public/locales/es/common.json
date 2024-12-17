@@ -1,0 +1,51 @@
+{
+    "app.title": "Aplicación de gestión de comestibles",
+    "general.error": "Ocurrió un error",
+
+    "login": {
+        "title": "Iniciar sesión",
+        "username": "Nombre de usuario",
+        "password": "Contraseña",
+        "submit": "Iniciar sesión",
+        "success": "Inicio de sesión exitoso",
+        "failed": "Inicio de sesión fallido",
+        "validate": {
+            "username": "El nombre de usuario es obligatorio",
+            "password": "La contraseña es obligatoria"
+        },
+        "label": {
+            "username": "Nombre de usuario:",
+            "password": "Contraseña:"
+        }
+    },
+    "header": {
+        "nav": {
+            "logout": "Cerrar sesión",
+            "profile": "Perfil",
+            "home": "Inicio",
+            "lists": "Listas",
+            "monthly": "Gastos mensuales",
+            "language": "Idioma"
+        }
+    },
+    "home": {
+        "title": "Inicio",
+        "subtitle": "Bienvenido a la aplicación de gestión de comestibles x app",
+        "description": "Esta aplicación está diseñada para ayudarte a gestionar tus compras de comestibles. Puedes crear listas de compras, rastrear tus gastos mensuales y más.",
+        "button": "Comenzar"
+    },
+    "lists": {
+        "title": "Listas de comestibles",
+        "description": "Esta es la página de listas",
+        "overview": "Resumen de las listas de compras",
+        "table": {
+            "name": "Nombre",
+            "number": "Cantidad de artículos"
+        }
+    },
+    "monthly": {
+        "title": "Gastos mensuales",
+        "description": "Esta es la página de gastos mensuales",
+        "overview": "Resumen de los gastos mensuales"
+    }
+}

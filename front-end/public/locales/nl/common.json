@@ -1,0 +1,51 @@
+{
+    "app.title": "Boodschappenbeheer x app",
+    "general.error": "Er is een fout opgetreden",
+
+    "login": {
+        "title": "Inloggen",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "submit": "Inloggen",
+        "success": "Succesvol ingelogd",
+        "failed": "Inloggen mislukt",
+        "validate": {
+            "username": "Gebruikersnaam is verplicht",
+            "password": "Wachtwoord is verplicht"
+        },
+        "label": {
+            "username": "Gebruikersnaam:",
+            "password": "Wachtwoord:"
+        }
+    },
+    "header": {
+        "nav": {
+            "logout": "Uitloggen",
+            "profile": "Profiel",
+            "home": "Home",
+            "lists": "Lijsten",
+            "monthly": "Maandelijkse uitgaven",
+            "language": "Taal"
+        }
+    },
+    "home": {
+        "title": "Home",
+        "subtitle": "Welkom bij de boodschappenbeheer x app",
+        "description": "Deze app is ontworpen om je te helpen met het beheren van je boodschappen. Je kunt boodschappenlijsten maken, je maandelijkse uitgaven bijhouden en meer.",
+        "button": "Aan de slag"
+    },
+    "lists": {
+        "title": "Boodschappenlijsten",
+        "description": "Dit is de lijstenpagina",
+        "overview": "Overzicht van boodschappenlijsten",
+        "table": {
+            "name": "Naam",
+            "number": "Aantal items"
+        }
+    },
+    "monthly": {
+        "title": "Maandelijkse uitgaven",
+        "description": "Dit is de pagina met maandelijkse uitgaven",
+        "overview": "Overzicht van de maandelijkse uitgaven"
+    }
+}

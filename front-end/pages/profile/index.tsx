@@ -1,10 +1,13 @@
 import Header from "@/components/header";
 import Head from "next/head";
 import {useRouter} from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import React, {useEffect} from "react";
 
 const monthlySpendings: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     try {
@@ -30,5 +33,13 @@ const monthlySpendings: React.FC = () => {
     </>
   )
 };
+
+export const getServerSideProps = async (context: { locale: any; }) => {
+  return {
+      props: {
+          ...(await serverSideTranslations(context.locale ?? "en", ["common"]) ),
+      },
+  };
+}
 
 export default monthlySpendings;

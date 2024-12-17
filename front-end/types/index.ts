@@ -40,5 +40,5 @@ export type {
     Urgency,
     ShoppingList,
     User,
-    Profile,
+    Profile, Item,
 };
