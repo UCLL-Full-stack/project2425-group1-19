@@ -6,7 +6,7 @@ import itemDb from "../repository/item.db";
 import {Privacy} from "@prisma/client";
 import itemService from "./item.service";
 
-const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList| null> => {
+const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> => {
     try {
         const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
         if (existingList) {
@@ -42,7 +42,7 @@ const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList| 
         return await shoppingListDb.saveShoppingList(newShoppingList);
     } catch (error) {
         console.error('Error adding shopping list:', error);
-        return null;
+        throw new Error('Error adding shopping list: '+error)
     }
 };
 

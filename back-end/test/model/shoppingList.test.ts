@@ -15,7 +15,7 @@ test('given valid ListName, items, owner, and privacy; when creating a ShoppingL
     // (global constants are used)
 
     // when
-    const newList = new ShoppingList({ ListName: validListName, items: validItems, owner:validOwner, privacy: validPrivacy });
+    const newList = new ShoppingList({ ListName: validListName, items: validItems, owner: validOwner, privacy: validPrivacy });
 
     // then
     expect(newList.getListName()).toBe(validListName);
@@ -82,7 +82,7 @@ test('given invalid owner; when setting owner; then it should throw an error', (
 test('given valid privacy; when setting privacy; then it should set the privacy correctly', () => {
     // given
     const newList = new ShoppingList({ ListName: validListName, items: validItems });
-    const newPrivacy:Privacy = 'adultOnly';
+    const newPrivacy: Privacy = 'adultOnly';
 
     // when
     newList.setPrivacy(newPrivacy);
@@ -101,8 +101,6 @@ test('given invalid privacy; when setting privacy; then it should throw an error
         newList.setPrivacy(invalidPrivacy);
     }).toThrow('Privacy can only be set to the following values: public, adultOnly, private');
 });
-
-// Existing tests...
 
 test('given valid ListName and items; when creating a ShoppingList; then it should create the ShoppingList correctly', () => {
     // given

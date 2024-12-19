@@ -21,7 +21,7 @@ class Item {
             throw new Error('Invalid name value');
         }
 
-        if (typeof item.description !== 'string' || item.description.length > 4000) {
+        if (typeof item.description !== 'string' || item.description.length > 240) {
             throw new Error('Invalid description value');
         }
 

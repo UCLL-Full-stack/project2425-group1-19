@@ -1,12 +1,11 @@
 import Item from "../../model/item";
-import {Urgency} from "../../types";
+import { Urgency } from "../../types";
 
 // Global constants for valid inputs
 const validName = "Test item";
 const validDescription = "This is a test item";
 const validPrice = 100;
-const validStringUrgency:Urgency = "high";
-// const validNumberUrgency = 3;
+const validStringUrgency: Urgency = "high";
 
 test('given valid values; when creating an item; then it should create the item correctly', () => {
     // given
@@ -102,27 +101,75 @@ test('given invalid urgency string; when creating an item; then it should throw 
 
     // when & then
     expect(() => {
-        new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgency as any});
+        new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgency as any });
     }).toThrow('Invalid urgency value');
 });
 
-// test('given valid urgency number; when creating an item; then it should convert the number to corresponding string', () => {
-//     // given
-//     // (global constants are used)
+test('given valid data; when creating an item from static method; then it should create the item correctly', () => {
+    // given
+    const data = { name: validName, description: validDescription, price: validPrice, urgency: validStringUrgency };
 
-//     // when
-//     const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validNumberUrgency });
+    // when
+    const newItem = Item.from(data);
 
-//     // then
-//     expect(newItem.getUrgency()).toBe(validStringUrgency);
-// });
+    // then
+    expect(newItem.getName()).toBe(validName);
+    expect(newItem.description).toBe(validDescription);
+    expect(newItem.getPrice()).toBe(validPrice);
+    expect(newItem.getUrgency()).toBe(validStringUrgency);
+});
 
-// test('given invalid urgency number; when creating an item; then it should throw an error', () => {
-//     // given
-//     const invalidUrgencyNumber = 5;
+test('given valid item; when getting name; then it should return the name', () => {
+    // given
+    const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validStringUrgency });
 
-//     // when & then
-//     expect(() => {
-//         new Item({ name: validName, description: validDescription, price: validPrice, urgency: invalidUrgencyNumber });
-//     }).toThrow('Invalid urgency value');
-// });
+    // when
+    const name = newItem.getName();
+
+    // then
+    expect(name).toBe(validName);
+});
+
+test('given valid item; when getting price; then it should return the price', () => {
+    // given
+    const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validStringUrgency });
+
+    // when
+    const price = newItem.getPrice();
+
+    // then
+    expect(price).toBe(validPrice);
+});
+
+test('given valid item with no price; when getting price; then it should return 0', () => {
+    // given
+    const newItem = new Item({ name: validName, description: validDescription });
+
+    // when
+    const price = newItem.getPrice();
+
+    // then
+    expect(price).toBe(0);
+});
+
+test('given valid item; when getting urgency; then it should return the urgency', () => {
+    // given
+    const newItem = new Item({ name: validName, description: validDescription, price: validPrice, urgency: validStringUrgency });
+
+    // when
+    const urgency = newItem.getUrgency();
+
+    // then
+    expect(urgency).toBe(validStringUrgency);
+});
+
+test('given valid item with no urgency; when getting urgency; then it should return default urgency', () => {
+    // given
+    const newItem = new Item({ name: validName, description: validDescription, price: validPrice });
+
+    // when
+    const urgency = newItem.getUrgency();
+
+    // then
+    expect(urgency).toBe("low");
+});

@@ -34,7 +34,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
             return 'Invalid name value';
         }
 
-        if (typeof item.description !== 'string' || item.description.length > 4000) {
+        if (typeof item.description !== 'string' || item.description.length > 240) {
             return 'Invalid description value';
         }
 

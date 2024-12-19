@@ -1,10 +1,10 @@
 import ItemService from "../../service/item.service";
 import itemDb from "../../repository/item.db";
 import Item from "../../model/item";
-import {Urgency} from "../../types";
+import { Urgency } from "../../types";
 
-const itemInput1 = { name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "high" as Urgency};
-const itemInput2 = { name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "low" as Urgency};
+const itemInput1 = { name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "high" as Urgency };
+const itemInput2 = { name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "low" as Urgency };
 const itemInput3 = { name: "Eggs", description: "1 dozen large eggs", price: 2.99, urgency: "mid" as Urgency };
 
 const item1 = new Item(itemInput1);
@@ -13,13 +13,11 @@ const item3 = new Item(itemInput3);
 
 jest.mock("../../repository/item.db");
 
-// Change to use jest.fn so mocking is cleaner
 const mockSaveItem = jest.fn();
 const mockGetItemByName = jest.fn();
 const mockRemoveItem = jest.fn();
 const mockGetAllItems = jest.fn();
 
-// Dan mock zo
 itemDb.saveItem = mockSaveItem;
 itemDb.getItemByName = mockGetItemByName;
 itemDb.removeItem = mockRemoveItem;
@@ -48,6 +46,14 @@ test('given existing item name; when adding an item; then it should throw an err
 
     // when & then
     await expect(ItemService.addItem(itemInput1)).rejects.toThrow(`Item with name ${itemInput1.name} already exists.`);
+});
+
+test('given invalid item input; when adding an item; then it should throw an error', async () => {
+    // given
+    const invalidItemInput = { name: "", description: "Invalid item", price: -1, urgency: "invalid" as Urgency };
+
+    // when & then
+    await expect(ItemService.addItem(invalidItemInput as any)).rejects.toThrow();
 });
 
 test('given valid item name; when retrieving an item; then it should return the item', async () => {
@@ -102,4 +108,36 @@ test('when retrieving all items; then it should return all items', async () => {
     // then
     expect(allItems.length).toBe(3);
     expect(mockGetAllItems).toHaveBeenCalled();
+});
+
+test('given database error; when adding an item; then it should throw an error', async () => {
+    // given
+    mockGetItemByName.mockRejectedValue(new Error('Database error'));
+
+    // when & then
+    await expect(ItemService.addItem(itemInput1)).rejects.toThrow('Item with name Milk already exists.');
+});
+
+test('given database error; when retrieving an item; then it should throw an error', async () => {
+    // given
+    mockGetItemByName.mockRejectedValue(new Error('Database error'));
+
+    // when & then
+    await expect(ItemService.getItem(itemInput1.name)).rejects.toThrow('Database error');
+});
+
+test('given database error; when removing an item; then it should throw an error', async () => {
+    // given
+    mockGetItemByName.mockRejectedValue(new Error('Database error'));
+
+    // when & then
+    await expect(ItemService.removeItem(itemInput1.name)).rejects.toThrow('Database error');
+});
+
+test('given database error; when retrieving all items; then it should throw an error', async () => {
+    // given
+    mockGetAllItems.mockRejectedValue(new Error('Database error'));
+
+    // when & then
+    await expect(ItemService.getAllItems()).rejects.toThrow('Database error');
 });

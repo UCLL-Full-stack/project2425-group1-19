@@ -1,5 +1,6 @@
 import ShoppingListService from "../../service/shoppingList.service";
 import shoppingListDb from "../../repository/shoppingList.db";
+import itemDb from "../../repository/item.db";
 import Item from "../../model/item";
 import ShoppingList from "../../model/shoppingList";
 import { Urgency, Privacy } from "../../types";
@@ -14,6 +15,7 @@ const item2 = new Item(itemInput2);
 const item3 = new Item(itemInput3);
 
 jest.mock("../../repository/shoppingList.db");
+jest.mock("../../repository/item.db");
 
 const mockSaveShoppingList = jest.fn();
 const mockGetShoppingListByName = jest.fn();
@@ -21,6 +23,7 @@ const mockRemoveShoppingList = jest.fn();
 const mockAddItemToShoppingList = jest.fn();
 const mockRemoveItemFromShoppingList = jest.fn();
 const mockGetAllShoppingLists = jest.fn();
+const mockSaveItem = jest.fn();
 
 (shoppingListDb.saveShoppingList as jest.Mock) = mockSaveShoppingList;
 (shoppingListDb.getShoppingListByName as jest.Mock) = mockGetShoppingListByName;
@@ -28,6 +31,7 @@ const mockGetAllShoppingLists = jest.fn();
 (shoppingListDb.addItemToShoppingList as jest.Mock) = mockAddItemToShoppingList;
 (shoppingListDb.removeItemFromShoppingList as jest.Mock) = mockRemoveItemFromShoppingList;
 (shoppingListDb.getAllShoppingLists as jest.Mock) = mockGetAllShoppingLists;
+(itemDb.saveItem as jest.Mock) = mockSaveItem;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -38,6 +42,8 @@ test('given valid shopping list input; when adding a shopping list; then it shou
     const shoppingListInput = { ListName: validListName, items: [itemInput1, itemInput2], privacy: 'public' as Privacy, owner: "TestOwner" };
     const newShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2], privacy: 'public' as Privacy, owner: "TestOwner" });
     mockSaveShoppingList.mockResolvedValue(newShoppingList);
+    mockSaveItem.mockResolvedValue(item1);
+    mockSaveItem.mockResolvedValue(item2);
 
     // when
     const addedList = await ShoppingListService.addShoppingList(shoppingListInput);
@@ -48,6 +54,7 @@ test('given valid shopping list input; when adding a shopping list; then it shou
     expect(addedList.getPrivacy()).toBe('public');
     expect(addedList.getOwner()).toBe("TestOwner");
     expect(mockSaveShoppingList).toHaveBeenCalledWith(expect.any(ShoppingList));
+    expect(mockSaveItem).toHaveBeenCalledTimes(2);
 });
 
 test('given existing shopping list name; when adding a shopping list; then it should throw an error', async () => {
@@ -130,10 +137,11 @@ test('given valid privacy; when setting privacy; then it should set the privacy 
     mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    existingShoppingList.setPrivacy('adultOnly');
+    await ShoppingListService.setShoppingListPrivacy(validListName, 'adultOnly');
 
     // then
     expect(existingShoppingList.getPrivacy()).toBe('adultOnly');
+    expect(mockSaveShoppingList).toHaveBeenCalledWith(existingShoppingList);
 });
 
 test('given invalid privacy; when setting privacy; then it should throw an error', async () => {
@@ -142,9 +150,7 @@ test('given invalid privacy; when setting privacy; then it should throw an error
     const invalidPrivacy = "invalid" as any;
 
     // when & then
-    expect(() => {
-        existingShoppingList.setPrivacy(invalidPrivacy);
-    }).toThrow('Privacy can only be set to the following values: public, adultOnly, private');
+    await expect(ShoppingListService.setShoppingListPrivacy(validListName, invalidPrivacy)).rejects.toThrow('Privacy can only be set to the following values: public, adultOnly, private');
 });
 
 test('given valid owner; when setting owner; then it should set the owner correctly', async () => {
@@ -153,10 +159,11 @@ test('given valid owner; when setting owner; then it should set the owner correc
     mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
 
     // when
-    existingShoppingList.setOwner("NewOwner");
+    await ShoppingListService.setShoppingListOwner(validListName, "NewOwner");
 
     // then
     expect(existingShoppingList.getOwner()).toBe("NewOwner");
+    expect(mockSaveShoppingList).toHaveBeenCalledWith(existingShoppingList);
 });
 
 test('given invalid owner; when setting owner; then it should throw an error', async () => {
@@ -165,7 +172,47 @@ test('given invalid owner; when setting owner; then it should throw an error', a
     const invalidOwner = 123 as any;
 
     // when & then
-    expect(() => {
-        existingShoppingList.setOwner(invalidOwner);
-    }).toThrow('Invalid owner name');
+    await expect(ShoppingListService.setShoppingListOwner(validListName, invalidOwner)).rejects.toThrow('Invalid owner name');
+});
+
+test('given valid role; when retrieving all shopping lists; then it should return all shopping lists', async () => {
+    // given
+    const shoppingLists = [
+        new ShoppingList({ ListName: validListName, items: [item1, item2], privacy: 'public', owner: "TestOwner" }),
+        new ShoppingList({ ListName: "Weekly Groceries", items: [item3], privacy: 'private', owner: "TestOwner2" })
+    ];
+    mockGetAllShoppingLists.mockResolvedValue(shoppingLists);
+
+    // when
+    const retrievedLists = await ShoppingListService.getAllShoppingLists('admin');
+
+    // then
+    expect(retrievedLists.length).toBe(2);
+    expect(mockGetAllShoppingLists).toHaveBeenCalledWith();
+});
+
+test('given valid list name; when retrieving shopping list privacy; then it should return the privacy', async () => {
+    // given
+    const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2], privacy: 'public', owner: "TestOwner" });
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
+
+    // when
+    const privacy = await ShoppingListService.getShoppingListPrivacy(validListName);
+
+    // then
+    expect(privacy).toBe('public');
+    expect(mockGetShoppingListByName).toHaveBeenCalledWith(validListName);
+});
+
+test('given valid list name; when retrieving shopping list owner; then it should return the owner', async () => {
+    // given
+    const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2], privacy: 'public', owner: "TestOwner" });
+    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
+
+    // when
+    const owner = await ShoppingListService.getShoppingListOwner(validListName);
+
+    // then
+    expect(owner).toBe('TestOwner');
+    expect(mockGetShoppingListByName).toHaveBeenCalledWith(validListName);
 });
