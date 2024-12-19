@@ -18,7 +18,7 @@ model Item {
     name           String        @unique
     description    String
     price          Float
-    urgency        Urgency           @default(low)
+    urgency        Urgency       @default(low)
     ShoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
     shoppingListId Int?
 }
@@ -28,7 +28,7 @@ model Profile {
     email    String @unique
     name     String
     lastName String
-    userId   Int
+    userId   Int    @unique
 }
 
 enum Privacy {
@@ -38,11 +38,11 @@ enum Privacy {
 }
 
 model ShoppingList {
-    id    Int    @id @default(autoincrement())
-    name  String @unique
-    items Item[]
+    id      Int     @id @default(autoincrement())
+    name    String  @unique
+    items   Item[]
     privacy Privacy @default(public)
-    owner   String @default("GeneralUser")
+    owner   String  @default("GeneralUser")
 }
 
 enum Role {

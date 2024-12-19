@@ -1,10 +1,12 @@
+import { ProfileInput } from "../types";
+
 class Profile {
     private email: string;
     public name: string;
     public lastName: string;
     public userId: number;
 
-    constructor (profile: {email: string, name: string, lastName: string; userId: number}) {
+    constructor (profile: ProfileInput) {
         this.validateprofiles(profile);
 
         this.email = profile.email;
@@ -55,6 +57,15 @@ class Profile {
     getEmail= ():string =>
     {
         return this.email;
+    }
+
+    getUserId= ():number =>
+    {
+        return this.userId;
+    }
+
+    public static from(profile: ProfileInput): Profile {
+        return new Profile(profile);
     }
 }
 export default Profile;

@@ -8,7 +8,6 @@ class User {
     constructor (user: UserInput) {
         this.validateusers(user);
         this.validatePassword(user.password);
-
         this.username = user.username;
         this.password = user.password;
         this.role = user.role;

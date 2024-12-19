@@ -1,4 +1,7 @@
+import { profile } from "console";
 import Profile from "../model/profile";
+import User from "../model/user";
+import profileService from "../service/profile.service";
 import database from "./database";
 
 const saveProfile = async (profile: Profile): Promise<Profile> => {
@@ -37,15 +40,34 @@ const removeProfile = async (email: string): Promise<void> => {
     }
 };
 
+
+const getProfileByUserId = async (userId: number): Promise<Profile | undefined> => {
+    try {
+        const profile = await database.profile.findUnique({
+            where: {userId},
+        });
+        if (!profile) {
+            throw new Error('No profile found with username:'+userId)
+        }
+        return Profile.from(profile);
+    } catch (error) {
+        throw new Error('db username');
+    }
+};
+
 const getAllProfiles = async (): Promise<Array<Profile>> => {
-    const profiles = await database.profile.findMany();
-    const profile_array = profiles.map((p) => new Profile(p))
-    return profile_array;
+    try {
+        const profiles = await database.profile.findMany();
+        const profile_array = profiles.map((p) => Profile.from(p))
+        return profile_array;
+    } catch (error) {
+        throw new Error('database getall error');
+    }
 };
 
 const createTestProfiles = async (): Promise<void> => {
     const profile1 = new Profile({ email: "Janneke@hotmail.com", name: "Jan", lastName: "Janssens", userId: 1 });
-    const profile2 = new Profile({ email: "Jannineke@telenet.be", name: "Jannine", lastName: "Janssens", userId: 2 });
+    const profile2 = new Profile({ email: "Jannineke@telenet.be", name: "Jannine", lastName: "Janssens", userId: 2 }) ;
     const profile3 = new Profile({ email: "Jeanke@outlook.com", name: "Jean", lastName: "Janssnes", userId: 3 });
     await saveProfile(profile1);
     await saveProfile(profile2);
@@ -58,5 +80,5 @@ export default {
     getAllProfiles,
     removeProfile,
     getProfileByEmail,
-
+    getProfileByUserId,
 };

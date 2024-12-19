@@ -56,7 +56,7 @@ const main = async () => {
             email: 'jane.doe@example.com',
             name: 'Jane',
             lastName: 'Doe',
-            userId: user2.id,
+            userId: user3.id,
         },
     });
 

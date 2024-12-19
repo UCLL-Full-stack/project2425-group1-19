@@ -51,6 +51,21 @@ const getUserByUsername = async (username:string): Promise<User | undefined> => 
     }
 };
 
+const getUserById = async (id: number): Promise<User | undefined> => {
+    try {
+        const user = await database.user.findUnique({
+            where: {id},
+        });
+        if (user) {
+            return User.from(user);
+        } else {
+            return undefined;
+        }
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 const removeUser = async (username: string): Promise<void> => {
     try {
         await database.user.delete({
@@ -85,5 +100,7 @@ export default {
     getUserByUsername,
     removeUser,
     getAllUsers,
+    createTestUsers,
+    getUserById,
 
 };

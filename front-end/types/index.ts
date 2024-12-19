@@ -25,7 +25,7 @@ type User = {
 type Profile = {
     email: string;
     name: string;
-    lastname: string;
+    lastName: string;
 };
 
 type AuthenticationResponse = {
