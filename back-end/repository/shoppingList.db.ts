@@ -1,6 +1,7 @@
 import ShoppingList from "../model/shoppingList";
 import Item from "../model/item";
 import database from "./database";
+import {Privacy} from "@prisma/client";
 
 const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingList> => {
     const savedShoppingList = await database.shoppingList.create({
@@ -46,21 +47,20 @@ const getAllShoppingLists = async (role?: 'admin' | 'adult' | 'child', username?
         // Admin can see all lists
         whereClause = {};
     } else if (role === 'adult') {
-        // Adult can see public, adult only, child, and their own private lists
+        // Adult can see public, adult only, and their own private lists
         whereClause = {
             OR: [
-                { privacy: 'public' },
-                { privacy: 'adult' },
-                { privacy: 'child' },
-                { AND: [{ privacy: 'private' }, { owner: username }] },
+                { privacy: Privacy.public },
+                { privacy: Privacy.adultOnly },
+                { AND: [{ privacy: Privacy.private }, { owner: username }] },
             ],
         };
     } else if (role === 'child') {
-        // Child can see child and their own private lists
+        // Child can see public and their own private lists
         whereClause = {
             OR: [
-                { privacy: 'child' },
-                { AND: [{ privacy: 'private' }, { owner: username }] },
+                { privacy: Privacy.public },
+                { AND: [{ privacy: Privacy.private }, { owner: username }] },
             ],
         };
     }

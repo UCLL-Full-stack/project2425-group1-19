@@ -15,7 +15,7 @@ const ListsOverview: React.FC = () => {
     const fetchShoppingLists = async () => {
         try {
             const lists = await getShoppingLists();
-            //console.log('Fetched lists:', lists); // Debugging: Log fetched lists
+            console.log('Fetched lists:', lists); // Debugging: Log fetched lists
             setShoppingLists(lists);
         } catch (error) {
             console.error(error);

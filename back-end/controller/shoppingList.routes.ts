@@ -28,8 +28,22 @@ const shoppingListRouter = Router();
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get all shopping lists, depending on the role a different shooping list will be displayed
+ *     summary: Get all shopping lists, depending on the role a different shopping list will be displayed
  *     tags: [ShoppingList]
+ *     parameters:
+ *       - in: query
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The username of the user
+ *       - in: query
+ *         name: role
+ *         schema:
+ *           type: string
+ *           enum: [admin, adult, child]
+ *         required: true
+ *         description: The role of the user
  *     responses:
  *       200:
  *         description: A list of shopping lists
@@ -44,15 +58,9 @@ const shoppingListRouter = Router();
  */
 
 shoppingListRouter.get('/', async (req: Request , res: Response) => {
-    let username;
-    let role ;
-    
+   
     try {
-        try {
-            ({username, role} = (req as any).auth as { username: string; role: 'admin' | 'adult' | 'child' });
-        } catch (error) {
-            console.log('No role or username given with request')
-        }
+        const { username, role } = req.query as { username?: string; role?: 'admin' | 'adult' | 'child' };
         const shoppingLists = await shoppingListService.getAllShoppingLists(role, username);
         res.status(200).json(shoppingLists);
     } catch (error) {

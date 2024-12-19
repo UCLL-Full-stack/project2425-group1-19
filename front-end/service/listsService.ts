@@ -1,5 +1,5 @@
-import {Item} from "@/types";
-
+import {AuthenticationResponse, Item} from "@/types";
+import userService from "./userService";
 const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!backendUrl) {
@@ -7,7 +7,13 @@ if (!backendUrl) {
 }
 
 const getShoppingLists = async () => {
-    const response = await fetch(`${backendUrl}/shoppingList`);
+    const token:AuthenticationResponse = userService.getLocalStorageFields();
+    const response = await fetch(`${backendUrl}/shoppingList?username=${token.username}&role=${token.role}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
+    });
     if (!response.ok) {
         throw new Error('Failed to fetch shopping lists');
     }
@@ -15,18 +21,26 @@ const getShoppingLists = async () => {
 };
 
 const getShoppingList = async (name: string) => {
-    const response = await fetch(`${backendUrl}/shoppingList/${name}`);
+    const token = userService.getLocalStorageFields();
+    const response = await fetch(`${backendUrl}/shoppingList/${name}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
+    });
     if (!response.ok) {
         throw new Error(`Failed to fetch shopping list: ${name}`);
     }
     return response.json();
 };
 
-const addShoppingList = async (list: { ListName: string, items: any[] }) => {
+const addShoppingList = async (list: {ListName: string, items: any[]}) => {
+    const token = userService.getLocalStorageFields();
     const response = await fetch(`${backendUrl}/shoppingList`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify(list),
     });
@@ -37,8 +51,13 @@ const addShoppingList = async (list: { ListName: string, items: any[] }) => {
 };
 
 const removeShoppingList = async (name: string) => {
+    const token = userService.getLocalStorageFields();
     const response = await fetch(`${backendUrl}/shoppingList/${name}`, {
         method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
     });
     if (!response.ok) {
         throw new Error(`Failed to remove shopping list: ${name}`);
@@ -47,6 +66,7 @@ const removeShoppingList = async (name: string) => {
 };
 
 const addItemToShoppingList = async (listName: string, item: Item) => {
+    const token = userService.getLocalStorageFields();
     const itemWithDefaultPrice = {
         ...item,
         price: item.price !== undefined ? Number(item.price) : 0
@@ -55,7 +75,8 @@ const addItemToShoppingList = async (listName: string, item: Item) => {
     const response = await fetch(`${backendUrl}/shoppingList/${listName}/item`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify(itemWithDefaultPrice),
     });
@@ -66,8 +87,13 @@ const addItemToShoppingList = async (listName: string, item: Item) => {
 };
 
 const removeItemFromShoppingList = async (listName: string, itemName: string) => {
+    const token = userService.getLocalStorageFields();
     const response = await fetch(`${backendUrl}/shoppingList/${listName}/item/${itemName}`, {
         method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
     });
     if (!response.ok) {
         throw new Error(`Failed to remove item from shopping list: ${listName}`);

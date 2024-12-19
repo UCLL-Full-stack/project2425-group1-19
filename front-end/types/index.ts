@@ -1,7 +1,7 @@
 type Privacy = 'public'|'adultOnly'|'private'
 
 type ShoppingList  = {
-    ListName?: string;
+    ListName: string;
     items?: Item[];
     privacy?:Privacy;
     owner?: string;
