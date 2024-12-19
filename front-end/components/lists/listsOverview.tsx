@@ -39,12 +39,12 @@ const ListsOverview: React.FC = () => {
         if (selectedListName) {
             try {
                 setErrorMessage(null);
-               try {
-                 await addItemToShoppingList(selectedListName, item);
-               } catch (e) {
-                setErrorMessage(JSON.stringify(e));
-                return;
-               }
+                try {
+                    await addItemToShoppingList(selectedListName, item);
+                } catch (e) {
+                    setErrorMessage(JSON.stringify(e));
+                    return;
+                }
 
                 // Als backend cresht is dit duidelijk
                 fetchShoppingLists();
@@ -59,7 +59,7 @@ const ListsOverview: React.FC = () => {
             }
         }
     };
-
+// Responsive design needs improvments
     return (
         <div className='p-4'>
             <h1 className='text-2xl font-bold mb-4'>{t("lists.overview")}</h1>
@@ -85,11 +85,14 @@ const ListsOverview: React.FC = () => {
                 {selectedListName && (
                     <>
                         {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+                        <div className='flex flex-col items-center sm:justify-center ml-4'>
+                            <div className="text-sm w-96 h-96 overflow-auto md:w-full md:h-auto md:text-lg">
+                                {/* Key zorgt voor refreshes */}
+                                <ListDetail key={refreshKey} shoppingListName={selectedListName} />
+                            </div>
 
-                        {/* Key zorgt voor refreshes */}
-                        <ListDetail key={refreshKey} shoppingListName={selectedListName} />
-
-                        <AddItemRow onAddItem={handleAddItem} />
+                            <AddItemRow onAddItem={handleAddItem} />
+                        </div>
                     </>
                 )}
             </div>
