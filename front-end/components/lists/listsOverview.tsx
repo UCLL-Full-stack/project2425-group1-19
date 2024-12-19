@@ -34,7 +34,7 @@ const ListsOverview: React.FC = () => {
         fetchShoppingLists();
     };
 
-    const handleAddItem = async (item: Item, newListName?:string) => {
+    const handleAddItem = async (item: Item, newListName?: string) => {
         console.log('Item added:', item);
         if (selectedListName && !newListName) {
             try {
@@ -58,12 +58,12 @@ const ListsOverview: React.FC = () => {
                     setErrorMessage('An unexpected error occurred.');
                 }
             }
-        } else if(newListName) {
+        } else if (newListName) {
             console.log(`A new list "${newListName}" is trying to be created.`);
             try {
-                await addShoppingList({ ListName: newListName, items: [createCorrectItem(item)] });
+                await addShoppingList({ListName: newListName, items: [createCorrectItem(item)]});
                 setErrorMessage("");
-                
+
                 setSelectedListName(newListName);
                 setRefreshKey((oldKey) => oldKey + 1);
             } catch (error) {
@@ -85,24 +85,29 @@ const ListsOverview: React.FC = () => {
     return (
         <div className='p-4'>
             <h1 className='text-2xl font-bold mb-4'>{t("lists.overview")}</h1>
-            <div className="overflow-x-auto">
-                <table className='w-full border-collapse mt-5'>
-                    <thead>
-                        <tr>
-                            <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.name")}</th>
-                            <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.number")}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {shoppingLists.map((list) => (
-                            <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)} className="cursor-pointer hover:bg-gray-100 hover:underline">
-                                <td className='border border-gray-300 p-2'>{list.ListName}</td>
-                                <td className='border border-gray-300 p-2'>{list.items ? list.items.length : 0}</td>
+            {shoppingLists.length>0 && (
+                <div className="overflow-x-auto">
+                    <table className='w-full border-collapse mt-5'>
+                        <thead>
+                            <tr>
+                                <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.name")}</th>
+                                <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.number")}</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {shoppingLists.map((list) => (
+                                <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)} className="cursor-pointer hover:bg-gray-100 hover:underline">
+                                    <td className='border border-gray-300 p-2'>{list.ListName}</td>
+                                    <td className='border border-gray-300 p-2'>{list.items ? list.items.length : 0}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            {shoppingLists.length<1 &&(
+                <h2 className='text-red-500'>No lists found</h2>
+            )}
             <div>
                 {selectedListName && (
                     <>
@@ -127,7 +132,7 @@ const ListsOverview: React.FC = () => {
                 )}
             </div>
             {selectedListName && (
-                <button type="button" onClick={()=>setSelectedListName('')}>
+                <button type="button" onClick={() => setSelectedListName('')}>
                     {t('lists.deselectList')}
                 </button>)}
         </div>

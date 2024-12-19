@@ -132,15 +132,13 @@ shoppingListRouter.get('/:name', async (req: Request, res: Response) => {
  *         description: Some input error
  */
 
-shoppingListRouter.post('/', async (req: Request, res: Response) => {
+shoppingListRouter.post('/', async (req: Request, res: Response, next:NextFunction) => {
     try {
         const shoppingList = <ShoppingListInput>req.body;
         const newShoppingList = shoppingListService.addShoppingList(shoppingList);
         res.status(201).json(newShoppingList);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ status: "error", errorMessage: error.message });
-        }
+        next(error);
     }
 });
 

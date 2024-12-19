@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {getShoppingList, removeItemFromShoppingList} from '@/service/listsService';
+import {getShoppingList, removeItemFromShoppingList, removeShoppingList} from '@/service/listsService';
 import {ShoppingList, Urgency} from '@/types';
-import { FaTrash } from 'react-icons/fa';
+import {FaTrash} from 'react-icons/fa';
 
 type Props = {
     onPurchase: () => void;
@@ -56,8 +56,13 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
         }
     }
 
-    const handleDeleteList = async() => {
-        alert("Are you sure you want to delete:"+shoppingList?.ListName)
+    const handleDeleteList = async () => {
+        const confirmation = window.confirm("Are you sure you want to delete: " + shoppingList?.ListName);
+        if (confirmation && shoppingList) {
+            removeShoppingList(shoppingList?.ListName)
+            console.log("List deleted: " + shoppingList?.ListName);
+            fetchShoppingList();
+        }
     }
 
     if (!shoppingList) {
@@ -66,7 +71,14 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
 
     return (
         <div className="flex flex-col items-center p-4">
-            <h1 className="text-2xl font-bold mb-4">{shoppingList.ListName}</h1>
+            <div className='flex flex-row items-center gap-6 mb-4'>
+                <h1 className="text-2xl font-bold">{shoppingList.ListName}</h1>
+                <div
+                    className='text-red-500'
+                    onClick={async () => await handleDeleteList()}>
+                    <FaTrash className='h-4 w-4'/>
+                </div>
+            </div>
             <div className="overflow-x-auto w-full">
                 <table className="w-full border-collapse">
                     <thead>
@@ -75,15 +87,7 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Description</th>
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Price</th>
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Urgency</th>
-                            <th className="flex flex-row items-center justify-between px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">
-                                Action
-                                <div 
-                                className='ml-2 text-red-500 text-md'
-                                onClick={async() => await handleDeleteList()}>
-                                    <FaTrash/>
-                                </div>
-                            </th>
-
+                            <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 bg-gray-200 ">Action</th>
                         </tr>
                     </thead>
                     <tbody>

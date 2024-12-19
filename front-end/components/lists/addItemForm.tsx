@@ -14,8 +14,10 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
         price: 0,
         urgency: 'mid'
     });
-    const [listName, setListName] = useState<string>(shoppingListName)
-    const [toAddListName, setToAddListName] = useState<string>(shoppingListName)
+    const [listName, setListName] = useState<string>(shoppingListName);
+    const [toAddListName, setToAddListName] = useState<string>(shoppingListName);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = e.target;
@@ -25,8 +27,41 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
         }));
     };
 
+    const validateItem = (item: Item): string | null => {
+        setErrorMessage(null);
+        
+        if (typeof item.name !== 'string' || item.name.length > 40) {
+            return 'Invalid name value';
+        }
+
+        if (typeof item.description !== 'string' || item.description.length > 4000) {
+            return 'Invalid description value';
+        }
+
+        if (item.price !== undefined) {
+            if (typeof item.price !== 'number' || !isFinite(item.price) || item.price < 0) {
+                return 'Invalid price value';
+            }
+        }
+
+        const validUrgencies: string[] = ['low', 'mid', 'high'];
+        if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
+            return 'Invalid urgency value';
+        }
+
+        return null;
+    };
+
     const handleAddItem = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        const validationError = validateItem(newItem);
+        if (validationError) {
+            setErrorMessage(validationError);
+            return;
+        }
+
+        setErrorMessage(null);
 
         if (!shoppingListName && toAddListName) {
             onAddItem(newItem, toAddListName);
@@ -51,6 +86,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
     return (
         <div className="flex flex-col items-center p-4">
             <h3 className='text-xl font-semibold mt-6 mb-2'>Add an Item to the shoppingList</h3>
+            {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
             <form onSubmit={handleAddItem} className="w-full max-w-lg bg-transparent p-6 rounded-lg shadow-md">
                 {listName === '' && (
                     <div className="mb-4">

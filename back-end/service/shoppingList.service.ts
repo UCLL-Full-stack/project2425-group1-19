@@ -6,21 +6,44 @@ import itemDb from "../repository/item.db";
 import {Privacy} from "@prisma/client";
 import itemService from "./item.service";
 
-const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> => {
-    const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
-    if (existingList) {
-        throw new Error(`Shopping list with name ${input.ListName} already exists.`);
+const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList| null> => {
+    try {
+        const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
+        if (existingList) {
+            throw new Error(`Shopping list with name ${input.ListName} already exists.`);
+        }
+        
+        let items:Array<Item>;
+        try {
+            items = input.items?.map(item => new Item(item)) || [];
+        } catch (error) {
+            console.log(error)
+            throw new Error("There is an error with the items: "+error)
+        }
+    
+        let newShoppingList:ShoppingList;
+    
+        try {
+            newShoppingList = new ShoppingList({
+                ListName: input.ListName,
+                items,
+                privacy: input.privacy,
+                owner: input.owner
+            });
+        } catch (error) {
+            console.log(error)
+            throw new Error("There is an error with the ShoppingList: "+error)
+        }
+    
+        for (const item of items) {
+            await itemDb.saveItem(item);
+        }
+        
+        return await shoppingListDb.saveShoppingList(newShoppingList);
+    } catch (error) {
+        console.error('Error adding shopping list:', error);
+        return null;
     }
-
-    const items = input.items?.map(item => new Item(item)) || [];
-    const newShoppingList = new ShoppingList({
-        ListName: input.ListName,
-        items,
-        privacy: input.privacy,
-        owner: input.owner
-    });
-    items.forEach(async(item) =>await itemDb.saveItem(item));
-    return shoppingListDb.saveShoppingList(newShoppingList);
 };
 
 const getShoppingList = async (name: string): Promise<ShoppingList | undefined> => {

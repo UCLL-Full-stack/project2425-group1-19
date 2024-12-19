@@ -58,9 +58,6 @@ const Header: React.FC = () => {
                                 <Link href="/lists">
                                     <h3 className="text-white mb-4">{t("header.nav.lists")}</h3>
                                 </Link>
-                                <Link href="/monthlySpendings">
-                                    <h3 className="text-white mb-4">{t("header.nav.monthly")}</h3>
-                                </Link>
                             </div>
                         </div>
                         <Language />
