@@ -13,7 +13,7 @@
  *             $ref: '#/components/schemas/Item'
  */
 
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import shoppingListService from "../service/shoppingList.service";
 import { ShoppingListInput, ItemInput, AuthenticationResponse } from "../types";
 
@@ -205,15 +205,13 @@ shoppingListRouter.delete('/:name', async (req: Request, res: Response) => {
  *         description: Shopping list not found
  */
 
-shoppingListRouter.post('/:name/item', async (req: Request, res: Response) => {
+shoppingListRouter.post('/:name/item', async (req: Request, res: Response, next:NextFunction) => {
     try {
         const itemInput = <ItemInput>req.body;
         await shoppingListService.addItemToShoppingList(req.params.name, itemInput);
         res.status(200).json({ status: "success", message: "Item added to shopping list successfully" });
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(404).json({ status: "error", errorMessage: error.message });
-        }
+        next(error)
     }
 });
 

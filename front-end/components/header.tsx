@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {CgProfile} from "react-icons/cg";
+import { FaBars } from 'react-icons/fa';
 import Language from './language/Language';
 import {useRouter} from 'next/router';
 import {useTranslation} from 'next-i18next';
@@ -41,29 +42,16 @@ const Header: React.FC = () => {
             <div className='w-screen mb-6'>
                 <nav className="bg-gray-800 p-4">
                     <header className="flex justify-between items-center">
-                        <div className="flex space-x-8">
+                        <div className="flex space-x-2 items-center">
                             <div className="sm:hidden">
-                                <button
-                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                    className="text-white focus:outline-none"
-                                >
-                                    <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M4 6h16M4 12h16m-7 6h7"
-                                        ></path>
-                                    </svg>
-                                </button>
+                            <div
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="text-white focus:outline-none bg-transparent border-none"
+                            >
+                                <FaBars className="w-4 h-4" />
                             </div>
-                            <div className={`sm:flex ${isMenuOpen ? 'block' : 'hidden'} sm:space-x-8`}>
+                            </div>
+                            <div className={`sm:flex ${isMenuOpen ? 'block' : 'hidden'} sm:space-x-4`}>
                                 <Link href="/">
                                     <h3 className="text-white mb-4">{t("header.nav.home")}</h3>
                                 </Link>

@@ -104,7 +104,7 @@ const Login: React.FC = () => {
                 {feedbackPass && <span className="text-red-500">{t("login.validate.password")}</span>}
             </div>
             <div>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={(e) => handleLogin(e)}>
+                <button type="submit" onClick={(e) => handleLogin(e)}>
                     {t("login.submit")}
                 </button>
             </div>

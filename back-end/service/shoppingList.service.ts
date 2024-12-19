@@ -4,6 +4,7 @@ import ShoppingList from "../model/shoppingList";
 import {ShoppingListInput, ItemInput} from "../types";
 import itemDb from "../repository/item.db";
 import {Privacy} from "@prisma/client";
+import itemService from "./item.service";
 
 const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> => {
     const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
@@ -57,18 +58,19 @@ const removeShoppingList = async (name: string): Promise<void> => {
 const addItemToShoppingList = async (listName: string, itemInput: ItemInput): Promise<void> => {
     const shoppingList = await shoppingListDb.getShoppingListByName(listName);
 
-    if (shoppingList != undefined) {
-        const existingItem = shoppingList.getListItems().find(item => item.getName() === itemInput.name);
-        if (existingItem) {
-            throw new Error(`Item with name ${itemInput.name} already exists in the shopping list ${listName}.`);
-        }
-
-        const newItem = new Item(itemInput);
-        itemDb.saveItem(newItem);
-        shoppingListDb.addItemToShoppingList(listName, newItem);
-    } else {
+    if (!shoppingList) {
         throw new Error(`Shopping list with name ${listName} does not exist.`);
     }
+
+    const items = await itemService.getAllItems();
+    const existingItem = items.find((i) => i.getName() === itemInput.name);
+    if (existingItem) {
+        throw new Error(`Item with name ${itemInput.name} already exists in the shopping list ${listName}.`);
+    }
+
+    const newItem = new Item(itemInput);
+    await itemService.addItem(itemInput);
+    await shoppingListDb.addItemToShoppingList(listName, newItem);
 };
 
 const removeItemFromShoppingList = async (listName: string, itemName: string): Promise<void> => {

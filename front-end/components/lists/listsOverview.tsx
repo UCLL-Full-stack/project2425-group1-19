@@ -2,20 +2,21 @@ import React, {useEffect, useState} from 'react';
 import AddItemRow from './addItemRow';
 import {getShoppingLists, addItemToShoppingList} from '@/service/listsService';
 import {ShoppingList, Item} from '@/types';
-import { useTranslation } from 'next-i18next';
+import {useTranslation} from 'next-i18next';
 import ListDetail from './ListDetail';
 
 const ListsOverview: React.FC = () => {
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
     const [selectedListName, setSelectedListName] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [refreshKey, setRefreshKey] = useState(0);
 
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const fetchShoppingLists = async () => {
         try {
             const lists = await getShoppingLists();
-            console.log('Fetched lists:', lists); // Debugging: Log fetched lists
+            // console.log('Fetched lists:', lists); // Debugging: Log fetched lists
             setShoppingLists(lists);
         } catch (error) {
             console.error(error);
@@ -35,12 +36,20 @@ const ListsOverview: React.FC = () => {
 
     const handleAddItem = async (item: Item) => {
         console.log('Item added:', item);
-        // Logic
         if (selectedListName) {
             try {
-                await addItemToShoppingList(selectedListName, item);
-                fetchShoppingLists();
                 setErrorMessage(null);
+               try {
+                 await addItemToShoppingList(selectedListName, item);
+               } catch (e) {
+                setErrorMessage(JSON.stringify(e));
+                return;
+               }
+
+                // Als backend cresht is dit duidelijk
+                fetchShoppingLists();
+                // Zorgt voor refresh
+                setRefreshKey((oldKey) => oldKey + 1);
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message);
@@ -52,45 +61,38 @@ const ListsOverview: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>{t("lists.overview")}</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>{t("lists.table.name")}</th>
-                        <th>{t("lists.table.number")}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {shoppingLists.map((list) => (
-                        <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)}>
-                            <td>{list.ListName}</td>
-                            <td>{list.items ? list.items.length : 0}</td>
+        <div className='p-4'>
+            <h1 className='text-2xl font-bold mb-4'>{t("lists.overview")}</h1>
+            <div className="overflow-x-auto">
+                <table className='w-full border-collapse mt-5'>
+                    <thead>
+                        <tr>
+                            <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.name")}</th>
+                            <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.number")}</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            {selectedListName && (
-                <>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                    <ListDetail shoppingListName={selectedListName} />
-                    <h3>Add an Item to the shoppingList</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Urgency</th>
-                                <th>Action</th>
+                    </thead>
+                    <tbody>
+                        {shoppingLists.map((list) => (
+                            <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)} className="cursor-pointer hover:bg-gray-100 hover:underline">
+                                <td className='border border-gray-300 p-2'>{list.ListName}</td>
+                                <td className='border border-gray-300 p-2'>{list.items ? list.items.length : 0}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <AddItemRow onAddItem={handleAddItem} />
-                        </tbody>
-                    </table>
-                </>
-            )}
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                {selectedListName && (
+                    <>
+                        {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+
+                        {/* Key zorgt voor refreshes */}
+                        <ListDetail key={refreshKey} shoppingListName={selectedListName} />
+
+                        <AddItemRow onAddItem={handleAddItem} />
+                    </>
+                )}
+            </div>
         </div>
     );
 };

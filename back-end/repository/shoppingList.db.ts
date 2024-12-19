@@ -78,11 +78,14 @@ const addItemToShoppingList = async (listName: string, item: Item): Promise<void
         where: {name: listName},
         data: {
             items: {
-                create: {
-                    name: item.getName(),
-                    description: item.description,
-                    price: item.getPrice(),
-                    urgency: item.getUrgency(),
+                connectOrCreate: {
+                    where: { name: item.getName() },
+                    create: {
+                        name: item.getName(),
+                        description: item.description,
+                        price: item.getPrice(),
+                        urgency: item.getUrgency(),
+                    },
                 },
             },
         },

@@ -66,24 +66,32 @@ const removeShoppingList = async (name: string) => {
 };
 
 const addItemToShoppingList = async (listName: string, item: Item) => {
-    const token = userService.getLocalStorageFields();
-    const itemWithDefaultPrice = {
-        ...item,
-        price: item.price !== undefined ? Number(item.price) : 0
-    };
+    try {
+        const token = userService.getLocalStorageFields();
+        const itemWithDefaultPrice = {
+            ...item,
+            price: item.price !== undefined ? Number(item.price) : 0
+        };
 
-    const response = await fetch(`${backendUrl}/shoppingList/${listName}/item`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token.token}`,
-        },
-        body: JSON.stringify(itemWithDefaultPrice),
-    });
-    if (!response.ok) {
-        throw new Error(`Failed to add item to shopping list: ${listName}`);
+        const response = await fetch(`${backendUrl}/shoppingList/${listName}/item`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token.token}`,
+            },
+            body: JSON.stringify(itemWithDefaultPrice),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.errorMessage || `Failed to add item to shopping list: ${listName}`);
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Error adding item to shopping list:', error);
+        throw error;
     }
-    return response.json();
 };
 
 const removeItemFromShoppingList = async (listName: string, itemName: string) => {

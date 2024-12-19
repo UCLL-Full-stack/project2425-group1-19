@@ -14,10 +14,16 @@ const item3 = new Item(itemInput3);
 jest.mock("../../repository/item.db");
 
 // Change to use jest.fn so mocking is cleaner
-const mockSaveItem = itemDb.saveItem as jest.Mock;
-const mockGetItemByName = itemDb.getItemByName as jest.Mock;
-const mockRemoveItem = itemDb.removeItem as jest.Mock;
-const mockGetAllItems = itemDb.getAllItems as jest.Mock;
+const mockSaveItem = jest.fn();
+const mockGetItemByName = jest.fn();
+const mockRemoveItem = jest.fn();
+const mockGetAllItems = jest.fn();
+
+// Dan mock zo
+itemDb.saveItem = mockSaveItem;
+itemDb.getItemByName = mockGetItemByName;
+itemDb.removeItem = mockRemoveItem;
+itemDb.getAllItems = mockGetAllItems;
 
 beforeEach(() => {
     jest.clearAllMocks();
