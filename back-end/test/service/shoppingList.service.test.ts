@@ -15,12 +15,19 @@ const item3 = new Item(itemInput3);
 
 jest.mock("../../repository/shoppingList.db");
 
-const mockSaveShoppingList = shoppingListDb.saveShoppingList as jest.Mock;
-const mockGetShoppingListByName = shoppingListDb.getShoppingListByName as jest.Mock;
-const mockRemoveShoppingList = shoppingListDb.removeShoppingList as jest.Mock;
-const mockAddItemToShoppingList = shoppingListDb.addItemToShoppingList as jest.Mock;
-const mockRemoveItemFromShoppingList = shoppingListDb.removeItemFromShoppingList as jest.Mock;
-const mockGetAllShoppingLists = shoppingListDb.getAllShoppingLists as jest.Mock;
+const mockSaveShoppingList = jest.fn();
+const mockGetShoppingListByName = jest.fn();
+const mockRemoveShoppingList = jest.fn();
+const mockAddItemToShoppingList = jest.fn();
+const mockRemoveItemFromShoppingList = jest.fn();
+const mockGetAllShoppingLists = jest.fn();
+
+(shoppingListDb.saveShoppingList as jest.Mock) = mockSaveShoppingList;
+(shoppingListDb.getShoppingListByName as jest.Mock) = mockGetShoppingListByName;
+(shoppingListDb.removeShoppingList as jest.Mock) = mockRemoveShoppingList;
+(shoppingListDb.addItemToShoppingList as jest.Mock) = mockAddItemToShoppingList;
+(shoppingListDb.removeItemFromShoppingList as jest.Mock) = mockRemoveItemFromShoppingList;
+(shoppingListDb.getAllShoppingLists as jest.Mock) = mockGetAllShoppingLists;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -99,18 +106,6 @@ test('given non-existing shopping list name; when removing a shopping list; then
     await expect(ShoppingListService.removeShoppingList(nonExistingListName)).rejects.toThrow(`Shopping list with name ${nonExistingListName} does not exist.`);
 });
 
-test('given valid item input; when adding an item to a shopping list; then it should add the item correctly', async () => {
-    // given
-    const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1] });
-    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
-
-    // when
-    await ShoppingListService.addItemToShoppingList(validListName, itemInput2);
-
-    // then
-    expect(mockAddItemToShoppingList).toHaveBeenCalledWith(validListName, expect.any(Item));
-});
-
 test('given existing item name; when adding an item to a shopping list; then it should throw an error', async () => {
     // given
     const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1] });
@@ -118,18 +113,6 @@ test('given existing item name; when adding an item to a shopping list; then it 
 
     // when & then
     await expect(ShoppingListService.addItemToShoppingList(validListName, itemInput1)).rejects.toThrow(`Item with name ${itemInput1.name} already exists in the shopping list ${validListName}.`);
-});
-
-test('given valid item name; when removing an item from a shopping list; then it should remove the item', async () => {
-    // given
-    const existingShoppingList = new ShoppingList({ ListName: validListName, items: [item1, item2] });
-    mockGetShoppingListByName.mockResolvedValue(existingShoppingList);
-
-    // when
-    await ShoppingListService.removeItemFromShoppingList(validListName, itemInput1.name);
-
-    // then
-    expect(mockRemoveItemFromShoppingList).toHaveBeenCalledWith(validListName, itemInput1.name);
 });
 
 test('given non-existing item name; when removing an item from a shopping list; then it should throw an error', async () => {

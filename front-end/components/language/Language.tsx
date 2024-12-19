@@ -12,7 +12,7 @@ const Language: React.FC = () => {
   };
 
   return (
-    <div className="ml-6">
+    <div>
       <label htmlFor="language" className="text-white">
         {t("header.nav.language")}
       </label>

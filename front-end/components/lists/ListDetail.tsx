@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {getShoppingList, removeItemFromShoppingList} from '@/service/listsService';
 import {ShoppingList, Urgency} from '@/types';
+import { FaTrash } from 'react-icons/fa';
 
 type Props = {
+    onPurchase: () => void;
     shoppingListName: string
 };
 
-const ListDetail: React.FC<Props> = ({shoppingListName}: Props) => {
+const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
     const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
 
     const getUrgencyClass = (urgency: Urgency) => {
@@ -22,16 +24,17 @@ const ListDetail: React.FC<Props> = ({shoppingListName}: Props) => {
         }
     };
 
-    useEffect(() => {
-        const fetchShoppingList = async () => {
-            try {
-                const list = await getShoppingList(shoppingListName);
-                setShoppingList(list);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const fetchShoppingList = async () => {
+        try {
+            const list = await getShoppingList(shoppingListName);
+            setShoppingList(list);
+        } catch (error) {
+            console.error(error);
+            window.location.reload();
+        }
+    };
 
+    useEffect(() => {
         fetchShoppingList();
     }, [shoppingListName]);
 
@@ -46,9 +49,15 @@ const ListDetail: React.FC<Props> = ({shoppingListName}: Props) => {
                     items: prevList.items ? prevList.items.filter(item => item.name !== itemName) : []
                 };
             });
+            await fetchShoppingList();
+            await onPurchase();
         } catch (error) {
             console.error(error);
         }
+    }
+
+    const handleDeleteList = async() => {
+        alert("Are you sure you want to delete:"+shoppingList?.ListName)
     }
 
     if (!shoppingList) {
@@ -66,7 +75,15 @@ const ListDetail: React.FC<Props> = ({shoppingListName}: Props) => {
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Description</th>
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Price</th>
                             <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Urgency</th>
-                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Action</th>
+                            <th className="flex flex-row items-center justify-between px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">
+                                Action
+                                <div 
+                                className='ml-2 text-red-500 text-md'
+                                onClick={async() => await handleDeleteList()}>
+                                    <FaTrash/>
+                                </div>
+                            </th>
+
                         </tr>
                     </thead>
                     <tbody>

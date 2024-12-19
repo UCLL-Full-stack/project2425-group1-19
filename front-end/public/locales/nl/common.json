@@ -41,7 +41,8 @@
         "table": {
             "name": "Naam",
             "number": "Aantal items"
-        }
+        },
+        "deselectList": "Lijst deselecteren"
     },
     "monthly": {
         "title": "Maandelijkse uitgaven",

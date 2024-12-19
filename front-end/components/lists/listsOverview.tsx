@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import AddItemRow from './addItemRow';
-import {getShoppingLists, addItemToShoppingList} from '@/service/listsService';
+import AddItemForm from './addItemForm';
+import {getShoppingLists, addItemToShoppingList, addShoppingList, createCorrectItem} from '@/service/listsService';
 import {ShoppingList, Item} from '@/types';
 import {useTranslation} from 'next-i18next';
 import ListDetail from './ListDetail';
@@ -34,9 +34,9 @@ const ListsOverview: React.FC = () => {
         fetchShoppingLists();
     };
 
-    const handleAddItem = async (item: Item) => {
+    const handleAddItem = async (item: Item, newListName?:string) => {
         console.log('Item added:', item);
-        if (selectedListName) {
+        if (selectedListName && !newListName) {
             try {
                 setErrorMessage(null);
                 try {
@@ -47,7 +47,8 @@ const ListsOverview: React.FC = () => {
                 }
 
                 // Als backend cresht is dit duidelijk
-                fetchShoppingLists();
+                await fetchShoppingLists();
+
                 // Zorgt voor refresh
                 setRefreshKey((oldKey) => oldKey + 1);
             } catch (error) {
@@ -57,9 +58,30 @@ const ListsOverview: React.FC = () => {
                     setErrorMessage('An unexpected error occurred.');
                 }
             }
+        } else if(newListName) {
+            console.log(`A new list "${newListName}" is trying to be created.`);
+            try {
+                await addShoppingList({ ListName: newListName, items: [createCorrectItem(item)] });
+                setErrorMessage("");
+                
+                setSelectedListName(newListName);
+                setRefreshKey((oldKey) => oldKey + 1);
+            } catch (error) {
+                setErrorMessage(JSON.stringify(error));
+                return;
+            }
+        };
+    };
+
+    const handleRefreshAfterAction = async () => {
+        try {
+            await fetchShoppingLists()
+        } catch (error) {
+            setErrorMessage(JSON.stringify(error))
         }
     };
-// Responsive design needs improvments
+
+    // Responsive design needs improvments
     return (
         <div className='p-4'>
             <h1 className='text-2xl font-bold mb-4'>{t("lists.overview")}</h1>
@@ -88,14 +110,26 @@ const ListsOverview: React.FC = () => {
                         <div className='flex flex-col items-center sm:justify-center ml-4'>
                             <div className="text-sm w-96 h-96 overflow-auto md:w-full md:h-auto md:text-lg">
                                 {/* Key zorgt voor refreshes */}
-                                <ListDetail key={refreshKey} shoppingListName={selectedListName} />
+                                <ListDetail key={refreshKey} onPurchase={handleRefreshAfterAction} shoppingListName={selectedListName} />
                             </div>
 
-                            <AddItemRow onAddItem={handleAddItem} />
+                            <AddItemForm onAddItem={handleAddItem} onNeedRefresh={handleRefreshAfterAction} shoppingListName={selectedListName} />
                         </div>
                     </>
                 )}
             </div>
+            <div>
+                {!selectedListName && (
+                    <>
+                        {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+                        <AddItemForm onAddItem={handleAddItem} onNeedRefresh={handleRefreshAfterAction} shoppingListName="" />
+                    </>
+                )}
+            </div>
+            {selectedListName && (
+                <button type="button" onClick={()=>setSelectedListName('')}>
+                    {t('lists.deselectList')}
+                </button>)}
         </div>
     );
 };

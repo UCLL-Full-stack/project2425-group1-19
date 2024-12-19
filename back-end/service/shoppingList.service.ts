@@ -19,7 +19,7 @@ const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> 
         privacy: input.privacy,
         owner: input.owner
     });
-    items.forEach(item => itemDb.saveItem(item));
+    items.forEach(async(item) =>await itemDb.saveItem(item));
     return shoppingListDb.saveShoppingList(newShoppingList);
 };
 
@@ -48,7 +48,7 @@ const removeShoppingList = async (name: string): Promise<void> => {
 
     if (shoppingList != undefined) {
         const items = shoppingList.getListItems();
-        items.forEach(item => itemDb.removeItem(item.getName()));
+        items.forEach(async(item) => await itemDb.removeItem(item.getName()));
         shoppingListDb.removeShoppingList(name);
     } else {
         throw new Error(`Shopping list with name ${name} does not exist.`);
@@ -62,8 +62,8 @@ const addItemToShoppingList = async (listName: string, itemInput: ItemInput): Pr
         throw new Error(`Shopping list with name ${listName} does not exist.`);
     }
 
-    const items = await itemService.getAllItems();
-    const existingItem = items.find((i) => i.getName() === itemInput.name);
+    // const items = await itemService.getAllItems(); //Maybe not needed, if the update in the db works
+    const existingItem = shoppingList.getListItems().find((i) => i.getName() === itemInput.name);
     if (existingItem) {
         throw new Error(`Item with name ${itemInput.name} already exists in the shopping list ${listName}.`);
     }
@@ -79,8 +79,13 @@ const removeItemFromShoppingList = async (listName: string, itemName: string): P
     if (shoppingList != undefined) {
         const existingItem = shoppingList.getListItems().find(item => item.getName() === itemName);
         if (existingItem) {
-            itemDb.removeItem(itemName);
-            shoppingListDb.removeItemFromShoppingList(listName, itemName);
+            await itemDb.removeItem(itemName);
+            await shoppingListDb.removeItemFromShoppingList(listName, itemName);
+
+            const updatedList = await getShoppingList(listName);
+            if (updatedList && updatedList?.getListItems().length < 1) {
+                await removeShoppingList(listName);
+            }
         } else {
             throw new Error(`Item with name ${itemName} does not exist in the shopping list ${listName}.`);
         }

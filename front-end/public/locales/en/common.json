@@ -42,7 +42,8 @@
         "table": {
             "name": "Name",
             "number": "Number of items"
-        }
+        },
+        "deselectList": "Deselect list"
     },
     "monthly": {
         "title": "Monthly spendings",

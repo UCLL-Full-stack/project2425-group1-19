@@ -41,7 +41,8 @@
         "table": {
             "name": "Nombre",
             "number": "Cantidad de artículos"
-        }
+        },
+        "deselectList": "Deseleccionar lista"
     },
     "monthly": {
         "title": "Gastos mensuales",
