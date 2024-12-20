@@ -3,22 +3,32 @@ import Head from "next/head";
 import {useRouter} from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import ProfileOverview from "@/components/profile/profileOverview";
+import UserService from "@/service/userService";
 
 const monthlySpendings: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const [id, setId] = useState<number>(0);
 
   useEffect(() => {
-    try {
-      const userToken = localStorage.getItem("userLoginToken");
-      if (!userToken) {
+    const fetchUserId = async () => {
+      try {
+        const userToken = localStorage.getItem("userLoginToken");
+        if (!userToken) {
+          router.push("/login");
+        }
+        const username = localStorage.getItem("username");
+        
+        setId(await UserService.getUserId(username || ""));
+      } catch (error) {
+        console.error("An error occurred while retrieving the user token:", error);
         router.push("/login");
       }
-    } catch (error) {
-      console.error("An error occurred while retrieving the user token:", error);
-      router.push("/login");
-    }
+    };
+
+    fetchUserId();
   }, [router]);
 
   return (
@@ -28,7 +38,7 @@ const monthlySpendings: React.FC = () => {
       </Head>
       <Header />
       <main>
-        <h1>Under development</h1>
+        <ProfileOverview userId={id} />
       </main>
     </>
   )

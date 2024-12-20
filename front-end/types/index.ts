@@ -23,6 +23,7 @@ type User = {
 };
 
 type Profile = {
+    userId: number;
     email: string;
     name: string;
     lastName: string;

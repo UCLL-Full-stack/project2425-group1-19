@@ -100,6 +100,16 @@ userRouter.get('/:username', async (req: Request, res: Response) => {
     }
 });
 
+userRouter.get('/id/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.getUserId(req.params.username);
+        res.status(200).json(user);
+    }catch(error){
+        next(error);
+    }
+
+});
+
 /**
  * @swagger
  * /user/signup:
