@@ -9,3 +9,6 @@ jest.mock('next-i18next', () => ({
         },
     }),
 }));
+
+// Mock environment variables
+process.env.backendUrl = 'http://localhost:3000';

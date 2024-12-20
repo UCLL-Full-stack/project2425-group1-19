@@ -9,9 +9,9 @@ const config: Config = {
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'], // Add setupTests.ts for jest-dom
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Map @ alias to the src directory
-  },
+  // moduleNameMapper: {
+  //   '^@/(.*)$': '<rootDir>/src/$1', // Map @ alias to the src directory
+  // },
   transformIgnorePatterns: [
     'node_modules/(?!(module-to-transform)/)', // Transform node_modules if necessary
   ],

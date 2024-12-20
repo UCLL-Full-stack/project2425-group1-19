@@ -68,6 +68,12 @@
                 "1" : "1- Lage prioriteit",
                 "2" : "2- Gemiddelde prioriteit",
                 "3" : "3- Hoge prioriteit"
+            },
+            "validate": {
+                "urgency": "Ongeldige urgentiewaarde",
+                "price": "Ongeldige prijswaarde",
+                "description": "Ongeldige beschrijvingswaarde",
+                "name": "Ongeldige naamwaarde"
             }
         },
         "loading" :"Aan het laden"

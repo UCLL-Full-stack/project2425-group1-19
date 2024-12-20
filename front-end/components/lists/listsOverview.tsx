@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import AddItemForm from './addItemForm';
-import {getShoppingLists, addItemToShoppingList, addShoppingList, createCorrectItem} from '@/service/listsService';
+import {getShoppingLists, addItemToShoppingList, addShoppingList, createCorrectItem} from '../../service/listsService'; //nodig zodat react front end testing niet faalt
 import {ShoppingList, Item} from '@/types';
 import {useTranslation} from 'next-i18next';
 import ListDetail from './ListDetail';

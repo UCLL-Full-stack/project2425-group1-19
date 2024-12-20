@@ -66,6 +66,12 @@
                 "1" : "1- Baja prioridad",
                 "2" : "2- Prioridad media",
                 "3" : "3- Alta prioridad"
+            },
+            "validate": {
+                "urgency": "Valor de urgencia inválido",
+                "price": "Valor de precio inválido",
+                "description": "Valor de descripción inválido",
+                "name": "Valor de nombre inválido"
             }
         },
         "loading": "Cargando"

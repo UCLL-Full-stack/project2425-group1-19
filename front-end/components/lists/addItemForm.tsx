@@ -33,21 +33,21 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
         setErrorMessage(null);
 
         if (typeof item.name !== 'string' || item.name.length > 40) {
-            return 'Invalid name value';
+            return t('lists.form.validate.name');
         }
 
         if (typeof item.description !== 'string' || item.description.length > 240) {
-            return 'Invalid description value';
+            return t('lists.form.validate.description');
         }
 
         if (!item.price) {
-            return 'Invalid price value';
+            return t('lists.form.validate.price');
         }
 
 
         const validUrgencies: string[] = ['low', 'mid', 'high'];
         if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
-            return 'Invalid urgency value';
+            return t('lists.form.validate.urgency');
         }
 
         return null;

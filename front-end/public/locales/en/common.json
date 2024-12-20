@@ -1,7 +1,6 @@
 {
     "app.title": "Grocery management x app",
     "general.error": "An error occurred",
-
     "login": {
         "title": "Login",
         "username": "Username",
@@ -27,7 +26,6 @@
             "monthly": "Monthly spendings",
             "language": "Language"
         }
-
     },
     "home": {
         "title": "Home",
@@ -43,7 +41,7 @@
             "name": "Name",
             "number": "Number of items"
         },
-        "list" : {
+        "list": {
             "itemname": "Item name",
             "description": "Description",
             "price": "Price",
@@ -52,26 +50,32 @@
             "buy": "Buy"
         },
         "deselectList": "Deselect list",
-        "form" : {
-            "title":"Add an item to the shoppingList",
-            "listname":"List name:",
-            "itemname":"Item name:",
-            "description":"Description:",
-            "price":"Price:",
-            "urgency":"Urgency:",
-            "submit":"Add item",
+        "form": {
+            "title": "Add an item to the shoppingList",
+            "listname": "List name:",
+            "itemname": "Item name:",
+            "description": "Description:",
+            "price": "Price:",
+            "urgency": "Urgency:",
+            "submit": "Add item",
             "placeholder": {
                 "listname": "Enter list name",
                 "itemname": "Enter item name",
                 "description": "Enter description",
                 "price": "Enter price",
                 "urgency": "Enter urgency",
-                "1" : "1- Low priority",
-                "2" : "2- Medium priority",
-                "3" : "3- High priority"
+                "1": "1- Low priority",
+                "2": "2- Medium priority",
+                "3": "3- High priority"
+            },
+            "validate": {
+                "urgency": "Invalid urgency value",
+                "price": "Invalid price value",
+                "description": "Invalid description value",
+                "name": "Invalid name value"
             }
         },
-        "loading" :"loading"
+        "loading": "loading"
     },
     "profile": {
         "title": "Profile",
@@ -109,6 +113,4 @@
             }
         }
     }
-
-
 }

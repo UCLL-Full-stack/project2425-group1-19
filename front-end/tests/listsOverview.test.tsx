@@ -1,14 +1,19 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom'; // Import jest-dom for extended matchers
-import ListsOverview from '../components/lists/listsOverview';
+import ListsOverview from '../components/lists/listsOverview'; // ../ is nodig anders faalt de test
 import { getShoppingLists } from '../service/listsService';
 import { ShoppingList } from '../types/index';
 
 // Mock the service functions
-jest.mock('@/service/listsService');
+jest.mock('../service/listsService');
+jest.mock('process', () => ({
+    env: {
+        backendUrl: 'http://localhost:3000'
+    }
+}));
 
-const mockGetShoppingLists = getShoppingLists as jest.MockedFunction<typeof getShoppingLists>;
+const mockGetShoppingLists = jest.fn();
+(getShoppingLists as jest.MockedFunction<typeof getShoppingLists>) = mockGetShoppingLists;
 
 beforeEach(() => {
     jest.clearAllMocks();
