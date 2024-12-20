@@ -53,11 +53,13 @@
         "form": {
             "title": "Add an item to the shoppingList",
             "listname": "List name:",
+            "noList": "Add a new list:",
             "itemname": "Item name:",
             "description": "Description:",
             "price": "Price:",
             "urgency": "Urgency:",
             "submit": "Add item",
+            "createList": "Create list",
             "placeholder": {
                 "listname": "Enter list name",
                 "itemname": "Enter item name",

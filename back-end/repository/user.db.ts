@@ -46,7 +46,7 @@ const getUserByUsername = async (username:string): Promise<User | undefined> => 
             return undefined;
         };
     } catch (error) {
-        console.log(error)
+        console.error(error)
         throw new Error('Database error. See server log for details.');
     }
 };

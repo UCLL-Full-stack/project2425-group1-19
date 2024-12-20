@@ -54,10 +54,12 @@
         "form" : {
             "title":"Agregar un artículo a la lista de compras",
             "itemname":"Nombre del artículo:",
+            "noList": "Agregar una nueva lista:",
             "description":"Descripción:",
             "price":"Precio:",
             "urgency":"Urgencia:",
             "submit":"Agregar artículo",
+            "createList": "Crear lista",
             "placeholder": {
                 "itemname": "Introduce nombre del artículo",
                 "description": "Introduce descripción",

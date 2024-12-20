@@ -38,7 +38,7 @@ const getShoppingList = async (name: string) => {
             "Authorization": `Bearer ${token.token}`,
         },
     });
-    console.log(response);
+    // console.log(response);
     if (!response.ok) {
     throw new Error(`Failed to fetch shopping list: ${name}`);
     }

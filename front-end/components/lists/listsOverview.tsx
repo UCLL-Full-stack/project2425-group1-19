@@ -85,6 +85,18 @@ const ListsOverview: React.FC = () => {
         };
     };
 
+    
+    const handleCreateList = async (ToBeAdedName: string) => {
+        try {
+            await addShoppingList({ ListName: ToBeAdedName, items: [] });
+            setErrorMessage(null);
+            await fetchShoppingLists();
+            setSelectedListName(ToBeAdedName);
+        } catch (error) {
+            setErrorMessage(JSON.stringify(error));
+        }
+    };
+
     const handleIconClick = (listName: string) => {
         router.push(`/lists/${listName}`);
     };
@@ -147,7 +159,7 @@ const ListsOverview: React.FC = () => {
                 {!selectedListName && (
                     <>
                         {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
-                        <AddItemForm onAddItem={handleAddItem} onNeedRefresh={handleRefreshAfterAction} shoppingListName="" />
+                        <AddItemForm onAddItem={handleAddItem} onCreateList={handleCreateList} onNeedRefresh={handleRefreshAfterAction} shoppingListName="" />
                     </>
                 )}
             </div>

@@ -60,7 +60,7 @@ const getShoppingListByName = async (name: string): Promise<ShoppingList | null>
 
     //from werk niet alleen, god weet waarom
     if (shoppingList) {
-        console.log('Shopping list from DB:', shoppingList);
+        // console.log('Shopping list from DB:', shoppingList);
         const shoppingListWithItems = {
             id: shoppingList.id,
             ListName: shoppingList.name, 
@@ -74,7 +74,7 @@ const getShoppingListByName = async (name: string): Promise<ShoppingList | null>
                 urgency: listItem.item.urgency,
             })),
         };
-        console.log('Shopping list with items:', shoppingListWithItems);
+        // console.log('Shopping list with items:', shoppingListWithItems);
         return ShoppingList.from(shoppingListWithItems);
     }
     return null;

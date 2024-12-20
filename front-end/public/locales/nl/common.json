@@ -55,10 +55,12 @@
             "title":"Voeg een item toe aan de boodschappenlijst",
             "listname":"Lijstnaam:",
             "itemname":"Artikelnaam:",
+            "noList": "Voeg een nieuwe lijst toe:",
             "description":"Beschrijving:",
             "price":"Prijs:",
             "urgency":"Urgentie:",
             "submit":"Voeg item toe",
+            "createList": "Maak lijst",
             "placeholder": {
                 "listname": "Voer lijstnaam in",
                 "itemname": "Voer artikelnaam in",
