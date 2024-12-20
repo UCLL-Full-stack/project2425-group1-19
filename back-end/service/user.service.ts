@@ -52,6 +52,16 @@ const removeUser = async(username: string): Promise<void> => {
     }
 };
 
+const getUserId = async(username: string): Promise<number> => {
+    const user = await userDb.getUserByUsername(username);
+
+    if (user != undefined) {
+        return user.getId();
+    } else {
+        throw new Error(`User with username ${username} does not exist.`);
+    }
+}
+
 const authenticate = async({username, password}:UserInput): Promise<AuthenticationResponse>=> {
     const user = await userDb.getUserByUsername(username);
     if (!user || !user.password) {
@@ -80,4 +90,5 @@ export default {
     getAllUsers,
     removeUser,
     authenticate,
+    getUserId,
 };

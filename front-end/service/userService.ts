@@ -1,4 +1,6 @@
-import {AuthenticationResponse} from "@/types";
+import {AuthenticationResponse, Item} from "@/types";
+import userService from "./userService";
+const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,6 +24,21 @@ const loginUser = async (username: string, password: string): Promise<Authentica
     }
 };
 
+const getUserId = async (username: string): Promise<number> => {
+    const token:AuthenticationResponse = userService.getLocalStorageFields();
+    
+        const response = await fetch(`${backendUrl}/user/id/${token.username}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token.token}`,
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile');
+        }
+        return response.json();
+};
+
 const getLocalStorageFields = (): AuthenticationResponse => {
     const userLoginToken = localStorage.getItem('userLoginToken');
     const storedUsername = localStorage.getItem("username");
@@ -42,5 +59,6 @@ const getLocalStorageFields = (): AuthenticationResponse => {
 export default {
     loginUser,
     getLocalStorageFields,
+    getUserId,
 
 }; 

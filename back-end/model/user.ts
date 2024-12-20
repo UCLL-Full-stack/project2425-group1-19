@@ -1,6 +1,7 @@
 import { UserInput } from "../types";
 
 class User {
+    private id : number;
     private username: string;
     public password: string;
     private role: 'admin' | 'adult' | 'child';
@@ -8,7 +9,7 @@ class User {
     constructor (user: UserInput) {
         this.validateusers(user);
         this.validatePassword(user.password);
-
+        this.id = user.id || 0;
         this.username = user.username;
         this.password = user.password;
         this.role = user.role;
@@ -44,6 +45,10 @@ class User {
     setRole= (role : 'admin' | 'adult' | 'child') =>
     {
         this.role = role;
+    }
+
+    getId= ():number => {
+        return this.id;
     }
 
     validatePassword= (password:string) =>

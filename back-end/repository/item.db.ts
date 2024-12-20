@@ -64,7 +64,7 @@ const removeItem = async (name: string): Promise<void> => {
 
 const getAllItems = async (): Promise<Array<Item>> => {
     const items = await database.item.findMany();
-    const items_array = items.map((i) => Item.from(i));
+    const items_array = items.map((i: any) => Item.from(i));
     return items_array;
 };
 

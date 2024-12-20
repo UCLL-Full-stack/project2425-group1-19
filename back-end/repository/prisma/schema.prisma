@@ -14,12 +14,12 @@ enum Urgency {
 }
 
 model Item {
-    id             Int           @id @default(autoincrement())
-    name           String        @unique
-    description    String
-    price          Float
-    urgency        Urgency       @default(low)
-    shoppingLists  ShoppingListItem[] @relation("ItemShoppingLists")
+    id            Int                @id @default(autoincrement())
+    name          String             @unique
+    description   String
+    price         Float
+    urgency       Urgency            @default(low)
+    shoppingLists ShoppingListItem[] @relation("ItemShoppingLists")
 }
 
 model Profile {
@@ -27,7 +27,7 @@ model Profile {
     email    String @unique
     name     String
     lastName String
-    userId   Int
+    userId   Int    @unique
 }
 
 enum Privacy {
@@ -37,11 +37,11 @@ enum Privacy {
 }
 
 model ShoppingList {
-    id    Int    @id @default(autoincrement())
-    name  String @unique
-    items ShoppingListItem[] @relation("ShoppingListItems")
-    privacy Privacy @default(public)
-    owner   String @default("GeneralUser")
+    id      Int                @id @default(autoincrement())
+    name    String             @unique
+    items   ShoppingListItem[] @relation("ShoppingListItems")
+    privacy Privacy            @default(public)
+    owner   String             @default("GeneralUser")
 }
 
 model ShoppingListItem {

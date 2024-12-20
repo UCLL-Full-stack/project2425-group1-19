@@ -3,22 +3,36 @@ import Head from "next/head";
 import {useRouter} from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import ProfileOverview from "@/components/profile/profileOverview";
+import Profiles from "@/components/profile/profiles";
+import UserService from "@/service/userService";
+import { AuthenticationResponse } from "@/types";
+import userService from "@/service/userService";
 
-const monthlySpendings: React.FC = () => {
+const Profile: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const [id, setId] = useState<number>(0);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
-    try {
-      const userToken = localStorage.getItem("userLoginToken");
-      if (!userToken) {
+    const fetchUserId = async () => {
+      try {
+        const userToken = localStorage.getItem("userLoginToken");
+        if (!userToken) {
+          router.push("/login");
+        }
+        const username = localStorage.getItem("username");
+        setRole(userService.getLocalStorageFields().role);
+        setId(await UserService.getUserId(username || ""));
+      } catch (error) {
+        console.error("An error occurred while retrieving the user token:", error);
         router.push("/login");
       }
-    } catch (error) {
-      console.error("An error occurred while retrieving the user token:", error);
-      router.push("/login");
-    }
+    };
+
+    fetchUserId();
   }, [router]);
 
   return (
@@ -28,7 +42,11 @@ const monthlySpendings: React.FC = () => {
       </Head>
       <Header />
       <main>
-        <h1>Under development</h1>
+        {role === "admin" && (<Profiles/>)
+        }
+        {role !== "admin" && (<ProfileOverview userId={id} />)}
+        
+        
       </main>
     </>
   )
@@ -42,4 +60,4 @@ export const getServerSideProps = async (context: { locale: any; }) => {
   };
 }
 
-export default monthlySpendings;
+export default Profile;

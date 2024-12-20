@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import profileService from "../service/profile.service";
 import { ProfileInput } from "../types";
 
@@ -15,8 +15,10 @@ const profileRouter = Router();
  *           type: string
  *         name:
  *           type: string
- *         lastname:
+ *         lastName:
  *           type: string
+ *         userId:
+ *           type: number
  */
 
 /**
@@ -56,6 +58,54 @@ profileRouter.get('/', async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /profile/{userId}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a profile by userId
+ *     tags: [Profile]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The userId of the profile
+ *     responses:
+ *       200:
+ *         description: The profile description by userId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Profile'
+ *       404:
+ *         description: Profile not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Profile not found
+ */
+
+profileRouter.get('/:userId', async (req: Request, res: Response) => {
+    try {
+        const profile = await profileService.getProfileByUserId(parseInt(req.params.userId));
+        res.status(200).json(profile);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(404).json({ status: "error", errorMessage: error.message });
+        }
+    }
+});
+
+/**
+ * @swagger
  * /profile/{email}:
  *   get:
  *     security:
@@ -80,16 +130,18 @@ profileRouter.get('/', async (req: Request, res: Response) => {
  *         description: Profile not found
  */
 
-profileRouter.get('/:email', async (req: Request, res: Response) => {
-    try {
-        const profile = await profileService.getProfileByEmail(req.params.email);
-        res.status(200).json(profile);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(404).json({ status: "error", errorMessage: error.message });
-        }
-    }
-});
+
+
+//profileRouter.get('/:email', async (req: Request, res: Response) => {
+ //   try {
+ //       const profile = await profileService.getProfileByEmail(req.params.email);
+ //       res.status(200).json(profile);
+ //   } catch (error) {
+ //       if (error instanceof Error) {
+  //          res.status(404).json({ status: "error", errorMessage: error.message });
+  //      }
+  //  }
+//});
 
 /**
  * @swagger
@@ -145,7 +197,7 @@ profileRouter.post('/', async (req: Request, res: Response) => {
  *         description: The email of the profile
  *     responses:
  *       200:
- *         description: The profile was deleted
+ *         description: The profile was successfully deleted
  *       404:
  *         description: Profile not found
  */

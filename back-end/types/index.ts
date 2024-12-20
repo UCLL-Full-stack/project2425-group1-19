@@ -17,6 +17,7 @@ type ShoppingListInput = {
 }
 
 type UserInput = {
+    id?: number;
     username: string;
     password: string;
     role: 'admin' | 'adult' | 'child';
