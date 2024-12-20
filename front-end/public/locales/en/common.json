@@ -70,7 +70,8 @@
                 "2" : "2- Medium priority",
                 "3" : "3- High priority"
             }
-        }
+        },
+        "loading" :"loading"
     },
     "profile": {
         "title": "Profile",

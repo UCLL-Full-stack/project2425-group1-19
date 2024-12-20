@@ -67,7 +67,8 @@
                 "2" : "2- Prioridad media",
                 "3" : "3- Alta prioridad"
             }
-        }
+        },
+        "loading": "Cargando"
     },
     "profile": {
         "title": "Perfil",

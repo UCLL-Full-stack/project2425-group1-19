@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 
 const main = async () => {
     console.log("Resetting database")
+    await prisma.shoppingListItem.deleteMany();
     await prisma.item.deleteMany();
     await prisma.profile.deleteMany();
     await prisma.shoppingList.deleteMany();

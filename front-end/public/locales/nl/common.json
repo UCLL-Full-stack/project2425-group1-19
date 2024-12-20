@@ -69,7 +69,8 @@
                 "2" : "2- Gemiddelde prioriteit",
                 "3" : "3- Hoge prioriteit"
             }
-        }
+        },
+        "loading" :"Aan het laden"
     },
     "profile": {
         "title": "Profiel",

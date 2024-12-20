@@ -13,7 +13,7 @@ const Profiles: React.FC = () => {
     const fetchData = async () => {
         try {
             const profiles = await fetchProfiles();
-            setProfiles(profiles);
+            setProfiles(profiles || []);
         } catch (error) {
             setError('Failed to fetch profiles');
         }
@@ -23,7 +23,7 @@ const Profiles: React.FC = () => {
     useEffect(() => {
         fetchData();
         setRefreshProfiles(false); // Reset the refresh flag after fetching
-    }, [refreshProfiles]); // Only trigger when refreshProfiles changes
+    }, [refreshProfiles]);
 
     const handleProfileAdded = () => {
         setRefreshProfiles(true); // Set the flag to trigger profile refetching
@@ -46,7 +46,7 @@ const Profiles: React.FC = () => {
                 </thead>
                 <tbody>
                     {profiles.map((profile) => (
-                        <tr key={profile.id}>
+                        <tr key={profile.email}>
                             <td className="py-2 px-4 border-b">{profile.email}</td>
                             <td className="py-2 px-4 border-b">{profile.name}</td>
                             <td className="py-2 px-4 border-b">{profile.lastName}</td>
