@@ -22,14 +22,33 @@ const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingLis
                 })),
             },
         },
-        include: {items: true},
+        include: {
+            items: {
+                include: {
+                    item: true,
+                },
+            },
+        },
     });
-    return ShoppingList.from(savedShoppingList);
+    const shoppingListWithItems = {
+        id: savedShoppingList.id,
+        ListName: savedShoppingList.name,
+        privacy: savedShoppingList.privacy,
+        owner: savedShoppingList.owner,
+        items: savedShoppingList.items.map((listItem: any) => ({
+            id: listItem.item.id,
+            name: listItem.item.name,
+            description: listItem.item.description,
+            price: listItem.item.price,
+            urgency: listItem.item.urgency,
+        })),
+    };
+    return ShoppingList.from(shoppingListWithItems);
 };
 
 const getShoppingListByName = async (name: string): Promise<ShoppingList | null> => {
     const shoppingList = await database.shoppingList.findUnique({
-        where: { name },
+        where: { name: name },
         include: {
             items: {
                 include: {
@@ -39,16 +58,24 @@ const getShoppingListByName = async (name: string): Promise<ShoppingList | null>
         },
     });
 
-    // console.log("Retrieved shopping list:", shoppingList);
-
+    //from werk niet alleen, god weet waarom
     if (shoppingList) {
-        return ShoppingList.from({
-            ...shoppingList,
-            items: shoppingList.items.map((listItem: any) => {
-                // console.log("Processing item:", listItem.item); // Add logging here
-                return listItem.item;
-            }),
-        });
+        console.log('Shopping list from DB:', shoppingList);
+        const shoppingListWithItems = {
+            id: shoppingList.id,
+            ListName: shoppingList.name, 
+            privacy: shoppingList.privacy,
+            owner: shoppingList.owner,
+            items: shoppingList.items.map((listItem: any) => ({
+                id: listItem.item.id,
+                name: listItem.item.name,
+                description: listItem.item.description,
+                price: listItem.item.price,
+                urgency: listItem.item.urgency,
+            })),
+        };
+        console.log('Shopping list with items:', shoppingListWithItems);
+        return ShoppingList.from(shoppingListWithItems);
     }
     return null;
 };
@@ -112,11 +139,22 @@ const getAllShoppingLists = async (role?: 'admin' | 'adult' | 'child', username?
     // console.log("Retrieved shopping lists data:", shoppingListsData);
 
     return shoppingListsData.map(list => {
-        // console.log("Processing shopping list:", list); // Add logging here
-        return ShoppingList.from({
-            ...list,
-            items: list.items.map((listItem: any) => listItem.item),
-        });
+        // console.log("Processing shopping list:", list);
+        const shoppingListWithItems = {
+            id: list.id,
+            ListName: list.name, 
+            privacy: list.privacy,
+            owner: list.owner,
+            items: list.items.map((listItem) => ({
+                id: listItem.item.id,
+                name: listItem.item.name,
+                description: listItem.item.description,
+                price: listItem.item.price,
+                urgency: listItem.item.urgency,
+            })),
+        };
+        // console.log("Shopping list with items:", shoppingListWithItems);
+        return ShoppingList.from(shoppingListWithItems);
     });
 };
 
@@ -190,30 +228,27 @@ const removeItemFromShoppingList = async (listName: string, itemName: string): P
         throw new Error(`Item with name ${itemName} not found.`);
     }
 
-    await database.shoppingList.update({
-        where: { name: listName },
-        data: {
-            items: {
-                disconnect: {
-                    shoppingListId_itemId: {
-                        shoppingListId: shoppingList.id,
-                        itemId: item.id,
-                    },
+    await database.$transaction(async (prisma) => {
+        await prisma.shoppingListItem.delete({
+            where: {
+                shoppingListId_itemId: {
+                    shoppingListId: shoppingList.id,
+                    itemId: item.id,
                 },
             },
-        },
-    });
-
-    // Optionally, delete the item if it is no longer associated with any shopping list
-    const itemAssociations = await database.shoppingListItem.findMany({
-        where: { itemId: item.id },
-    });
-
-    if (itemAssociations.length === 0) {
-        await database.item.delete({
-            where: { id: item.id },
         });
-    }
+
+        // Optionally, delete the item if it is no longer associated with any shopping list
+        const itemAssociations = await prisma.shoppingListItem.findMany({
+            where: { itemId: item.id },
+        });
+
+        if (itemAssociations.length === 0) {
+            await prisma.item.delete({
+                where: { id: item.id },
+            });
+        }
+    });
 };
 
 

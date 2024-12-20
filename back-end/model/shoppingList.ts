@@ -1,4 +1,4 @@
-import {Privacy} from "../types";
+import {ItemInput, Privacy, ShoppingListInput} from "../types";
 import Item from "./item";
 class ShoppingList {
     private ListName?: string;
@@ -9,7 +9,7 @@ class ShoppingList {
     constructor (shoppingList: {ListName?: string, items?: Array<Item>,  privacy?: Privacy,  owner?:string}) {
         this.validate(shoppingList)
 
-        this.ListName = shoppingList.ListName?.trim() || "General list";
+        this.ListName = shoppingList.ListName;
         this.items = shoppingList.items || [];
         this.privacy = shoppingList.privacy || 'public';
         this.owner = shoppingList.owner || 'GeneralUser';
@@ -47,10 +47,10 @@ class ShoppingList {
         }
     }
 
-    static from(data: any): ShoppingList {
-        const items = data.items.map((item: any) => new Item(item));
+    static from(data: ShoppingListInput): ShoppingList {
+        const items = (data.items || []).map((item: ItemInput) => Item.from(item));
         return new ShoppingList({
-            ListName: data.name,
+            ListName: data.ListName,
             items: items,
             privacy: data.privacy,
             owner: data.owner

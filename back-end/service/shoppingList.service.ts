@@ -5,27 +5,33 @@ import {ShoppingListInput, ItemInput} from "../types";
 import itemDb from "../repository/item.db";
 import {Privacy} from "@prisma/client";
 import itemService from "./item.service";
+import {PrismaClientKnownRequestError} from "@prisma/client/runtime/library";
 
 const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> => {
     try {
-        const existingList = await shoppingListDb.getShoppingListByName(input.ListName || "General list");
-        if (existingList) {
-            throw new Error(`Shopping list with name ${input.ListName} already exists.`);
+        const listName = input.ListName;
+        if (!listName) {
+            throw new Error("List name is required.");
         }
-        
-        let items: Array<Item>;
+        console.log(`Checking if shopping list with name ${listName} already exists.`);
+        const existingList = await shoppingListDb.getShoppingListByName(listName);
+        if (existingList) {
+            throw new Error(`Shopping list with name ${listName} already exists.`);
+        }
+
+        let items: Array<ItemInput>;
         try {
-            items = input.items?.map(item => Item.from(item)) || [];
+            items = input.items?.map(item => Item.from(item)) || [] as any;
         } catch (error) {
             console.log(error);
             throw new Error("There is an error with the items: " + error);
         }
-    
+
         let newShoppingList: ShoppingList;
-    
+
         try {
             newShoppingList = ShoppingList.from({
-                ListName: input.ListName,
+                ListName: listName,
                 items,
                 privacy: input.privacy,
                 owner: input.owner
@@ -34,25 +40,33 @@ const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> 
             console.log(error);
             throw new Error("There is an error with the ShoppingList: " + error);
         }
-    
+
         for (const item of items) {
-            await itemDb.saveItem(item);
+            console.log(`Saving item with name ${item.name}.`);
+            await itemDb.saveItem(item as any);
         }
+
         console.log(`Saving shopping list with name ${newShoppingList.getListName()}.`);
         return await shoppingListDb.saveShoppingList(newShoppingList);
     } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                console.error('Unique constraint failed on the fields:', error.meta);
+                throw new Error(`A shopping list with the name '${input.ListName}' already exists.`);
+            }
+        }
         console.error('Error adding shopping list:', error);
         throw new Error('Error adding shopping list: ' + error);
     }
 };
 
 const getShoppingList = async (name: string): Promise<ShoppingList | undefined> => {
-    let shoppingList:ShoppingList | null;
+    let shoppingList: ShoppingList | null;
     try {
         shoppingList = await shoppingListDb.getShoppingListByName(name);
         // console.log(shoppingList)
     } catch (error) {
-        throw new Error("Service can't retrieve shopping lists from database: "+error)
+        throw new Error("Service can't retrieve shopping lists from database: " + error)
     }
 
     if (shoppingList) {
@@ -138,7 +152,7 @@ const setShoppingListPrivacy = async (listName: string, privacy: Privacy): Promi
 
     if (shoppingList != undefined) {
         shoppingList.setPrivacy(privacy);
-        await shoppingListDb.saveShoppingList(shoppingList);
+        await shoppingListDb.saveShoppingList(shoppingList as any);
     } else {
         throw new Error(`Shopping list with name ${listName} does not exist.`);
     }
@@ -159,14 +173,14 @@ const setShoppingListOwner = async (listName: string, owner: string): Promise<vo
 
     if (shoppingList != undefined) {
         shoppingList.setOwner(owner);
-        await shoppingListDb.saveShoppingList(shoppingList);
+        await shoppingListDb.saveShoppingList(shoppingList as any);
     } else {
         throw new Error(`Shopping list with name ${listName} does not exist.`);
     }
 };
 
 export default {
-    
+
     getShoppingList,
     getAllShoppingLists,
     getShoppingListOwner,
@@ -176,7 +190,7 @@ export default {
     addItemToShoppingList,
     setShoppingListOwner,
     setShoppingListPrivacy,
-    
+
     removeItemFromShoppingList,
     removeShoppingList,
 };
