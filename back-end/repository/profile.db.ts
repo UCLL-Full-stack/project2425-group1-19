@@ -3,6 +3,7 @@ import Profile from "../model/profile";
 import User from "../model/user";
 import profileService from "../service/profile.service";
 import database from "./database";
+import { ProfileInput } from "../types";
 
 const saveProfile = async (profile: Profile): Promise<Profile> => {
     const savedProfile = await database.profile.create({
@@ -25,6 +26,22 @@ const getProfileByEmail = async ({email}: {email: string}): Promise<Profile | nu
             throw new Error('No profile found with email:'+email)
         }
         return new Profile(profile);
+    } catch (error) {
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const updateProfile = async (profile : ProfileInput): Promise<Profile> => {
+    try {
+        const updatedProfile = await database.profile.update({
+            where: {userId: profile.userId},
+            data: {
+                name: profile.name,
+                lastName: profile.lastName,
+                email: profile.email,
+            },
+        });
+        return new Profile(updatedProfile);
     } catch (error) {
         throw new Error('Database error. See server log for details.');
     }
@@ -81,4 +98,5 @@ export default {
     removeProfile,
     getProfileByEmail,
     getProfileByUserId,
+    updateProfile,
 };

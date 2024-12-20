@@ -4,6 +4,8 @@ import {getShoppingLists, addItemToShoppingList, addShoppingList, createCorrectI
 import {ShoppingList, Item} from '@/types';
 import {useTranslation} from 'next-i18next';
 import ListDetail from './ListDetail';
+import { FaEye } from "react-icons/fa";
+import { useRouter } from 'next/router';
 import Lists from '@/pages/lists';
 
 const ListsOverview: React.FC = () => {
@@ -11,6 +13,7 @@ const ListsOverview: React.FC = () => {
     const [selectedListName, setSelectedListName] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [refreshKey, setRefreshKey] = useState(0);
+    const router = useRouter();
 
     const {t} = useTranslation();
 
@@ -82,6 +85,10 @@ const ListsOverview: React.FC = () => {
         };
     };
 
+    const handleIconClick = (listName: string) => {
+        router.push(`/lists/${listName}`);
+    };
+
     const handleRefreshAfterAction = async () => {
         try {
             await fetchShoppingLists()
@@ -99,6 +106,7 @@ const ListsOverview: React.FC = () => {
                     <table className='w-full border-collapse mt-5'>
                         <thead>
                             <tr>
+                                <th className='border border-gray-300 p-2 text-left bg-gray-200'></th>
                                 <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.name")}</th>
                                 <th className='border border-gray-300 p-2 text-left bg-gray-200'>{t("lists.table.number")}</th>
                             </tr>
@@ -106,6 +114,9 @@ const ListsOverview: React.FC = () => {
                         <tbody>
                             {shoppingLists.map((list) => (
                                 <tr key={list.ListName} onClick={() => handleRowClick(list.ListName)} className="cursor-pointer hover:bg-gray-100 hover:underline">
+                                    <td className='border border-gray-300 p-2'>
+                                    <FaEye className="text-blue-500 cursor-pointer" onClick={() => handleIconClick(list.ListName)} />
+                                    </td>
                                     <td className='border border-gray-300 p-2'>{list.ListName}</td>
                                     <td className='border border-gray-300 p-2'>{list.items ? list.items.length : 0}</td>
                                 </tr>

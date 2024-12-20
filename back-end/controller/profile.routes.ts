@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import profileService from "../service/profile.service";
 import { ProfileInput } from "../types";
+import Profile from "../model/profile";
 
 const profileRouter = Router();
 
@@ -140,6 +141,95 @@ profileRouter.post('/', async (req: Request, res: Response) => {
         }
     }
 });
+
+/**
+ * @swagger
+ * /profile/{userId}:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Update a profile by userId
+ *     tags: [Profile]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The userId of the profile to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: The profile was successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Profile'
+ *       400:
+ *         description: Some input error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Name, email, and last name are required
+ *       404:
+ *         description: Profile not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 errorMessage:
+ *                   type: string
+ *                   example: Profile not found
+ */
+
+profileRouter.put('/:userId', async (req: Request, res: Response) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const { name, email, lastName } = req.body;
+
+        if (!name || !email || !lastName) {
+            return res.status(400).json({ status: "error", errorMessage: "Name, email, and last name are required" });
+        }
+
+        const profileInput: ProfileInput = {
+            userId,
+            name,
+            email,
+            lastName,
+        };
+
+        const updatedProfile = await profileService.updateProfile(profileInput);
+        res.status(200).json(updatedProfile);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        }
+    }
+});
+
 
 ////**
 // * @swagger

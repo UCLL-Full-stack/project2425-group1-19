@@ -1,7 +1,7 @@
 import { ProfileInput } from "../types";
 
 class Profile {
-    private email: string;
+    public email: string;
     public name: string;
     public lastName: string;
     public userId: number;

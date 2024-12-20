@@ -41,6 +41,22 @@ const removeProfile = async(email: string): Promise<void> => {
     }
 };
 
+const updateProfile = async(profile: ProfileInput ): Promise<Profile> => {
+
+    if (profile != undefined) {
+        const updatedProfile = Profile.from(profile);
+        const profileInput: ProfileInput = {
+            userId: updatedProfile.userId,
+            name: updatedProfile.name,
+            email: updatedProfile.email,
+            lastName: updatedProfile.lastName,
+        };
+        return await profileDb.updateProfile(profileInput);
+    } else {
+        throw new Error(`Profile does not exist.`);
+    }
+};
+
 const getProfileByUserId = async(userId: number): Promise<Profile | undefined> => {
     try {
         const profile = await profileDb.getProfileByUserId(userId);
@@ -63,5 +79,6 @@ export default {
     getProfileByEmail,
     getAllProfiles,
     removeProfile,
-    getProfileByUserId
+    getProfileByUserId,
+    updateProfile,
 };
