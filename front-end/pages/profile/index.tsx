@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import ProfileOverview from "@/components/profile/profileOverview";
 import UserService from "@/service/userService";
 
-const monthlySpendings: React.FC = () => {
+const Profile: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const [id, setId] = useState<number>(0);
@@ -52,4 +52,4 @@ export const getServerSideProps = async (context: { locale: any; }) => {
   };
 }
 
-export default monthlySpendings;
+export default Profile;
