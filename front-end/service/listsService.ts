@@ -10,7 +10,7 @@ const createCorrectItem = (itemInput: any): Item => {
     const newCorrectItem:Item = {
         name: itemInput.name || "GeneralItem",
         description: itemInput.description || "GeneralDescription",
-        price: itemInput.price || 0,
+        price: itemInput.price !== undefined ? Number(itemInput.price) : 0,
         urgency:itemInput.urgency || "low",
     };
     return newCorrectItem;
@@ -117,13 +117,6 @@ const removeItemFromShoppingList = async (listName: string, itemName: string) =>
     if (!response.ok) {
         throw new Error(`Failed to remove item from shopping list: ${listName}`);
     }
-    // Happens in the backend
-    // const updatedList = await getShoppingList(listName);
-    // if (updatedList.items.length === 0) {
-    //     console.log(`The shopping list "${listName}" has no items left. \n Removing list!`);
-    //     await removeShoppingList(listName)
-    // }
-
     return response.json();
 };
 

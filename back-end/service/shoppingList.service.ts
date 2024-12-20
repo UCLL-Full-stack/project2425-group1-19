@@ -13,36 +13,36 @@ const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> 
             throw new Error(`Shopping list with name ${input.ListName} already exists.`);
         }
         
-        let items:Array<Item>;
+        let items: Array<Item>;
         try {
-            items = input.items?.map(item => new Item(item)) || [];
+            items = input.items?.map(item => Item.from(item)) || [];
         } catch (error) {
-            console.log(error)
-            throw new Error("There is an error with the items: "+error)
+            console.log(error);
+            throw new Error("There is an error with the items: " + error);
         }
     
-        let newShoppingList:ShoppingList;
+        let newShoppingList: ShoppingList;
     
         try {
-            newShoppingList = new ShoppingList({
+            newShoppingList = ShoppingList.from({
                 ListName: input.ListName,
                 items,
                 privacy: input.privacy,
                 owner: input.owner
             });
         } catch (error) {
-            console.log(error)
-            throw new Error("There is an error with the ShoppingList: "+error)
+            console.log(error);
+            throw new Error("There is an error with the ShoppingList: " + error);
         }
     
         for (const item of items) {
             await itemDb.saveItem(item);
         }
-        
+        console.log(`Saving shopping list with name ${newShoppingList.getListName()}.`);
         return await shoppingListDb.saveShoppingList(newShoppingList);
     } catch (error) {
         console.error('Error adding shopping list:', error);
-        throw new Error('Error adding shopping list: '+error)
+        throw new Error('Error adding shopping list: ' + error);
     }
 };
 
@@ -50,7 +50,7 @@ const getShoppingList = async (name: string): Promise<ShoppingList | undefined> 
     let shoppingList:ShoppingList | null;
     try {
         shoppingList = await shoppingListDb.getShoppingListByName(name);
-        console.log(shoppingList)
+        // console.log(shoppingList)
     } catch (error) {
         throw new Error("Service can't retrieve shopping lists from database: "+error)
     }
@@ -77,7 +77,7 @@ const removeShoppingList = async (name: string): Promise<void> => {
 
     if (shoppingList != undefined) {
         const items = shoppingList.getListItems();
-        items.forEach(async(item) => await itemDb.removeItem(item.getName()));
+        // items.forEach(async(item) => await itemDb.removeItem(item.getName()));
         shoppingListDb.removeShoppingList(name);
     } else {
         throw new Error(`Shopping list with name ${name} does not exist.`);
@@ -108,7 +108,7 @@ const removeItemFromShoppingList = async (listName: string, itemName: string): P
     if (shoppingList != undefined) {
         const existingItem = shoppingList.getListItems().find(item => item.getName() === itemName);
         if (existingItem) {
-            await itemDb.removeItem(itemName);
+            // await itemDb.removeItem(itemName);
             await shoppingListDb.removeItemFromShoppingList(listName, itemName);
 
             const updatedList = await getShoppingList(listName);
