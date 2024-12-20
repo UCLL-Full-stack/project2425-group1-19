@@ -99,6 +99,7 @@ shoppingListRouter.get('/', async (req: Request , res: Response) => {
 shoppingListRouter.get('/:name', async (req: Request, res: Response) => {
     try {
         const shoppingList = await shoppingListService.getShoppingList(req.params.name);
+        console.log(shoppingList)
         res.status(200).json(shoppingList);
     } catch (error) {
         if (error instanceof Error) {

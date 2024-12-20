@@ -11,10 +11,14 @@ const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingLis
             owner: shoppingList.getOwner(),
             items: {
                 create: shoppingList.getListItems().map(item => ({
-                    name: item.getName(),
-                    description: item.description,
-                    price: item.getPrice(),
-                    urgency: item.getUrgency(),
+                    item: {
+                        create: {
+                            name: item.getName(),
+                            description: item.description,
+                            price: item.getPrice(),
+                            urgency: item.getUrgency(),
+                        }
+                    }
                 })),
             },
         },
@@ -25,11 +29,26 @@ const saveShoppingList = async (shoppingList: ShoppingList): Promise<ShoppingLis
 
 const getShoppingListByName = async (name: string): Promise<ShoppingList | null> => {
     const shoppingList = await database.shoppingList.findUnique({
-        where: {name},
-        include: {items: true},
+        where: { name },
+        include: {
+            items: {
+                include: {
+                    item: true,
+                },
+            },
+        },
     });
+
+    // console.log("Retrieved shopping list:", shoppingList);
+
     if (shoppingList) {
-        return ShoppingList.from(shoppingList);
+        return ShoppingList.from({
+            ...shoppingList,
+            items: shoppingList.items.map((listItem: any) => {
+                // console.log("Processing item:", listItem.item); // Add logging here
+                return listItem.item;
+            }),
+        });
     }
     return null;
 };
@@ -67,47 +86,118 @@ const getAllShoppingLists = async (role?: 'admin' | 'adult' | 'child', username?
 
     const shoppingListsData = await database.shoppingList.findMany({
         where: whereClause,
-        include: { items: true },
+        include: {
+            items: {
+                include: {
+                    item: true,
+                },
+            },
+        },
     });
+    // console.log("Retrieved shopping lists data:", shoppingListsData);
 
-    return shoppingListsData.map(list => ShoppingList.from(list));
+    return shoppingListsData.map(list => {
+        // console.log("Processing shopping list:", list); // Add logging here
+        return ShoppingList.from({
+            ...list,
+            items: list.items.map((listItem: any) => listItem.item),
+        });
+    });
 };
 
 const addItemToShoppingList = async (listName: string, item: Item): Promise<void> => {
-    const shoppingList = await database.shoppingList.update({
-        where: {name: listName},
+    const shoppingList = await database.shoppingList.findUnique({
+        where: { name: listName },
+    });
+
+    if (!shoppingList) {
+        throw new Error(`Shopping list with name ${listName} not found.`);
+    }
+
+    const existingItem = await database.item.findUnique({
+        where: { name: item.getName() },
+    });
+
+    if (!existingItem) {
+        await database.item.create({
+            data: {
+                name: item.getName(),
+                description: item.description,
+                price: item.getPrice(),
+                urgency: item.getUrgency(),
+            },
+        });
+    }
+
+    await database.shoppingList.update({
+        where: { name: listName },
         data: {
             items: {
                 connectOrCreate: {
-                    where: { name: item.getName() },
+                    where: {
+                        shoppingListId_itemId: {
+                            shoppingListId: shoppingList.id,
+                            itemId: existingItem ? existingItem.id : item.getId(),
+                        },
+                    },
                     create: {
-                        name: item.getName(),
-                        description: item.description,
-                        price: item.getPrice(),
-                        urgency: item.getUrgency(),
+                        item: {
+                            connect: { id: existingItem ? existingItem.id : item.getId()},
+                        },
                     },
                 },
             },
         },
     });
-    if (!shoppingList) {
-        throw new Error(`Shopping list with name ${listName} not found.`);
-    }
 };
 
 const removeItemFromShoppingList = async (listName: string, itemName: string): Promise<void> => {
-    const shoppingList = await database.shoppingList.update({
-        where: {name: listName},
-        data: {
+    const shoppingList = await database.shoppingList.findUnique({
+        where: { name: listName },
+        include: {
             items: {
-                deleteMany: {
-                    name: itemName,
+                include: {
+                    item: true,
                 },
             },
         },
     });
+
     if (!shoppingList) {
         throw new Error(`Shopping list with name ${listName} not found.`);
+    }
+
+    const item = await database.item.findUnique({
+        where: { name: itemName },
+    });
+
+    if (!item) {
+        throw new Error(`Item with name ${itemName} not found.`);
+    }
+
+    await database.shoppingList.update({
+        where: { name: listName },
+        data: {
+            items: {
+                disconnect: {
+                    shoppingListId_itemId: {
+                        shoppingListId: shoppingList.id,
+                        itemId: item.id,
+                    },
+                },
+            },
+        },
+    });
+
+    // Optionally, delete the item if it is no longer associated with any shopping list
+    const itemAssociations = await database.shoppingListItem.findMany({
+        where: { itemId: item.id },
+    });
+
+    if (itemAssociations.length === 0) {
+        await database.item.delete({
+            where: { id: item.id },
+        });
     }
 };
 

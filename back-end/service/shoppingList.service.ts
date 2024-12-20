@@ -47,9 +47,15 @@ const addShoppingList = async (input: ShoppingListInput): Promise<ShoppingList> 
 };
 
 const getShoppingList = async (name: string): Promise<ShoppingList | undefined> => {
-    const shoppingList = await shoppingListDb.getShoppingListByName(name);
+    let shoppingList:ShoppingList | null;
+    try {
+        shoppingList = await shoppingListDb.getShoppingListByName(name);
+        console.log(shoppingList)
+    } catch (error) {
+        throw new Error("Service can't retrieve shopping lists from database: "+error)
+    }
 
-    if (shoppingList != undefined) {
+    if (shoppingList) {
         return shoppingList;
     } else {
         throw new Error(`Shopping list with name ${name} does not exist.`);

@@ -18,9 +18,8 @@ model Item {
     name           String        @unique
     description    String
     price          Float
-    urgency        Urgency           @default(low)
-    ShoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
-    shoppingListId Int?
+    urgency        Urgency       @default(low)
+    shoppingLists  ShoppingListItem[] @relation("ItemShoppingLists")
 }
 
 model Profile {
@@ -40,9 +39,18 @@ enum Privacy {
 model ShoppingList {
     id    Int    @id @default(autoincrement())
     name  String @unique
-    items Item[]
+    items ShoppingListItem[] @relation("ShoppingListItems")
     privacy Privacy @default(public)
     owner   String @default("GeneralUser")
+}
+
+model ShoppingListItem {
+    shoppingListId Int
+    itemId         Int
+    shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], name: "ShoppingListItems")
+    item           Item         @relation(fields: [itemId], references: [id], name: "ItemShoppingLists")
+
+    @@id([shoppingListId, itemId])
 }
 
 enum Role {

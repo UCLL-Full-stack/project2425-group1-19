@@ -44,15 +44,21 @@ const getItemByName = async({name}: {name: string}): Promise<Item | undefined>  
 
 const removeItem = async (name: string): Promise<void> => {
     try {
-        const id = await getItemIdByName(name)
-        if (!id) {
-            throw new Error("No Item found with name:"+name);
-        };
+        const item = await database.item.findUnique({
+            where: { name },
+        });
+
+        if (!item) {
+            console.error(`Item with name ${name} not found.`); // Log a warning instead of throwing an error
+            return;
+        }
+
         await database.item.delete({
-            where: { id },
+            where: { id: item.id },
         });
     } catch (error) {
-        throw new Error(`Item with name ${name} not found.`);
+        console.error(`Error removing item with name ${name}:`, error);
+        throw new Error(`Error removing item with name ${name}`);
     }
 };
 
@@ -61,24 +67,6 @@ const getAllItems = async (): Promise<Array<Item>> => {
     const items_array = items.map((i) => Item.from(i));
     return items_array;
 };
-
-// const createTestItems = (): void => {
-//     const itemslist = [
-//         new Item({name: "Milk", description: "1 gallon of whole milk", price: 3.99, urgency: "high"}),
-//         new Item({name: "Bread", description: "Whole grain bread", price: 2.49, urgency: "mid"}),
-//         new Item({name: "Eggs", description: "Dozen large eggs", price: 2.99, urgency: "high"}),
-//         new Item({name: "Cheese", description: "Cheddar cheese block", price: 4.99, urgency: "mid"}),
-//         new Item({name: "Apples", description: "1 kg of red apples", price: 3.49, urgency: "mid"}),
-//         new Item({name: "Chicken Breast", description: "1 kg of boneless chicken breast", price: 7.99, urgency: "high"}),
-//         new Item({name: "Tomatoes", description: "1 kg of fresh tomatoes", price: 2.99, urgency: "low"}), 
-//         new Item({name: "Pens", description: "Pack of 10 blue pens", price: 5.99, urgency: "low"}),
-//         new Item({name: "Notebooks", description: "Pack of 3 notebooks", price: 7.99, urgency: "high"})
-//     ]
-//     itemslist.forEach((item) => saveItem(item))
-    
-// };
-
-//createTestItems();
 
 export default {
     saveItem,

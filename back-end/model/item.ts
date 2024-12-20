@@ -1,15 +1,17 @@
 import {Urgency} from "../types";
 
 class Item {
+    private id: number;
     private name: string;
     public description: string;
     private price?: number;
     private urgency?: Urgency;
 
 
-    constructor (item: {name: string, description: string, price?: number, urgency?: Urgency}) {
+    constructor (item: {id?: number, name: string, description: string, price?: number, urgency?: Urgency}) {
         this.validateitems(item);
 
+        this.id = item.id || 0;
         this.name = item.name;
         this.description = item.description;
         this.price = item.price;
@@ -30,11 +32,15 @@ class Item {
                 throw new Error('Invalid price value');
             }
         }
-        
+
         const validUrgencies: Urgency[] = ['low', 'mid', 'high'];
         if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
             throw new Error('Invalid urgency value');
         }
+    };
+
+    getId = (): number => {
+        return this.id;
     };
 
     getName = (): string => {
@@ -48,13 +54,14 @@ class Item {
             return this.price;
         }
     }
-    getUrgency = ():Urgency => {
+    getUrgency = (): Urgency => {
         return this.urgency!;
     }
 
 
     static from = (data: any): Item => {
         return new Item({
+            id: data.id,
             name: data.name,
             description: data.description,
             price: data.price,

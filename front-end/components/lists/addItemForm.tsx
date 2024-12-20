@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {Item} from '@/types';
 
 type Props = {
-    onAddItem: (item: Item, newShoppingListName?:string) => void;
+    onAddItem: (item: Item, newShoppingListName?: string) => void;
     onNeedRefresh: () => void;
     shoppingListName: string;
 };
 
-const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName}) => {
+const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListName}) => {
     const [newItem, setNewItem] = useState<Item>({
         name: '',
         description: '',
@@ -29,7 +29,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
 
     const validateItem = (item: Item): string | null => {
         setErrorMessage(null);
-        
+
         if (typeof item.name !== 'string' || item.name.length > 40) {
             return 'Invalid name value';
         }
@@ -38,11 +38,10 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
             return 'Invalid description value';
         }
 
-        if (item.price !== undefined) {
-            if (typeof item.price !== 'number' || !isFinite(item.price) || item.price < 0) {
-                return 'Invalid price value';
-            }
+        if (!item.price) {
+            return 'Invalid price value';
         }
+
 
         const validUrgencies: string[] = ['low', 'mid', 'high'];
         if (item.urgency !== undefined && !validUrgencies.includes(item.urgency)) {
@@ -54,7 +53,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
 
     const handleAddItem = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         const validationError = validateItem(newItem);
         if (validationError) {
             setErrorMessage(validationError);
@@ -147,13 +146,13 @@ const AddItemForm: React.FC<Props> = ({onAddItem,onNeedRefresh, shoppingListName
                     </label>
                     <input
                         type="number"
+                        min={0}
+                        max={100000}
                         name="price"
                         id="price"
                         placeholder="Price"
                         value={newItem.price}
                         onChange={handleChange}
-                        autoCorrect='false'
-                        autoComplete='false'
                         className="w-full px-3 py-2 border rounded"
                     />
                 </div>
