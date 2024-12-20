@@ -17,6 +17,7 @@ const ProfileOverview: React.FC<{ userId: number }> = ({ userId }) => {
         }
     };
 
+
     useEffect(() => {
             fetchProfile();
         }, []);

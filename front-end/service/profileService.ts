@@ -9,6 +9,7 @@ if (!backendUrl) {
 const getProfile = async () => {
     const token:AuthenticationResponse = userService.getLocalStorageFields();
     const id = await userService.getUserId(token.username);
+    localStorage.setItem('userId', id.toString());
 
     const response = await fetch(`${backendUrl}/profile/${id}`, {
         headers: {
@@ -22,8 +23,28 @@ const getProfile = async () => {
     return response.json();
 };
 
+const fetchProfiles = async () => {
+    try {
+        const token:AuthenticationResponse = userService.getLocalStorageFields();
+
+        const response = await fetch('http://localhost:3000/profile', {
+            headers: {
+                
+                'Authorization': `Bearer ${token.token}`,
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        console.error('An error occurred:', err);
+    }
+};
+
 export {
     getProfile,
-
+    fetchProfiles,
 
 };

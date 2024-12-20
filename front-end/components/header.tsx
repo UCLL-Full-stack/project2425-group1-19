@@ -30,6 +30,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         if (confirm("Are you sure you want to logout?")) {
             localStorage.removeItem("userLoginToken");
+            localStorage.removeItem("userId");
             setLogedIn(false);
             router.push('/');
         }
