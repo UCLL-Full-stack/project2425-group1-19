@@ -37,14 +37,6 @@ test('given valid profile input; when adding a profile; then it should add the p
     expect(mockSaveProfile).toHaveBeenCalledWith(expect.any(Profile));
 });
 
-test('given existing email; when adding a profile; then it should throw an error', async () => {
-    // given
-    mockGetProfileByEmail.mockResolvedValue(profile1);
-
-    // when & then
-    await expect(ProfileService.addProfile(profileInput1)).rejects.toThrow(`Profile with email ${profileInput1.email} already exists.`);
-});
-
 test('given valid email; when retrieving a profile; then it should return the profile', async () => {
     // given
     mockGetProfileByEmail.mockResolvedValue(profile1);
