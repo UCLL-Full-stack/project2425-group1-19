@@ -7,8 +7,9 @@ import React, {useEffect, useState} from "react";
 import ProfileOverview from "@/components/profile/profileOverview";
 import Profiles from "@/components/profile/profiles";
 import UserService from "@/service/userService";
-import { AuthenticationResponse } from "@/types";
+import { AuthenticationResponse, Item } from "@/types";
 import userService from "@/service/userService";
+import AddProfile from "@/components/profile/addProfile";
 
 const Profile: React.FC = () => {
   const router = useRouter();
@@ -42,8 +43,10 @@ const Profile: React.FC = () => {
       </Head>
       <Header />
       <main>
-        {role === "admin" && (<Profiles/>)
-        }
+        {role === "admin" && (
+          <Profiles />
+        )}
+        
         {role !== "admin" && (<ProfileOverview userId={id} />)}
         
         

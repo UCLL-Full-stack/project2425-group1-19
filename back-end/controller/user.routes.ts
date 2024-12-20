@@ -65,6 +65,43 @@ userRouter.get('/', async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /user:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Create a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: The user was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Some input error
+ */
+
+userRouter.post('/', async (req: Request, res: Response) => {
+    try {
+        const user = <UserInput>req.body;
+        const newUser = await userService.addUser(user);
+        res.status(201).json(newUser);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ status: "error", errorMessage: error.message });
+        }
+    }
+});
+
+/**
+ * @swagger
  * /user/{username}:
  *   get:
  *     security:

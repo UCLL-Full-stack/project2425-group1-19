@@ -5,7 +5,6 @@ import { getProfile } from '@/service/profileService';
 
 const ProfileOverview: React.FC<{ userId: number }> = ({ userId }) => {
     const [profile, setProfile] = useState<Profile | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     
     const fetchProfile = async () => {

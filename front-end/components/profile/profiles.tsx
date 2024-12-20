@@ -1,23 +1,31 @@
 import { fetchProfiles } from '@/service/profileService';
 import React, { useEffect, useState } from 'react';
 import { Profile } from '@/types';
+import AddProfileForm from './addProfile';
 
 const Profiles: React.FC = () => {
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [refreshProfiles, setRefreshProfiles] = useState<boolean>(false);
 
+    const fetchData = async () => {
+        try {
+            const profiles = await fetchProfiles();
+            setProfiles(profiles);
+        } catch (error) {
+            setError('Failed to fetch profiles');
+        }
+    };
+
+    // Fetch profiles when the component mounts or when refreshProfiles is true
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const profiles = await fetchProfiles();
-                setProfiles(profiles);
-            } catch (error) {
-                setError('Failed to fetch profiles');
-            }
-        };
-
         fetchData();
-    }, []);
+        setRefreshProfiles(false); // Reset the refresh flag after fetching
+    }, [refreshProfiles]); // Only trigger when refreshProfiles changes
+
+    const handleProfileAdded = () => {
+        setRefreshProfiles(true); // Set the flag to trigger profile refetching
+    };
 
     if (error) {
         return <div className="text-center text-red-500">{error}</div>;
@@ -45,6 +53,7 @@ const Profiles: React.FC = () => {
                     ))}
                 </tbody>
             </table>
+            <AddProfileForm onProfileAdded={handleProfileAdded} />
         </div>
     );
 };
