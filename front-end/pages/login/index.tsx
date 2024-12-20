@@ -109,6 +109,38 @@ const Login: React.FC = () => {
                 </button>
             </div>
 
+            <div className="mt-4">
+                <h1 className="text-2xl font-bold mb-4">User Table</h1>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white shadow-md rounded-lg">
+                        <thead>
+                            <tr>
+                                <th className="py-2 px-4 border-b">Username</th>
+                                <th className="py-2 px-4 border-b">Password</th>
+                                <th className="py-2 px-4 border-b">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="py-2 px-4 border-b">admin</td>
+                                <td className="py-2 px-4 border-b">Admin123!</td>
+                                <td className="py-2 px-4 border-b">admin</td>
+                            </tr>
+                            <tr>
+                                <td className="py-2 px-4 border-b">johndoe</td>
+                                <td className="py-2 px-4 border-b">Password123!</td>
+                                <td className="py-2 px-4 border-b">adult</td>
+                            </tr>
+                            <tr>
+                                <td className="py-2 px-4 border-b">janedoe</td>
+                                <td className="py-2 px-4 border-b">Password123!</td>
+                                <td className="py-2 px-4 border-b">child</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </>
     )
 };
