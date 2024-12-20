@@ -242,14 +242,12 @@ shoppingListRouter.post('/:name/item', async (req: Request, res: Response, next:
  *         description: Shopping list or item not found
  */
 
-shoppingListRouter.delete('/:name/item/:itemName', async (req: Request, res: Response) => {
+shoppingListRouter.delete('/:listName/item/:itemName', async (req: Request, res: Response, next:NextFunction) => {
     try {
-        await shoppingListService.removeItemFromShoppingList(req.params.name, req.params.itemName);
+        await shoppingListService.removeItemFromShoppingList(req.params.listName, req.params.itemName);
         res.status(200).json({ status: "success", message: "Item removed from shopping list successfully" });
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(404).json({ status: "error", errorMessage: error.message });
-        }
+        next(error)
     }
 });
 

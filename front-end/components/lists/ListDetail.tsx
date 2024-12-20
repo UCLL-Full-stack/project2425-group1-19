@@ -28,7 +28,8 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
 
     const fetchShoppingList = async () => {
         try {
-            const list = await getShoppingList(shoppingListName);
+            const list:ShoppingList = await getShoppingList(shoppingListName);
+            console.log('Fetched shopping list:', list);
             setShoppingList(list);
         } catch (error) {
             console.error(error);
@@ -43,7 +44,6 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
     const handlePurchase = async (itemName: string) => {
         try {
             await removeItemFromShoppingList(shoppingListName, itemName);
-            // Update the state to remove the item from the list
             setShoppingList((prevList) => {
                 if (!prevList) return prevList;
                 return {

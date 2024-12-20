@@ -10,7 +10,7 @@ type ItemInput = {
 type Privacy = 'public'|'adultOnly'|'private'
 
 type ShoppingListInput = {
-    ListName?: string;
+    ListName: string;
     items?: ItemInput[];
     privacy?:Privacy;
     owner?: string;

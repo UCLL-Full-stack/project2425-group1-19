@@ -6,6 +6,7 @@ import {useTranslation} from 'next-i18next';
 import ListDetail from './ListDetail';
 import { FaEye } from "react-icons/fa";
 import { useRouter } from 'next/router';
+import Lists from '@/pages/lists';
 
 const ListsOverview: React.FC = () => {
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
@@ -25,6 +26,14 @@ const ListsOverview: React.FC = () => {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchShoppingLists();
+        }, 5000); 
+
+        return () => clearInterval(interval); 
+    }, [Lists]);
 
     useEffect(() => {
         fetchShoppingLists();
