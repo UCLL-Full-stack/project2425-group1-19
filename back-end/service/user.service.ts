@@ -6,18 +6,30 @@ import jwt from 'jsonwebtoken';
 
 const addUser = async (input: UserInput): Promise<User> => {
     try {
-        const existingUser = await userDb.getUserByUsername( input.username);
+        // Check if a user already exists with the same username
+        const existingUser = await userDb.getUserByUsername(input.username);
         if (existingUser) {
             throw new Error(`User with username ${input.username} already exists.`);
         }
-        
-        // Ensure the user meets the rules
+
+        // Log the user input for debugging
+        console.log('Adding new user with username:', input.username);
+
+        // Ensure the user meets the validation rules (e.g., password strength, required fields)
         const newUser = new User(input);
-        return await userDb.saveUser(newUser);
+        
+        // Save the new user in the database
+        const savedUser = await userDb.saveUser(newUser);
+
+        console.log('User created successfully:', savedUser);
+
+        return savedUser;
     } catch (error) {
-        throw new Error(`Error adding user with username ${input.username}: ${error}`);
+        console.error(`Error adding user with username ${input.username}:`, error);
+        throw error;
     }
 };
+
     //ERROR:
 //     at Generator.next (<anonymous>)
 //     at fulfilled (C:\Users\aboud\Documents\Full stack\Project\project2425-group1-19\back-end\repository\user.db.ts:5:58)

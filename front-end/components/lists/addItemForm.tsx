@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Item} from '@/types';
+import {useTranslation} from 'next-i18next';
 
 type Props = {
     onAddItem: (item: Item, newShoppingListName?: string) => void;
@@ -17,6 +18,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
     const [listName, setListName] = useState<string>(shoppingListName);
     const [toAddListName, setToAddListName] = useState<string>(shoppingListName);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const { t } = useTranslation();
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -84,19 +86,19 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
 
     return (
         <div className="flex flex-col items-center p-4">
-            <h3 className='text-xl font-semibold mt-6 mb-2'>Add an Item to the shoppingList</h3>
+            <h3 className='text-xl font-semibold mt-6 mb-2'>{t("lists.form.title")}</h3>
             {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
             <form onSubmit={handleAddItem} className="w-full max-w-lg bg-transparent p-6 rounded-lg shadow-md">
                 {listName === '' && (
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ListName">
-                            Shopping List name
+                            {t("lists.form.listname")}
                         </label>
                         <input
                             type="text"
                             name="ListName"
                             id="ListName"
-                            placeholder="Shopping List name"
+                            placeholder={t("lists.form.placeholder.listname")}
                             value={toAddListName}
                             onChange={(e) => setToAddListName(e.target.value)}
                             autoCorrect='false'
@@ -108,13 +110,13 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                 )}
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Item Name
+                        {t("lists.form.itemname")}
                     </label>
                     <input
                         type="text"
                         name="name"
                         id="name"
-                        placeholder="Name"
+                        placeholder={t("lists.form.placeholder.itemname")}
                         value={newItem.name}
                         onChange={handleChange}
                         autoCorrect='false'
@@ -125,13 +127,13 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                        Description
+                        {t("lists.form.description")}
                     </label>
                     <input
                         type="text"
                         name="description"
                         id="description"
-                        placeholder="Description"
+                        placeholder={t("lists.form.placeholder.description")}
                         value={newItem.description}
                         onChange={handleChange}
                         autoCorrect='false'
@@ -142,7 +144,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
-                        Price
+                        {t("lists.form.price")}
                     </label>
                     <input
                         type="number"
@@ -150,7 +152,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                         max={100000}
                         name="price"
                         id="price"
-                        placeholder="Price"
+                        placeholder={t("lists.form.placeholder.price")}
                         value={newItem.price}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded"
@@ -158,7 +160,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="urgency">
-                        Urgency
+                        {t("lists.form.urgency")}
                     </label>
                     <select
                         name="urgency"
@@ -170,9 +172,9 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                         required
                         className="w-full px-3 py-2 border rounded"
                     >
-                        <option value="low">1- Low priority</option>
-                        <option value="mid">2- Midium priority</option>
-                        <option value="high">3- High priority</option>
+                        <option value="low">{t("lists.form.placeholder.1")}</option>
+                        <option value="mid">{t("lists.form.placeholder.2")}</option>
+                        <option value="high">{t("lists.form.placeholder.3")}</option>
                     </select>
                 </div>
                 <div className="mb-4">
@@ -182,7 +184,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
                         // onSubmit={(e) => {e.preventDefault(); handleAddItem();}}
                         className="w-full bg-blue-500 text-white px-3 py-2 rounded disabled:opacity-50"
                     >
-                        Add Item
+                        {t("lists.form.submit")}
                     </button>
                 </div>
             </form>

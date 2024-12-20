@@ -106,45 +106,6 @@ profileRouter.get('/:userId', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /profile/{email}:
- *   get:
- *     security:
- *       - bearerAuth: []
- *     summary: Get a profile by email
- *     tags: [Profile]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The email of the profile
- *     responses:
- *       200:
- *         description: The profile description by email
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Profile'
- *       404:
- *         description: Profile not found
- */
-
-
-
-//profileRouter.get('/:email', async (req: Request, res: Response) => {
- //   try {
- //       const profile = await profileService.getProfileByEmail(req.params.email);
- //       res.status(200).json(profile);
- //   } catch (error) {
- //       if (error instanceof Error) {
-  //          res.status(404).json({ status: "error", errorMessage: error.message });
-  //      }
-  //  }
-//});
-
-/**
- * @swagger
  * /profile:
  *   post:
  *     security:
@@ -179,6 +140,46 @@ profileRouter.post('/', async (req: Request, res: Response) => {
         }
     }
 });
+
+////**
+// * @swagger
+ //* /profile/{email}:
+ //*   get:
+ //*     security:
+ //*       - bearerAuth: []
+ //*     summary: Get a profile by email
+ //*     tags: [Profile]
+ //*     parameters:
+ //*       - in: path
+ //*         name: email
+ //*         schema:
+ //*           type: string
+ //*         required: true
+ //*         description: The email of the profile
+ //*     responses:
+ //*       200:
+ //*         description: The profile description by email
+ //*         content:
+ //*           application/json:
+ //*             schema:
+ //*               $ref: '#/components/schemas/Profile'
+ //*       404:
+ //*         description: Profile not found
+ //*/
+
+
+
+//profileRouter.get('/:email', async (req: Request, res: Response) => {
+ //   try {
+ //       const profile = await profileService.getProfileByEmail(req.params.email);
+ //       res.status(200).json(profile);
+ //   } catch (error) {
+ //       if (error instanceof Error) {
+  //          res.status(404).json({ status: "error", errorMessage: error.message });
+  //      }
+  //  }
+//});
+
 
 /**
  * @swagger

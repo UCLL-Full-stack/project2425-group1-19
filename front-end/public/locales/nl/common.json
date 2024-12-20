@@ -42,11 +42,69 @@
             "name": "Naam",
             "number": "Aantal items"
         },
-        "deselectList": "Lijst deselecteren"
+        "list": {
+            "itemname": "Artikelnaam",
+            "description": "Beschrijving",
+            "price": "Prijs",
+            "urgency": "Urgentie",
+            "Action": "Actie",
+            "buy": "Kopen"
+        },
+        "deselectList": "Lijst deselecteren",
+        "form" : {
+            "title":"Voeg een item toe aan de boodschappenlijst",
+            "listname":"Lijstnaam:",
+            "itemname":"Artikelnaam:",
+            "description":"Beschrijving:",
+            "price":"Prijs:",
+            "urgency":"Urgentie:",
+            "submit":"Voeg item toe",
+            "placeholder": {
+                "listname": "Voer lijstnaam in",
+                "itemname": "Voer artikelnaam in",
+                "description": "Voer beschrijving in",
+                "price": "Voer prijs in",
+                "urgency": "Selecteer urgentie",
+                "1" : "1- Lage prioriteit",
+                "2" : "2- Gemiddelde prioriteit",
+                "3" : "3- Hoge prioriteit"
+            }
+        }
     },
-    "monthly": {
-        "title": "Maandelijkse uitgaven",
-        "description": "Dit is de pagina met maandelijkse uitgaven",
-        "overview": "Overzicht van de maandelijkse uitgaven"
+    "profile": {
+        "title": "Profiel",
+        "description": "Dit is de profielpagina",
+        "overview": "Profieloverzicht",
+        "table": {
+            "email": "E-mail",
+            "Name": "Naam",
+            "LastName": "Achternaam",
+            "UserId": "Gebruikers-ID"
+        },
+        "form": {
+            "title": "Voeg een profiel en gebruiker toe",
+            "email": "E-mail:",
+            "name": "Voornaam:",
+            "lastname": "Achternaam:",
+            "username": "Gebruikersnaam:",
+            "password": "Wachtwoord:",
+            "submit": "Voeg profiel en gebruiker toe",
+            "success": "Profiel en gebruiker succesvol toegevoegd",
+            "failed": "Profiel en gebruiker toevoegen mislukt",
+            "validate": {
+                "email": "E-mail is verplicht",
+                "Name": "Naam is verplicht",
+                "LastName": "Achternaam is verplicht",
+                "username": "Gebruikersnaam is verplicht",
+                "password": "Wachtwoord is verplicht"
+            },
+            "placeholder" : {
+                "email": "Voer e-mailadres in",
+                "name": "Voer voornaam in",
+                "lastname": "Voer achternaam in",
+                "username": "Voer gebruikersnaam in",
+                "password": "Voer wachtwoord in"
+            }
+        }
     }
 }

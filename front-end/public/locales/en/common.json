@@ -43,11 +43,71 @@
             "name": "Name",
             "number": "Number of items"
         },
-        "deselectList": "Deselect list"
+        "list" : {
+            "itemname": "Item name",
+            "description": "Description",
+            "price": "Price",
+            "urgency": "Urgency",
+            "Action": "Action",
+            "buy": "Buy"
+        },
+        "deselectList": "Deselect list",
+        "form" : {
+            "title":"Add an item to the shoppingList",
+            "listname":"List name:",
+            "itemname":"Item name:",
+            "description":"Description:",
+            "price":"Price:",
+            "urgency":"Urgency:",
+            "submit":"Add item",
+            "placeholder": {
+                "listname": "Enter list name",
+                "itemname": "Enter item name",
+                "description": "Enter description",
+                "price": "Enter price",
+                "urgency": "Enter urgency",
+                "1" : "1- Low priority",
+                "2" : "2- Medium priority",
+                "3" : "3- High priority"
+            }
+        }
     },
-    "monthly": {
-        "title": "Monthly spendings",
-        "description": "This is the monthly spendings page",
-        "overview": "Monthly spendings overview"
+    "profile": {
+        "title": "Profile",
+        "description": "This is the profile page",
+        "overview": "Profile overview",
+        "table": {
+            "email": "Email",
+            "Name": "Name",
+            "LastName": "Last name",
+            "UserId": "User ID"
+        },
+        "form": {
+            "title": "Add a Profile and User",
+            "email": "Email:",
+            "name": "First name:",
+            "lastname": "Last name:",
+            "username": "Username:",
+            "password": "Password:",
+            "submit": "Add profile and user",
+            "success": "Profile and user added successfully",
+            "failed": "Profile and user added failed",
+            "validate": {
+                "email": "Email is required",
+                "Name": "Name is required",
+                "LastName": "Last name is required",
+                "username": "Username is required",
+                "password": "Password is required"
+            },
+            "placeholder": {
+                "email": "Enter email",
+                "name": "Enter first name",
+                "lastname": "Enter last name",
+                "username": "Enter username",
+                "password": "Enter password"
+            }
+        }
     }
+
+
 }
