@@ -43,7 +43,34 @@
             "name": "Name",
             "number": "Number of items"
         },
-        "deselectList": "Deselect list"
+        "list" : {
+            "itemname": "Item name",
+            "description": "Description",
+            "price": "Price",
+            "urgency": "Urgency",
+            "Action": "Action",
+            "buy": "Buy"
+        },
+        "deselectList": "Deselect list",
+        "form" : {
+            "title":"Add an item to the shoppingList",
+            "listname":"List name:",
+            "itemname":"Item name:",
+            "description":"Description:",
+            "price":"Price:",
+            "urgency":"Urgency:",
+            "submit":"Add item",
+            "placeholder": {
+                "listname": "Enter list name",
+                "itemname": "Enter item name",
+                "description": "Enter description",
+                "price": "Enter price",
+                "urgency": "Enter urgency",
+                "1" : "1- Low priority",
+                "2" : "2- Medium priority",
+                "3" : "3- High priority"
+            }
+        }
     },
     "profile": {
         "title": "Profile",

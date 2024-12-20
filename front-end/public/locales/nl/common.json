@@ -42,7 +42,34 @@
             "name": "Naam",
             "number": "Aantal items"
         },
-        "deselectList": "Lijst deselecteren"
+        "list": {
+            "itemname": "Artikelnaam",
+            "description": "Beschrijving",
+            "price": "Prijs",
+            "urgency": "Urgentie",
+            "Action": "Actie",
+            "buy": "Kopen"
+        },
+        "deselectList": "Lijst deselecteren",
+        "form" : {
+            "title":"Voeg een item toe aan de boodschappenlijst",
+            "listname":"Lijstnaam:",
+            "itemname":"Artikelnaam:",
+            "description":"Beschrijving:",
+            "price":"Prijs:",
+            "urgency":"Urgentie:",
+            "submit":"Voeg item toe",
+            "placeholder": {
+                "listname": "Voer lijstnaam in",
+                "itemname": "Voer artikelnaam in",
+                "description": "Voer beschrijving in",
+                "price": "Voer prijs in",
+                "urgency": "Selecteer urgentie",
+                "1" : "1- Lage prioriteit",
+                "2" : "2- Gemiddelde prioriteit",
+                "3" : "3- Hoge prioriteit"
+            }
+        }
     },
     "profile": {
         "title": "Profiel",

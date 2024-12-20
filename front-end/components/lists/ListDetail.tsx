@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {getShoppingList, removeItemFromShoppingList, removeShoppingList} from '@/service/listsService';
 import {ShoppingList, Urgency} from '@/types';
 import {FaTrash} from 'react-icons/fa';
+import {useTranslation} from 'next-i18next';
 
 type Props = {
     onPurchase: () => void;
@@ -10,6 +11,7 @@ type Props = {
 
 const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
     const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
+    const { t } = useTranslation();
 
     const getUrgencyClass = (urgency: Urgency) => {
         switch (urgency) {
@@ -83,11 +85,11 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
                 <table className="w-full border-collapse">
                     <thead>
                         <tr>
-                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Item Name</th>
-                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Description</th>
-                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Price</th>
-                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">Urgency</th>
-                            <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 bg-gray-200 ">Action</th>
+                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">{t("lists.list.itemname")}</th>
+                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">{t("lists.list.description")}</th>
+                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">{t("lists.list.price")}</th>
+                            <th className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300 bg-gray-200">{t("lists.list.urgency")}</th>
+                            <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 bg-gray-200 ">{t("lists.list.Action")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,7 +100,7 @@ const ListDetail: React.FC<Props> = ({onPurchase, shoppingListName}: Props) => {
                                 <td className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300">{item.price}</td>
                                 <td className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300">{item.urgency}</td>
                                 <td className="px-2 py-1 sm:px-2 sm:py-1 border border-gray-300">
-                                    <button onClick={() => item.name && handlePurchase(item.name)}>Buy</button>
+                                    <button onClick={() => item.name && handlePurchase(item.name)}>{t("lists.list.buy")}</button>
                                 </td>
                             </tr>
                         ))}
