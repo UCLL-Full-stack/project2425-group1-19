@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+
 // Mock useTranslation from next-i18next
 jest.mock('next-i18next', () => ({
     useTranslation: () => ({

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import AddItemForm from '@/components/lists/addItemForm';
-import { Item } from '@/types';
+import AddItemForm from '../components/lists/addItemForm';
 
 // Mock functions
 const mockOnAddItem = jest.fn();

@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Import jest-dom for extended matchers
-import ListsOverview from '@/components/lists/listsOverview';
+import ListsOverview from '../components/lists/listsOverview';
 import { getShoppingLists } from '../service/listsService';
-import { ShoppingList } from '@/types';
+import { ShoppingList } from '../types/index';
 
 // Mock the service functions
 jest.mock('@/service/listsService');
