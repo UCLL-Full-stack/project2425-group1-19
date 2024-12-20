@@ -96,6 +96,7 @@
             "lastname": "Last name:",
             "username": "Username:",
             "password": "Password:",
+            "role": "Role:",
             "submit": "Add profile and user",
             "success": "Profile and user added successfully",
             "failed": "Profile and user added failed",
@@ -104,7 +105,8 @@
                 "Name": "Name is required",
                 "LastName": "Last name is required",
                 "username": "Username is required",
-                "password": "Password is required"
+                "password": "Password is required",
+                "role": "Role is required"
             },
             "placeholder": {
                 "email": "Enter email",

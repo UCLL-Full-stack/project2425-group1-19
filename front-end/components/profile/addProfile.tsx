@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Profile } from '@/types';
 import { addProfile, fetchProfiles, addUser } from '@/service/profileService';
 import { useTranslation } from 'next-i18next';
+import { routeModule } from 'next/dist/build/templates/pages';
 
 interface AddProfileFormProps {
     onProfileAdded: () => void;
@@ -16,6 +17,7 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
     });
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [role, setRole] = useState<string>('adult');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null); // New state for success message
     const { t } = useTranslation();
@@ -34,6 +36,8 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
             setUsername(value);
         } else if (name === 'password') {
             setPassword(value);
+        } else if (name === 'role') {
+            setRole(value);
         }
     };
 
@@ -56,6 +60,9 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
         }
         if (!password || password.length < 6) {
             return 'Password is required and must be at least 6 characters long';
+        }
+        if (!role || role !== 'adult' && role !== 'child' && role !== 'admin') {
+            return 'Role is required and must be less than 50 characters';
         }
         return null;
     };
@@ -99,7 +106,7 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
             console.log('Profile added successfully:', profileResult);
 
             // Create the user with the same userId
-            const userResult = await addUser({ id: newUserId, username, password, role: 'adult' }); // Added role here
+            const userResult = await addUser({ id: newUserId, username, password, role }); 
             console.log('User added successfully:', userResult);
 
             // Reset the form after successful submission
@@ -111,6 +118,7 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
             });
             setUsername('');
             setPassword('');
+            setRole('adult');
             setErrorMessage(null);
 
             // Set success message
@@ -143,8 +151,8 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                         {t("profile.form.email")}
                     </label>
                     <input
-                        type="email"
-                        name="email"
+                        type="text"
+                        name='email'
                         id="email"
                         placeholder={t("profile.form.placeholder.email")}
                         value={newProfile.email}
@@ -214,12 +222,31 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                     />
                 </div>
                 <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
+                        {t("profile.form.role")}
+                    </label>
+                    <select
+                                name="role"
+                                id="role"
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                                autoCorrect='false'
+                                autoComplete='false'
+                                required
+                                className="w-full px-3 py-2 border rounded"
+                            >
+                                <option value="admin">admin</option>
+                                <option value="adult">adult</option>
+                                <option value="child">child</option>
+                            </select>
+                </div>
+                <div className="mb-4">
                     <button
                         type="submit"
                         disabled={!isFormValid}
                         className="w-full bg-blue-500 text-white px-3 py-2 rounded disabled:opacity-50"
                     >
-                        Add Profile and User
+                        {t("profile.form.submit")}
                     </button>
                 </div>
             </form>

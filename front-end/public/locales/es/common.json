@@ -96,6 +96,7 @@
             "lastname": "Apellido:",
             "username": "Nombre de usuario:",
             "password": "Contraseña:",
+            "role": "Rol:",
             "submit": "Añadir perfil y usuario",
             "success": "Perfil y usuario añadidos con éxito",
             "failed": "Falló al añadir perfil y usuario",
@@ -104,7 +105,8 @@
                 "Name": "El nombre es obligatorio",
                 "LastName": "El apellido es obligatorio",
                 "username": "El nombre de usuario es obligatorio",
-                "password": "La contraseña es obligatoria"
+                "password": "La contraseña es obligatoria",
+                "role": "El rol es obligatorio"
             },
             "placeholder": {
                 "listname": "Introduce nombre de la lista",

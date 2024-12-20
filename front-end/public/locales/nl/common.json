@@ -97,6 +97,7 @@
             "lastname": "Achternaam:",
             "username": "Gebruikersnaam:",
             "password": "Wachtwoord:",
+            "role": "Rol:",
             "submit": "Voeg profiel en gebruiker toe",
             "success": "Profiel en gebruiker succesvol toegevoegd",
             "failed": "Profiel en gebruiker toevoegen mislukt",
@@ -105,7 +106,8 @@
                 "Name": "Naam is verplicht",
                 "LastName": "Achternaam is verplicht",
                 "username": "Gebruikersnaam is verplicht",
-                "password": "Wachtwoord is verplicht"
+                "password": "Wachtwoord is verplicht",
+                "role": "Rol is verplicht"
             },
             "placeholder" : {
                 "email": "Voer e-mailadres in",
