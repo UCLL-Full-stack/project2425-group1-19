@@ -40,7 +40,7 @@ const AddItemForm: React.FC<Props> = ({onAddItem, onNeedRefresh, shoppingListNam
             return t('lists.form.validate.description');
         }
 
-        if (!item.price) {
+        if (!item.price || item.price <0) {
             return t('lists.form.validate.price');
         }
 

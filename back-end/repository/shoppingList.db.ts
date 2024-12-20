@@ -54,9 +54,24 @@ const getShoppingListByName = async (name: string): Promise<ShoppingList | null>
 };
 
 const removeShoppingList = async (name: string): Promise<void> => {
-    await database.shoppingList.delete({
-        where: {name},
+    const shoppingList = await database.shoppingList.findUnique({
+        where: { name },
+        include: { items: true },
     });
+
+    if (shoppingList) {
+        // Remove related items from ShoppingListItem table
+        await database.shoppingListItem.deleteMany({
+            where: { shoppingListId: shoppingList.id },
+        });
+
+        // Remove the shopping list
+        await database.shoppingList.delete({
+            where: { id: shoppingList.id },
+        });
+    } else {
+        throw new Error(`Shopping list with name ${name} does not exist.`);
+    }
 };
 
 const getAllShoppingLists = async (role?: 'admin' | 'adult' | 'child', username?: string): Promise<Array<ShoppingList>> => {
