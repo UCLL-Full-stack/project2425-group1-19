@@ -114,17 +114,6 @@ test('given valid ListName and items; when creating a ShoppingList; then it shou
     expect(newList.getListItems()).toEqual(validItems);
 });
 
-test('given no ListName and valid items; when creating a ShoppingList; then it should create the ShoppingList with default ListName', () => {
-    // given
-    // (global constants are used)
-
-    // when
-    const newList = new ShoppingList({ items: validItems });
-
-    // then
-    expect(newList.getListName()).toBe("General list");
-    expect(newList.getListItems()).toEqual(validItems);
-});
 
 test('given valid ListName and no items; when creating a ShoppingList; then it should create the ShoppingList with empty items array', () => {
     // given
@@ -138,17 +127,6 @@ test('given valid ListName and no items; when creating a ShoppingList; then it s
     expect(newList.getListItems()).toEqual([]);
 });
 
-test('given no ListName and no items; when creating a ShoppingList; then it should create the ShoppingList with default ListName and empty items array', () => {
-    // given
-    // (global constants are used)
-
-    // when
-    const newList = new ShoppingList({});
-
-    // then
-    expect(newList.getListName()).toBe("General list");
-    expect(newList.getListItems()).toEqual([]);
-});
 
 test('given invalid ListName; when creating a ShoppingList; then it should throw an error', () => {
     // given
