@@ -109,10 +109,10 @@ const Login: React.FC = () => {
                 </button>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-16 mx-6">
                 <h1 className="text-2xl font-bold mb-4">User Table</h1>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white shadow-md rounded-lg">
+                    <table className="min-w-full bg-white shadow-md rounded-lg text-left">
                         <thead>
                             <tr>
                                 <th className="py-2 px-4 border-b">Username</th>
@@ -120,21 +120,21 @@ const Login: React.FC = () => {
                                 <th className="py-2 px-4 border-b">Role</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-left">
                             <tr>
                                 <td className="py-2 px-4 border-b">admin</td>
                                 <td className="py-2 px-4 border-b">Admin123!</td>
-                                <td className="py-2 px-4 border-b">admin</td>
+                                <td className="py-2 px-4 border-b">Admin: Can view all tables, can add users and view all current users.</td>
                             </tr>
                             <tr>
                                 <td className="py-2 px-4 border-b">johndoe</td>
                                 <td className="py-2 px-4 border-b">Password123!</td>
-                                <td className="py-2 px-4 border-b">adult</td>
+                                <td className="py-2 px-4 border-b">Adult: Can view public tables, adult only tables, and their own tables</td>
                             </tr>
                             <tr>
                                 <td className="py-2 px-4 border-b">janedoe</td>
                                 <td className="py-2 px-4 border-b">Password123!</td>
-                                <td className="py-2 px-4 border-b">child</td>
+                                <td className="py-2 px-4 border-b">Child: Can view public tables, and their own tables</td>
                             </tr>
                         </tbody>
                     </table>
