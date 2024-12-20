@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Profile } from '@/types';
 import { addProfile, fetchProfiles, addUser } from '@/service/profileService';
+import { useTranslation } from 'next-i18next';
 
 interface AddProfileFormProps {
     onProfileAdded: () => void;
@@ -17,6 +18,7 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null); // New state for success message
+    const { t } = useTranslation();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -132,19 +134,19 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
 
     return (
         <div className="flex flex-col items-center p-4">
-            <h3 className="text-xl font-semibold mt-6 mb-2">Add a Profile and User</h3>
-            {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
-            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>} {/* Success message */}
+            <h3 className="text-xl font-semibold mt-6 mb-2">{t("profile.form.title")}</h3>
+            {errorMessage && <p className="text-red-500 mb-4">{t("profile.form.failed")}</p>}
+            {successMessage && <p className="text-green-500 mb-4">{t("profile.form.success")}</p>} {/* Success message */}
             <form onSubmit={handleSubmit} className="w-full max-w-lg bg-transparent p-6 rounded-lg shadow-md">
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
+                        {t("profile.form.email")}
                     </label>
                     <input
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="Enter email"
+                        placeholder={t("profile.form.placeholder.email")}
                         value={newProfile.email}
                         onChange={handleChange}
                         required
@@ -153,13 +155,13 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        First Name
+                        {t("profile.form.name")}
                     </label>
                     <input
                         type="text"
                         name="name"
                         id="name"
-                        placeholder="Enter first name"
+                        placeholder={t("profile.form.placeholder.name")}
                         value={newProfile.name}
                         onChange={handleChange}
                         required
@@ -168,13 +170,13 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
-                        Last Name
+                        {t("profile.form.lastname")}
                     </label>
                     <input
                         type="text"
                         name="lastName"
                         id="lastName"
-                        placeholder="Enter last name"
+                        placeholder={t("profile.form.placeholder.lastname")}
                         value={newProfile.lastName}
                         onChange={handleChange}
                         required
@@ -183,13 +185,13 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                        Username
+                        {t("profile.form.username")}
                     </label>
                     <input
                         type="text"
                         name="username"
                         id="username"
-                        placeholder="Enter username"
+                        placeholder={t("profile.form.placeholder.username")}
                         value={username}
                         onChange={handleUserChange}
                         required
@@ -198,13 +200,13 @@ const AddProfileForm: React.FC<AddProfileFormProps> = ({ onProfileAdded }) => {
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
+                        {t("profile.form.password")}
                     </label>
                     <input
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Enter password"
+                        placeholder={t("profile.form.placeholder.password")}
                         value={password}
                         onChange={handleUserChange}
                         required

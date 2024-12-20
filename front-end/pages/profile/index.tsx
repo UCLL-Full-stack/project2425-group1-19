@@ -39,7 +39,7 @@ const Profile: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Profile</title>
+        <title>{t("profile.title")}</title>
       </Head>
       <Header />
       <main>
@@ -62,5 +62,6 @@ export const getServerSideProps = async (context: { locale: any; }) => {
       },
   };
 }
+
 
 export default Profile;

@@ -2,11 +2,13 @@ import { fetchProfiles } from '@/service/profileService';
 import React, { useEffect, useState } from 'react';
 import { Profile } from '@/types';
 import AddProfileForm from './addProfile';
+import { useTranslation } from 'next-i18next';
 
 const Profiles: React.FC = () => {
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [refreshProfiles, setRefreshProfiles] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const fetchData = async () => {
         try {
@@ -36,10 +38,10 @@ const Profiles: React.FC = () => {
             <table className="min-w-full bg-white shadow-md rounded-lg">
                 <thead>
                     <tr>
-                        <th className="py-2 px-4 border-b">Email</th>
-                        <th className="py-2 px-4 border-b">Name</th>
-                        <th className="py-2 px-4 border-b">Last Name</th>
-                        <th className="py-2 px-4 border-b">User ID</th>
+                        <th className="py-2 px-4 border-b">{t("profile.table.email")}</th>
+                        <th className="py-2 px-4 border-b">{t("profile.table.Name")}</th>
+                        <th className="py-2 px-4 border-b">{t("profile.table.LastName")}</th>
+                        <th className="py-2 px-4 border-b">{t("profile.table.UserId")}</th>
                     </tr>
                 </thead>
                 <tbody>

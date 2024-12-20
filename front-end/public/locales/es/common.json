@@ -44,9 +44,40 @@
         },
         "deselectList": "Deseleccionar lista"
     },
-    "monthly": {
-        "title": "Gastos mensuales",
-        "description": "Esta es la página de gastos mensuales",
-        "overview": "Resumen de los gastos mensuales"
+    "profile": {
+        "title": "Perfil",
+        "description": "Esta es la página de perfil",
+        "overview": "Descripción del perfil",
+        "table": {
+            "email": "Correo electrónico",
+            "Name": "Nombre",
+            "LastName": "Apellido",
+            "UserId": "ID de usuario"
+        },
+        "form": {
+            "title": "Añadir un perfil y usuario",
+            "email": "Correo electrónico:",
+            "name": "Nombre:",
+            "lastname": "Apellido:",
+            "username": "Nombre de usuario:",
+            "password": "Contraseña:",
+            "submit": "Añadir perfil y usuario",
+            "success": "Perfil y usuario añadidos con éxito",
+            "failed": "Falló al añadir perfil y usuario",
+            "validate": {
+                "email": "El correo electrónico es obligatorio",
+                "Name": "El nombre es obligatorio",
+                "LastName": "El apellido es obligatorio",
+                "username": "El nombre de usuario es obligatorio",
+                "password": "La contraseña es obligatoria"
+            },
+            "placeholder": {
+                "email": "Introduce correo electrónico",
+                "name": "Introduce nombre",
+                "lastname": "Introduce apellido",
+                "username": "Introduce nombre de usuario",
+                "password": "Introduce contraseña"
+            }
+        }
     }
 }
